@@ -9,22 +9,21 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User> login(String email, String password) async {
-    // Simulating network delay
     await Future.delayed(const Duration(seconds: 1));
-    
-    // Mock successful login
+    // Mocking a customer login
     return const User(
       id: '1', 
       email: 'farzad@example.com', 
       fullName: 'Farzad Abbasi', 
-      phoneNumber: '09123456789'
+      phoneNumber: '09123456789',
+      role: UserRole.customer
     );
   }
 
   @override
-  Future<User> register(String email, String password, String fullName, String phoneNumber) async {
+  Future<User> register(String email, String password, String fullName, String phoneNumber, UserRole role) async {
     await Future.delayed(const Duration(seconds: 1));
-    return User(id: '2', email: email, fullName: fullName, phoneNumber: phoneNumber);
+    return User(id: '2', email: email, fullName: fullName, phoneNumber: phoneNumber, role: role);
   }
 
   @override
@@ -34,6 +33,6 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User?> getCurrentUser() async {
-    return null; // Not logged in by default
+    return null;
   }
 }

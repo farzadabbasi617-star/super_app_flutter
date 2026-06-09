@@ -8,10 +8,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
 
   AuthBloc({required this.authRepository}) : super(AuthInitial()) {
-    
-    // Using 'restartable' for login: If a new login request comes while one is pending,
-    // the previous one is cancelled and the new one starts. This prevents multiple 
-    // simultaneous login attempts.
     on<AuthLoginRequested>(
       (event, emit) async {
         emit(AuthLoading());
@@ -25,12 +21,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       transformer: restartable(),
     );
 
-    // Using 'restartable' for registration as well
     on<AuthRegisterRequested>(
       (event, emit) async {
         emit(AuthLoading());
         try {
-          final user = await authRepository.register(event.email, event.password, event.fullName, event.phoneNumber);
+          final user = await authRepository.register(event.email, event.password, event.fullName, event.phoneNumber, event.role);
           emit(AuthAuthenticated(user));
         } catch (e) {
           emit(AuthFailure(e.toString()));
@@ -39,7 +34,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       transformer: restartable(),
     );
 
-    // Using 'sequential' for logout to ensure it completes before any other auth action
     on<AuthLogoutRequested>(
       (event, emit) async {
         try {
