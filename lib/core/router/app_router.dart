@@ -1,11 +1,13 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/auth/presentation/pages/welcome_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
-import '../../features/map/presentation/pages/home_page.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../features/map/presentation/pages/map_page.dart';
+import '../../features/map/presentation/pages/shop_detail_page.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/map/presentation/bloc/map_bloc.dart';
 import '../di/service_locator.dart';
 
 class AppRouter {
@@ -32,7 +34,17 @@ class AppRouter {
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => BlocProvider(
+          create: (context) => sl<MapBloc>(),
+          child: const MapPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/shop/:shopId',
+        builder: (context, state) {
+          final shopId = state.pathParameters['shopId']!;
+          return ShopDetailPage(shopId: shopId);
+        },
       ),
     ],
   );
