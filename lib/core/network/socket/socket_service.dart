@@ -1,4 +1,4 @@
-import 'package:socket_io_client/socket_io_client.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService {
   static final SocketService _instance = SocketService._internal();
@@ -8,33 +8,21 @@ class SocketService {
   late IO.Socket socket;
 
   void initSocket(String token) {
-    socket = IO.io('YOUR_BACKEND_URL', 
+    socket = IO.io('https://your-mock-socket-server.com', 
       IO.OptionBuilder()
         .setTransports(['websocket'])
         .setAuth({'token': token})
         .build());
 
-    socket.onConnect((_) {
-      print('Connected to Socket.io server');
-    });
-
-    socket.onDisconnect((_) {
-      print('Disconnected from Socket.io server');
-    });
-
-    socket.onConnectError((data) => print('Connect Error: $data'));
-    socket.on('connect_error', (data) => print('Connect Error: $data'));
+    socket.onConnect((_) => print('Connected to Service Socket'));
+    socket.onDisconnect((_) => print('Disconnected from Service Socket'));
   }
 
-  void joinRoom(String roomId) {
-    socket.emit('join', {'room': roomId});
-  }
-
-  void sendEvent(String event, Map<String, dynamic> data) {
+  void emitEvent(String event, Map<String, dynamic> data) {
     socket.emit(event, data);
   }
 
-  void listenToEvent(String event, Function(dynamic) callback) {
+  void listenEvent(String event, Function(dynamic) callback) {
     socket.on(event, callback);
   }
 }

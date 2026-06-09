@@ -6,8 +6,11 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/map/presentation/pages/map_page.dart';
 import '../../features/map/presentation/pages/shop_detail_page.dart';
+import '../../features/services/presentation/pages/request_service_page.dart';
+import '../../features/services/presentation/pages/pro_dashboard_page.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/map/presentation/bloc/map_bloc.dart';
+import '../../features/services/presentation/bloc/service_bloc.dart';
 import '../di/service_locator.dart';
 
 class AppRouter {
@@ -45,6 +48,17 @@ class AppRouter {
           final shopId = state.pathParameters['shopId']!;
           return ShopDetailPage(shopId: shopId);
         },
+      ),
+      GoRoute(
+        path: '/request-service',
+        builder: (context, state) => BlocProvider(
+          create: (context) => sl<ServiceBloc>(),
+          child: const RequestServicePage(),
+        ),
+      ),
+      GoRoute(
+        path: '/pro-dashboard',
+        builder: (context, state) => const ProDashboardPage(),
       ),
     ],
   );
