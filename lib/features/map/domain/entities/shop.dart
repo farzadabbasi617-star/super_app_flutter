@@ -9,6 +9,12 @@ class Shop extends Equatable {
   final String imageUrl;
   final String category;
   final double rating;
+  final int reviewCount;
+  final String address;
+  final String phoneNumber;
+  final String website;
+  final bool isOpen;
+  final String operatingHours;
 
   const Shop({
     required this.id, 
@@ -17,9 +23,15 @@ class Shop extends Equatable {
     required this.location, 
     required this.imageUrl, 
     required this.category, 
-    required this.rating
+    required this.rating,
+    required this.reviewCount,
+    required this.address,
+    required this.phoneNumber,
+    required this.website,
+    required this.isOpen,
+    required this.operatingHours,
   });
 
   @override
-  List<Object?> get props => [id, name, description, location, imageUrl, category, rating];
+  List<Object?> get props => [id, name, description, location, imageUrl, category, rating, reviewCount, address, phoneNumber, website, isOpen, operatingHours];
 }
