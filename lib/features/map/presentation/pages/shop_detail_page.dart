@@ -18,23 +18,26 @@ class ShopDetailPage extends StatelessWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: const Text('Store Profile', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(
-                    'https://via.placeholder.com/400x300', 
-                    fit: BoxFit.cover,
-                  ),
-                  const DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black87],
+              background: Hero(
+                tag: 'shop_image_$shopId',
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      'https://via.placeholder.com/400x300', 
+                      fit: BoxFit.cover,
+                    ),
+                    const DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.transparent, Colors.black87],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -44,7 +47,6 @@ class ShopDetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Shop Header
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -56,7 +58,7 @@ class ShopDetailPage extends StatelessWidget {
                             style: theme.textTheme.displayLarge?.copyWith(fontWeight: FontWeight.bold, fontSize: 28),
                           ),
                           Text(
-                            'Electronics & Repair',
+                            'Electronics \& Repair',
                             style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.primary),
                           ),
                         ],
@@ -82,12 +84,10 @@ class ShopDetailPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  // Info Section
                   _buildInfoTile(theme, Icons.location_on, 'Address', 'Tehran, Valiasr St, Block 4'),
                   _buildInfoTile(theme, Icons.phone, 'Phone', '+98 21 1234 5678'),
                   _buildInfoTile(theme, Icons.access_time, 'Hours', 'Open: 09:00 - 22:00'),
                   const SizedBox(height: 24),
-                  // Description
                   Text('About', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   Text(
@@ -95,9 +95,8 @@ class ShopDetailPage extends StatelessWidget {
                     style: theme.textTheme.bodyLarge,
                   ),
                   const SizedBox(height: 32),
-                  // Products Grid
                   Text('Featured Products', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 16),
+                  constHizedBox(height: 16),
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
