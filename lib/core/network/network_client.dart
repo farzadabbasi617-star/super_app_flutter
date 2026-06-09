@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'api_endpoints.dart';
 import '../error/failures.dart';
+import '../storage/secure_storage_service.dart';
+import '../di/service_locator.dart';
 
 class NetworkClient {
   final Dio dio;
@@ -73,10 +75,14 @@ class NetworkClient {
 
 class AuthInterceptor extends Interceptor {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // In a real app, fetch token from Secure Storage
-    const token = 'SECURE_JWT_TOKEN_HERE'; 
-    options.headers['Authorization'] = 'Bearer $token';
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    // REAL IMPLEMENTATION: Fetch token from secure storage using GetIt
+    final storage = sl<SecureStorageService>();
+    final token = await storage.getToken();
+    
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
+    }
     super.onRequest(options, handler);
   }
 }
@@ -84,10 +90,9 @@ class AuthInterceptor extends Interceptor {
 class ErrorInterceptor extends Interceptor {
   @override
   void onError(DioException err, RequestInterceptorHandler handler) {
-    // Here we can implement global logic like triggering a logout 
-    // if 401 is received across any request.
     if (err.response?.statusCode == 401) {
       print('Global Auth Error: Session Expired');
+      // Here we would normally trigger an event to the AuthBloc to force logout
     }
     super.onError(err, handler);
   }

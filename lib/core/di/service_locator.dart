@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../network/network_client.dart';
+import '../storage/secure_storage_service.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
@@ -15,6 +17,10 @@ import '../network/socket/socket_service.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  // Core Storage
+  sl.registerLazySingleton(() => const FlutterSecureStorage());
+  sl.registerLazySingleton(() => SecureStorageService(sl()));
+
   // Core Network
   sl.registerLazySingleton(() => Dio());
   sl.registerLazySingleton(() => NetworkClient(sl()));
@@ -32,5 +38,5 @@ Future<void> init() async {
   sl.registerLazySingleton<ServiceRepository>(() => ServiceRepositoryImpl(sl()));
   sl.registerFactory(() => ServiceBloc(serviceRepository: sl()));
   
-  print("Professional Service Locator Initialized");
+  print("Professional Service Locator Initialized with Secure Storage");
 }
