@@ -13,22 +13,29 @@ import '../../features/services/data/repositories/service_repository_impl.dart';
 import '../../features/services/domain/repositories/service_repository.dart';
 import '../../features/services/presentation/bloc/service_bloc.dart';
 import '../network/socket/socket_service.dart';
+import '../../features/marketplace/data/repositories/product_repository_impl.dart';
+import '../../features/marketplace/domain/repositories/product_repository.dart';
+import '../../features/marketplace/data/repositories/rental_repository_impl.dart';
+import '../../features/marketplace/domain/repositories/rental_repository.dart';
+import '../../features/marketplace/presentation/bloc/product_bloc.dart';
+import '../../features/marketplace/presentation/bloc/rental_bloc.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  registerLazySingleton(() => const FlutterSecureStorage());
-  registerLazySingleton(() => SecureStorageService(sl()));
-  registerLazySingleton(() => Dio());
-  registerLazySingleton(() => NetworkClient(sl()));
-  registerLazySingleton<SocketService>(() => SocketService());
-  registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
-  registerFactory(() => AuthBloc(authRepository: sl()));
-  registerLazySingleton<ShopRepository>(() => ShopRepositoryImpl());
-  // Register MapBloc as Factory
-  registerFactory(() => MapBloc(shopRepository: sl()));
-  registerLazySingleton<ServiceRepository>(() => ServiceRepositoryImpl(sl()));
-  registerFactory(() => ServiceBloc(serviceRepository: sl()));
-  
-  print("Professional Service Locator Initialized");
+  sl.registerLazySingleton(() => const FlutterSecureStorage());
+  sl.registerLazySingleton(() => SecureStorageService(sl()));
+  sl.registerLazySingleton(() => Dio());
+  sl.registerLazySingleton(() => NetworkClient(sl()));
+  sl.registerLazySingleton<SocketService>(() => SocketService());
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
+  sl.registerFactory(() => AuthBloc(authRepository: sl()));
+  sl.registerLazySingleton<ShopRepository>(() => ShopRepositoryImpl());
+  sl.registerFactory(() => MapBloc(shopRepository: sl()));
+  sl.registerLazySingleton<ServiceRepository>(() => ServiceRepositoryImpl(sl()));
+  sl.registerFactory(() => ServiceBloc(serviceRepository: sl()));
+  sl.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl());
+  sl.registerLazySingleton<RentalRepository>(() => RentalRepositoryImpl());
+  sl.registerFactory(() => ProductBloc(productRepository: sl()));
+  sl.registerFactory(() => RentalBloc(rentalRepository: sl()));
 }

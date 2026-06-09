@@ -9,6 +9,7 @@ class Product extends Equatable {
   final String category;
   final bool isRental;
   final double rentalPricePerDay;
+  final List<DateTime> unavailableDates;
 
   const Product({
     required this.id,
@@ -19,8 +20,9 @@ class Product extends Equatable {
     required this.category,
     this.isRental = false,
     this.rentalPricePerDay = 0.0,
+    this.unavailableDates = const [],
   });
 
   @override
-  List<Object?> get props => [id, name, description, price, imageUrl, category, isRental, rentalPricePerDay];
+  List<Object?> get props => [id, name, description, price, imageUrl, category, isRental, rentalPricePerDay, unavailableDates];
 }
