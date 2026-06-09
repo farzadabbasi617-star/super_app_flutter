@@ -11,7 +11,6 @@ class WelcomePage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Gradient
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -24,8 +23,6 @@ class WelcomePage extends StatelessWidget {
               ),
             ),
           ),
-          
-          // Content
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24.0),
@@ -33,7 +30,6 @@ class WelcomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Spacer(),
-                  // App Logo / Icon
                   Icon(
                     Icons.rocket_launch_rounded, 
                     size: 120, 
@@ -57,15 +53,11 @@ class WelcomePage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const Spacer(),
-                  
-                  // Get Started Button
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Navigate to login/register (will be implemented)
-                      },
+                      onPressed: () => context.push('/login'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.colorScheme.primary,
                         foregroundColor: theme.colorScheme.onPrimary,
@@ -81,7 +73,7 @@ class WelcomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () => context.push('/login'),
                     child: Text(
                       'Already have an account? Sign In',
                       style: TextStyle(color: theme.colorScheme.primary),
