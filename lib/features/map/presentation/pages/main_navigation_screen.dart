@@ -5,6 +5,8 @@ import '../../bloc/map_bloc.dart';
 import '../../../core/di/service_locator.dart';
 import '../../marketplace/presentation/pages/explore_page.dart';
 import '../../marketplace/presentation/bloc/product_bloc.dart';
+import '../../rental/presentation/pages/rental_page.dart';
+import '../../profile/presentation/pages/profile_page.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -16,18 +18,27 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    BlocProvider(
-      create: (context) => sl<MapBloc>(),
-      child: const MapPage(),
-    ),
-    BlocProvider(
-      create: (context) => sl<ProductBloc>(),
-      child: const ExplorePage(),
-    ),
-    const Center(child: Text('Rental Booking Page (Coming Soon)')),
-    const Center(child: Text('Profile Page (Coming Soon)')),
-  ];
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      BlocProvider(
+        create: (context) => sl<MapBloc>(),
+        child: const MapPage(),
+      ),
+      BlocProvider(
+        create: (context) => sl<ProductBloc>(),
+        child: const ExplorePage(),
+      ),
+      BlocProvider(
+        create: (context) => sl<ProductBloc>(),
+        child: const RentalPage(),
+      ),
+      const ProfilePage(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
