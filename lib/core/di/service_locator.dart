@@ -17,26 +17,18 @@ import '../network/socket/socket_service.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // Core Storage
-  sl.registerLazySingleton(() => const FlutterSecureStorage());
-  sl.registerLazySingleton(() => SecureStorageService(sl()));
-
-  // Core Network
-  sl.registerLazySingleton(() => Dio());
-  sl.registerLazySingleton(() => NetworkClient(sl()));
-  sl.registerLazySingleton<SocketService>(() => SocketService());
-
-  // Auth
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
-  sl.registerFactory(() => AuthBloc(authRepository: sl()));
-
-  // Map/Shop
-  sl.registerLazySingleton<ShopRepository>(() => ShopRepositoryImpl());
-  sl.registerFactory(() => MapBloc(shopRepository: sl()));
-
-  // Services
-  sl.registerLazySingleton<ServiceRepository>(() => ServiceRepositoryImpl(sl()));
-  sl.registerFactory(() => ServiceBloc(serviceRepository: sl()));
+  registerLazySingleton(() => const FlutterSecureStorage());
+  registerLazySingleton(() => SecureStorageService(sl()));
+  registerLazySingleton(() => Dio());
+  registerLazySingleton(() => NetworkClient(sl()));
+  registerLazySingleton<SocketService>(() => SocketService());
+  registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
+  registerFactory(() => AuthBloc(authRepository: sl()));
+  registerLazySingleton<ShopRepository>(() => ShopRepositoryImpl());
+  // Register MapBloc as Factory
+  registerFactory(() => MapBloc(shopRepository: sl()));
+  registerLazySingleton<ServiceRepository>(() => ServiceRepositoryImpl(sl()));
+  registerFactory(() => ServiceBloc(serviceRepository: sl()));
   
-  print("Professional Service Locator Initialized with Secure Storage");
+  print("Professional Service Locator Initialized");
 }

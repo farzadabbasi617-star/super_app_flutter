@@ -7,10 +7,15 @@ abstract class ServiceState extends Equatable {
 }
 
 class ServiceInitial extends ServiceState {}
-class ServiceSearching extends ServiceState {}
-class ServiceProFound extends ServiceState {
+class ServiceSearching extends ServiceState {
   final ServiceRequest request;
-  ServiceProFound(this.request);
+  ServiceSearching(this.request);
+  @override
+  List<Object?> get props => [request];
+}
+class ServiceProfessionalAssigned extends ServiceState {
+  final ServiceRequest request;
+  ServiceProfessionalAssigned(this.request);
   @override
   List<Object?> get props => [request];
 }

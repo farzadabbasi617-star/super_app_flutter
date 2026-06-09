@@ -19,3 +19,11 @@ class ServiceStatusUpdated extends ServiceEvent {
   @override
   List<Object?> get props => [request];
 }
+
+class AcceptRequestRequested extends ServiceEvent {
+  final String requestId;
+  final String professionalId;
+  AcceptRequestRequested(this.requestId, this.professionalId);
+  @override
+  List<Object?> get props => [requestId, professionalId];
+}
