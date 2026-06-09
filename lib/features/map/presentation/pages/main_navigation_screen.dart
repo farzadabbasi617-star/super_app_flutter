@@ -3,6 +3,8 @@ import 'map_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/map_bloc.dart';
 import '../../../core/di/service_locator.dart';
+import '../../marketplace/presentation/pages/explore_page.dart';
+import '../../marketplace/presentation/bloc/product_bloc.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -19,8 +21,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       create: (context) => sl<MapBloc>(),
       child: const MapPage(),
     ),
-    const Center(child: Text('Explore Page (Coming Soon)')),
-    const Center(child: Text('Rental Page (Coming Soon)')),
+    BlocProvider(
+      create: (context) => sl<ProductBloc>(),
+      child: const ExplorePage(),
+    ),
+    const Center(child: Text('Rental Booking Page (Coming Soon)')),
     const Center(child: Text('Profile Page (Coming Soon)')),
   ];
 
