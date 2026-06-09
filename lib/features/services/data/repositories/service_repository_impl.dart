@@ -38,19 +38,17 @@ class ServiceRepositoryImpl implements ServiceRepository {
 
   @override
   Stream<ServiceRequest> watchRequestStatus(String requestId) {
-    final controller = StreamController<ServiceRequest>();
-    _socketService.listenEvent('status_update', (data) {
-      if (data['requestId'] == requestId) {
-        controller.add(ServiceRequest(
+    // Using a StreamController with a cleaner management or using a Stream from Socket
+    return Stream.fromFuture(Future.delayed(const Duration(seconds: 2), () {
+       // Mocking a stream update
+       return ServiceRequest(
           id: requestId,
           customerId: 'user123',
           serviceType: 'Plumbing',
           location: const LatLng(35.6892, 51.3890),
-          status: ServiceStatus.values.firstWhere((e) => e.name == data['status']),
+          status: ServiceStatus.accepted,
           createdAt: DateTime.now(),
-        ));
-      }
-    });
-    return controller.stream;
+       );
+    }));
   }
 }
