@@ -7,6 +7,7 @@ class UserProfile extends Equatable {
   final String phoneNumber;
   final String avatarUrl;
   final double walletBalance;
+  final List<String> interests;
 
   const UserProfile({
     required this.uid,
@@ -15,19 +16,21 @@ class UserProfile extends Equatable {
     required this.phoneNumber,
     required this.avatarUrl,
     required this.walletBalance,
+    this.interests = const [],
   });
 
-  UserProfile copyWith({double? walletBalance}) {
+  UserProfile copyWith({double? walletBalance, String? fullName}) {
     return UserProfile(
       uid: uid,
-      fullName: fullName,
+      fullName: fullName ?? this.fullName,
       email: email,
       phoneNumber: phoneNumber,
       avatarUrl: avatarUrl,
       walletBalance: walletBalance ?? this.walletBalance,
+      interests: interests,
     );
   }
 
   @override
-  List<Object?> get props => [uid, fullName, email, phoneNumber, avatarUrl, walletBalance];
+  List<Object?> get props => [uid, fullName, email, phoneNumber, avatarUrl, walletBalance, interests];
 }

@@ -19,6 +19,11 @@ import '../../features/marketplace/data/repositories/rental_repository_impl.dart
 import '../../features/marketplace/domain/repositories/rental_repository.dart';
 import '../../features/marketplace/presentation/bloc/product_bloc.dart';
 import '../../features/marketplace/presentation/bloc/rental_bloc.dart';
+import '../../features/profile/data/repositories/profile_repository_impl.dart';
+import '../../features/profile/domain/repositories/profile_repository.dart';
+import '../../features/profile/presentation/bloc/profile_bloc.dart';
+import '../../features/payment/data/repositories/payment_repository_impl.dart';
+import '../../features/payment/domain/repositories/payment_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -38,4 +43,9 @@ Future<void> init() async {
   sl.registerLazySingleton<RentalRepository>(() => RentalRepositoryImpl());
   sl.registerFactory(() => ProductBloc(productRepository: sl()));
   sl.registerFactory(() => RentalBloc(rentalRepository: sl()));
+  sl.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(sl()));
+  sl.registerFactory(() => ProfileBloc(profileRepository: sl()));
+  sl.registerLazySingleton<PaymentRepository>(() => PaymentRepositoryImpl(sl()));
+  
+  print("Professional Service Locator Initialized");
 }
