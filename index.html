@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>Super App Simulator | شبیه‌ساز سوپراپلیکیشن</title>
+  <title>Super App Simulator | شبیه‌ساز سوپراپلیکیشن فارسی</title>
   <style>
     :root {
       --primary-color: #00934b;
@@ -19,7 +19,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: Tahoma, "Vazirmatn", -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     body {
@@ -36,7 +36,7 @@
 
     .container {
       display: flex;
-      flex-direction: row;
+      flex-direction: row-reverse;
       gap: 40px;
       max-width: 1100px;
       width: 100%;
@@ -50,18 +50,19 @@
       flex: 1;
       min-width: 320px;
       padding: 20px;
+      text-align: right;
     }
 
     .info-panel h1 {
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 800;
       color: var(--primary-color);
       margin-bottom: 12px;
     }
 
     .info-panel p {
-      font-size: 15px;
-      line-height: 1.6;
+      font-size: 14px;
+      line-height: 1.7;
       color: #b0b3b8;
       margin-bottom: 20px;
     }
@@ -74,10 +75,11 @@
     .features-list li {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 12px;
-      font-size: 14px;
+      font-size: 13.5px;
       color: #e4e6eb;
+      flex-direction: row-reverse;
     }
 
     .features-list li span {
@@ -91,6 +93,7 @@
       justify-content: center;
       font-weight: bold;
       font-size: 12px;
+      flex-shrink: 0;
     }
 
     /* Device Simulator styling */
@@ -103,6 +106,7 @@
       padding: 12px;
       box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 4px #2c2d30;
       border: 4px solid #1a1a1c;
+      direction: ltr; /* keep notch/status symbols physically correct on top */
     }
 
     /* Notch & Camera */
@@ -147,6 +151,7 @@
       color: #000;
       display: flex;
       flex-direction: column;
+      direction: rtl; /* UI inside is RTL */
     }
 
     /* Status Bar */
@@ -167,18 +172,11 @@
       right: 0;
     }
 
-    .status-bar.dark-text {
-      color: #000;
-    }
-
-    .status-bar.light-text {
-      color: #fff;
-    }
-
     .status-icons {
       display: flex;
       gap: 6px;
       align-items: center;
+      flex-direction: row-reverse;
     }
 
     .vpn-tag {
@@ -188,7 +186,7 @@
       font-size: 9px;
     }
 
-    /* Main Navigation Layout */
+    /* App body with active views */
     .app-body {
       flex: 1;
       position: relative;
@@ -277,7 +275,7 @@
 
     .fab-location {
       bottom: 20px;
-      right: 16px;
+      left: 16px; /* swapped for RTL layout */
       width: 44px;
       height: 44px;
       background: var(--surface-color);
@@ -286,7 +284,7 @@
 
     .fab-request {
       bottom: 20px;
-      left: 16px;
+      right: 16px; /* swapped for RTL layout */
       height: 44px;
       padding: 0 16px;
       background: var(--primary-color);
@@ -294,6 +292,7 @@
       font-size: 12px;
       font-weight: bold;
       gap: 6px;
+      flex-direction: row-reverse;
     }
 
     /* ========================================= */
@@ -303,7 +302,6 @@
       background: #e3ece6;
     }
 
-    /* Vector/SVG Map simulation */
     .map-canvas {
       width: 100%;
       height: 100%;
@@ -314,7 +312,6 @@
       background-position: center;
     }
 
-    /* Tehran Vector Grid */
     .vector-grid {
       width: 100%;
       height: 100%;
@@ -379,6 +376,7 @@
       display: flex;
       align-items: center;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      flex-direction: row-reverse;
     }
 
     .search-input {
@@ -387,7 +385,8 @@
       flex: 1;
       font-size: 13px;
       color: var(--on-surface);
-      margin-left: 10px;
+      margin-right: 10px;
+      text-align: right;
     }
 
     /* Suggestions List Card */
@@ -398,6 +397,7 @@
       overflow-y: auto;
       box-shadow: 0 10px 25px rgba(0,0,0,0.12);
       display: none;
+      direction: rtl;
     }
 
     .suggestions-card.open {
@@ -412,6 +412,8 @@
       gap: 12px;
       cursor: pointer;
       font-size: 13px;
+      flex-direction: row-reverse;
+      text-align: right;
     }
 
     .suggestion-item:hover {
@@ -425,6 +427,7 @@
       white-space: nowrap;
       padding: 2px 4px;
       scrollbar-width: none;
+      flex-direction: row-reverse;
     }
 
     .chips-row::-webkit-scrollbar {
@@ -444,6 +447,7 @@
       gap: 4px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.04);
       transition: all 0.2s ease;
+      flex-direction: row-reverse;
     }
 
     .filter-chip.active {
@@ -466,6 +470,7 @@
       transform: translateY(110%);
       transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.15);
       z-index: 600;
+      text-align: right;
     }
 
     .quick-view-sheet.open {
@@ -477,6 +482,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
+      flex-direction: row-reverse;
     }
 
     .badge-category {
@@ -499,6 +505,7 @@
       gap: 16px;
       align-items: center;
       margin-bottom: 12px;
+      flex-direction: row-reverse;
     }
 
     .sheet-img {
@@ -529,6 +536,8 @@
       font-size: 12px;
       font-weight: bold;
       color: #333;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
     }
 
     .sheet-address {
@@ -544,6 +553,7 @@
       margin-bottom: 16px;
       font-size: 12px;
       color: #444;
+      flex-direction: row-reverse;
     }
 
     .badge-open {
@@ -579,6 +589,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
+      flex-direction: row-reverse;
     }
 
     /* ========================================= */
@@ -605,6 +616,7 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
       align-content: start;
+      direction: rtl;
     }
 
     .product-card {
@@ -616,6 +628,7 @@
       display: flex;
       flex-direction: column;
       position: relative;
+      text-align: right;
     }
 
     .product-img {
@@ -657,7 +670,7 @@
     .badge-rental {
       position: absolute;
       top: 6px;
-      right: 6px;
+      left: 6px; /* swapped for RTL */
       background: var(--accent-color);
       color: #fff;
       font-size: 9px;
@@ -713,6 +726,7 @@
       margin-bottom: 24px;
       font-size: 14px;
       font-weight: bold;
+      flex-direction: row-reverse;
     }
 
     .dialog-actions {
@@ -754,6 +768,7 @@
       display: none;
       flex-direction: column;
       padding: 24px;
+      text-align: right;
     }
 
     .rental-booking-overlay.open {
@@ -765,6 +780,7 @@
       align-items: center;
       gap: 16px;
       margin-bottom: 24px;
+      flex-direction: row-reverse;
     }
 
     .booking-back-btn {
@@ -789,6 +805,7 @@
       display: flex;
       justify-content: space-between;
       margin: 16px 0;
+      flex-direction: row-reverse;
     }
 
     .booking-date-selector {
@@ -809,6 +826,7 @@
       justify-content: space-between;
       font-weight: bold;
       margin-bottom: 24px;
+      flex-direction: row-reverse;
     }
 
     /* ========================================= */
@@ -863,6 +881,7 @@
       font-size: 28px;
       font-weight: 800;
       margin-bottom: 16px;
+      text-align: center;
     }
 
     .wallet-btn {
@@ -884,6 +903,7 @@
       align-items: center;
       background: var(--surface-color);
       cursor: pointer;
+      flex-direction: row-reverse;
     }
 
     /* ========================================= */
@@ -955,6 +975,7 @@
       padding: 20px;
       display: none;
       flex-direction: column;
+      text-align: right;
     }
 
     .offers-list {
@@ -975,6 +996,8 @@
       gap: 12px;
       cursor: pointer;
       animation: slideIn 0.4s ease forwards;
+      flex-direction: row-reverse;
+      text-align: right;
     }
 
     @keyframes slideIn {
@@ -999,6 +1022,7 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 2px;
+      flex-direction: row-reverse;
     }
 
     .offer-name {
@@ -1023,6 +1047,8 @@
       gap: 10px;
       font-size: 10px;
       color: #555;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
     }
 
     /* Consultation Chat overlay */
@@ -1049,6 +1075,8 @@
       align-items: center;
       gap: 12px;
       border-bottom: 1px solid rgba(0,0,0,0.05);
+      flex-direction: row-reverse;
+      text-align: right;
     }
 
     .chat-messages {
@@ -1066,6 +1094,7 @@
       border-radius: 16px;
       font-size: 13px;
       line-height: 1.4;
+      text-align: right;
     }
 
     .msg-expert {
@@ -1088,6 +1117,7 @@
       padding: 4px 16px;
       font-style: italic;
       display: none;
+      text-align: right;
     }
 
     .chat-footer {
@@ -1101,6 +1131,7 @@
       gap: 8px;
       align-items: center;
       margin-bottom: 10px;
+      flex-direction: row-reverse;
     }
 
     .chat-input {
@@ -1111,6 +1142,7 @@
       outline: none;
       padding: 8px 16px;
       font-size: 13px;
+      text-align: right;
     }
 
     .chat-send-btn {
@@ -1119,6 +1151,7 @@
       color: var(--primary-color);
       font-size: 20px;
       cursor: pointer;
+      transform: scaleX(-1); /* mirror arrow for RTL */
     }
 
     .chat-action-btn {
@@ -1190,6 +1223,7 @@
       padding: 24px;
       box-shadow: 0 -8px 24px rgba(0,0,0,0.15);
       animation: sheetUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+      text-align: right;
     }
 
     @keyframes sheetUp {
@@ -1202,6 +1236,7 @@
       justify-content: space-between;
       align-items: center;
       margin: 16px 0;
+      flex-direction: row-reverse;
     }
 
     .toggle-switch {
@@ -1254,6 +1289,7 @@
       display: flex;
       gap: 8px;
       margin: 12px 0 24px;
+      flex-direction: row-reverse;
     }
 
     /* Notification Banner */
@@ -1273,6 +1309,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       z-index: 2000;
       animation: bannerSlide 0.3s ease forwards;
+      flex-direction: row-reverse;
     }
 
     @keyframes bannerSlide {
@@ -1288,12 +1325,12 @@
   
   <!-- LEFT: Info Panel (Features presentation) -->
   <div class="info-panel">
-    <h1>Super App Live Prototype</h1>
+    <h1>شبیه‌ساز زنده سوپراپلیکیشن</h1>
     <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
     
     <ul class="features-list">
       <li><span>۱</span> <strong>پین‌های پالس‌زن و زیبای نقشه:</strong> نشانگرها با آیکون‌های صنف کاری به صورت زنده پالس و انیمیشن می‌زنند.</li>
-      <li><span>۲</span> <strong>سرچ و ساجستشن لایو نقشه:</strong> هنگام تایپ، لیست پیشنهادات باز می‌شود و کلیک بر روی آن نقشه را پرواز می‌دهد.</li>
+      <li><span>۲</span> <strong>سرچ و پیشنهادات لایو نقشه:</strong> هنگام تایپ، لیست پیشنهادات باز می‌شود و کلیک بر روی آن نقشه را پرواز می‌دهد.</li>
       <li><span>۳</span> <strong>باکس فیلترهای پیشرفته مپ:</strong> کلیک بر روی دکمه تنظیمات (Tune) بالا، فیلتر باز بودن و ریتینگ را به صورت لایو تغییر می‌دهد.</li>
       <li><span>۴</span> <strong>مشاوره و چت زنده با متخصص:</strong> سیستم چت فعال با پاسخ‌دهی هوشمند ربات متخصص بر اساس سؤال شما.</li>
       <li><span>۵</span> <strong>ردیابی مدرن متخصص:</strong> صفحه کامل ردیابی با اطلاعات تاییدشده متخصص منتخب و قیمت توافق‌شده.</li>
@@ -1377,8 +1414,8 @@
           <div class="map-search-container">
             <div class="search-card">
               <span>🔍</span>
-              <input type="text" class="search-input" id="map-search" placeholder="Search stores, cafes..." onfocus="onSearchFocus()" onblur="onSearchBlur()">
-              <span id="map-search-clear" style="display:none; cursor:pointer; margin-right:8px;" onclick="clearMapSearch()">✕</span>
+              <input type="text" class="search-input" id="map-search" placeholder="جستجوی فروشگاه، خدمات، کافه..." onfocus="onSearchFocus()" onblur="onSearchBlur()">
+              <span id="map-search-clear" style="display:none; cursor:pointer; margin-left:8px;" onclick="clearMapSearch()">✕</span>
               <span style="cursor:pointer;" onclick="openFilters()">⚙️</span>
             </div>
 
@@ -1388,10 +1425,10 @@
             </div>
             
             <div class="chips-row">
-              <div class="filter-chip active" id="chip-all" onclick="filterMapCategory(null)">🌐 All</div>
-              <div class="filter-chip" id="chip-elec" onclick="filterMapCategory('Electronics')">📱 Tech</div>
-              <div class="filter-chip" id="chip-plant" onclick="filterMapCategory('Plants')">🌱 Plants</div>
-              <div class="filter-chip" id="chip-cafe" onclick="filterMapCategory('Cafe')">☕ Cafe</div>
+              <div class="filter-chip active" id="chip-all" onclick="filterMapCategory(null)">🌐 همه صنف‌ها</div>
+              <div class="filter-chip" id="chip-elec" onclick="filterMapCategory('Electronics')">📱 الکترونیک</div>
+              <div class="filter-chip" id="chip-plant" onclick="filterMapCategory('Plants')">🌱 گل و گیاه</div>
+              <div class="filter-chip" id="chip-cafe" onclick="filterMapCategory('Cafe')">☕ کافه</div>
             </div>
           </div>
 
@@ -1401,31 +1438,31 @@
           </div>
 
           <div class="fab-btn fab-request" id="req-fab" onclick="openServicesFlow()">
-            <span>🛠️</span> Request Expert
+            <span>🛠️</span> درخواست متخصص
           </div>
 
           <!-- Quick View sliding panel -->
           <div class="quick-view-sheet" id="quick-view">
             <div class="sheet-header">
-              <span class="badge-category" id="qv-category">Electronics</span>
+              <span class="badge-category" id="qv-category">الکترونیک</span>
               <span class="sheet-close" onclick="closeQuickView()">✕</span>
             </div>
             <div class="sheet-info-row">
               <div class="sheet-img" id="qv-icon">📱</div>
               <div class="sheet-text-container">
-                <div class="sheet-title" id="qv-name">Tech Hub</div>
+                <div class="sheet-title" id="qv-name">مرکز فنی تک هاب</div>
                 <div class="sheet-rating">
-                  <span>⭐</span> <span id="qv-rating">4.8</span> <span style="color:#777; font-weight:normal;" id="qv-reviews">(124 reviews)</span>
+                  <span>⭐</span> <span id="qv-rating">4.8</span> <span style="color:#777; font-weight:normal;" id="qv-reviews">(۱۲۴ نظر)</span>
                 </div>
-                <div class="sheet-address" id="qv-address">Tehran, Valiasr St, Block 4</div>
+                <div class="sheet-address" id="qv-address">تهران، خیابان ولیعصر، پلاک ۴</div>
               </div>
             </div>
             <div class="sheet-details-row">
-              <span id="qv-hours">Hours: 09:00 - 22:00</span>
-              <span class="badge-open" id="qv-status">OPEN</span>
+              <span id="qv-hours">ساعت کاری: ۰۹:۰۰ الی ۲۲:۰۰</span>
+              <span class="badge-open" id="qv-status">باز است</span>
             </div>
             <button class="sheet-btn" onclick="viewStoreProfile()">
-              <span>🏪</span> View Store Profile
+              <span>🏪</span> مشاهده پروفایل فروشگاه
             </button>
           </div>
         </div>
@@ -1435,26 +1472,26 @@
         <!-- ========================================= -->
         <div class="screen-content" id="view-market" style="background:#fff;">
           <div class="market-header">
-            <div class="market-title">Marketplace (Buy)</div>
+            <div class="market-title">مارکت‌پلیس (خرید کالا)</div>
             <div class="chips-row" style="justify-content: center;">
-              <div class="filter-chip active">🌐 All Products</div>
-              <div class="filter-chip">📱 Tech</div>
-              <div class="filter-chip">🏠 Home</div>
+              <div class="filter-chip active">🌐 همه محصولات</div>
+              <div class="filter-chip">📱 الکترونیک</div>
+              <div class="filter-chip">🏠 وسایل خانه</div>
             </div>
           </div>
           
           <div class="product-grid">
-            <div class="product-card" onclick="openPurchaseDialog('iPhone 15 Pro', 'Latest Apple flagship', '999$')">
+            <div class="product-card" onclick="openPurchaseDialog('iPhone 15 Pro', 'آخرین پرچمدار اپل با ظرفیت بالا', '۹۹۹ دلار')">
               <div class="product-img">📱</div>
               <div class="product-name">iPhone 15 Pro</div>
-              <div class="product-price">999$</div>
-              <div class="product-desc">Latest Apple flagship</div>
+              <div class="product-price">۹۹۹ دلار</div>
+              <div class="product-desc">آخرین پرچمدار اپل</div>
             </div>
-            <div class="product-card" onclick="openPurchaseDialog('Air Fryer', 'Healthy cooking made easy', '120$')">
+            <div class="product-card" onclick="openPurchaseDialog('سرخ‌کن بدون روغن Air Fryer', 'غذای سالم و بدون روغن با کارکرد آسان', '۱۲۰ دلار')">
               <div class="product-img">🏠</div>
-              <div class="product-name">Air Fryer</div>
-              <div class="product-price">120$</div>
-              <div class="product-desc">Healthy cooking made easy</div>
+              <div class="product-name">سرخ‌کن بدون روغن</div>
+              <div class="product-price">۱۲۰ دلار</div>
+              <div class="product-desc">غذای سالم با کارکرد آسان</div>
             </div>
           </div>
         </div>
@@ -1464,35 +1501,35 @@
         <!-- ========================================= -->
         <div class="screen-content" id="view-rental" style="background:#fff;">
           <div class="market-header" style="background:#fdfdfd;">
-            <div class="market-title" style="color:#d97706;">Industrial & Agricultural Rental</div>
+            <div class="market-title" style="color:#d97706;">اجاره ماشین‌آلات صنعتی و کشاورزی</div>
             <div class="chips-row" style="justify-content: center;">
-              <div class="filter-chip active">🚜 All Machinery</div>
-              <div class="filter-chip">⚙️ Industrial</div>
-              <div class="filter-chip">🌱 Agriculture</div>
+              <div class="filter-chip active">🚜 همه ادوات سنگین</div>
+              <div class="filter-chip">⚙️ صنعتی</div>
+              <div class="filter-chip">🌱 کشاورزی</div>
             </div>
           </div>
 
           <div class="product-grid">
-            <div class="product-card" onclick="openRentalBooking('Concrete Mixer', 'Heavy duty industrial concrete mixer.', 50, '⚙️ Industrial')">
-              <div class="badge-rental">Rental</div>
+            <div class="product-card" onclick="openRentalBooking('میکسر بتن بتونیر', 'میکسر بتن سنگین صنعتی جهت پروژه‌های ساختمانی.', ۵۰, '⚙️ صنعتی')">
+              <div class="badge-rental">اجاره‌ای</div>
               <div class="product-img">⚙️</div>
-              <div class="product-name">Concrete Mixer</div>
-              <div class="product-price">50$/day</div>
-              <div class="product-desc">Heavy duty industrial mixer</div>
+              <div class="product-name">میکسر بتن بتونیر</div>
+              <div class="product-price">۵۰ دلار/روز</div>
+              <div class="product-desc">میکسر بتن صنعتی سنگین</div>
             </div>
-            <div class="product-card" onclick="openRentalBooking('Tractor X-200', 'High performance agricultural tractor.', 120, '🌱 Agriculture')">
-              <div class="badge-rental">Rental</div>
+            <div class="product-card" onclick="openRentalBooking('تراکتور سنگین X-200', 'تراکتور قدرتمند چند منظوره کشاورزی با بهره‌وری بالا.', ۱۲۰, '🌱 کشاورزی')">
+              <div class="badge-rental">اجاره‌ای</div>
               <div class="product-img">🚜</div>
-              <div class="product-name">Tractor X-200</div>
-              <div class="product-price">120$/day</div>
-              <div class="product-desc">High performance agricultural tractor</div>
+              <div class="product-name">تراکتور سنگین X-200</div>
+              <div class="product-price">۱۲۰ دلار/روز</div>
+              <div class="product-desc">تراکتور پرقدرت کشاورزی</div>
             </div>
-            <div class="product-card" onclick="openRentalBooking('Generator 5kW', 'Reliable power generator backup.', 30, '⚙️ Industrial')">
-              <div class="badge-rental">Rental</div>
+            <div class="product-card" onclick="openRentalBooking('ژنراتور برق 5kW', 'ژنراتور برق اضطراری مطمئن صنعتی.', ۳۰, '⚙️ صنعتی')">
+              <div class="badge-rental">اجاره‌ای</div>
               <div class="product-img">⚡</div>
-              <div class="product-name">Generator 5kW</div>
-              <div class="product-price">30$/day</div>
-              <div class="product-desc">Reliable power backup</div>
+              <div class="product-name">ژنراتور برق 5kW</div>
+              <div class="product-price">۳۰ دلار/روز</div>
+              <div class="product-desc">ژنراتور برق پشتیبان مطمئن</div>
             </div>
           </div>
         </div>
@@ -1503,26 +1540,26 @@
         <div class="screen-content" id="view-profile" style="background:#f6f8f9;">
           <div class="profile-card">
             <div class="profile-avatar">👨</div>
-            <div class="profile-name">Amir Hossein</div>
+            <div class="profile-name">امیرحسین عباسی</div>
             <div class="profile-email">amir@superapp.ir</div>
           </div>
 
           <div class="wallet-card">
-            <div class="wallet-title">Wallet Balance (کیف پول)</div>
-            <div class="wallet-balance" id="wallet-val">150.00 $</div>
-            <button class="wallet-btn" onclick="topUpWallet()">Top Up Wallet (+100$)</button>
+            <div class="wallet-title">اعتبار کیف پول الکترونیکی</div>
+            <div class="wallet-balance" id="wallet-val">۱۵۰.۰۰ دلار</div>
+            <button class="wallet-btn" onclick="topUpWallet()">شارژ سریع کیف پول (+۱۰۰ دلار)</button>
           </div>
 
           <div class="menu-item">
-            <span>📜 Order History</span>
+            <span>📜 تاریخچه سفارش‌ها</span>
             <span style="color:#aaa;">➔</span>
           </div>
           <div class="menu-item">
-            <span>💳 Payment Methods</span>
+            <span>💳 روش‌های پرداخت من</span>
             <span style="color:#aaa;">➔</span>
           </div>
           <div class="menu-item">
-            <span>🛠️ Support Centre</span>
+            <span>🛠️ مرکز پشتیبانی آنلاین</span>
             <span style="color:#aaa;">➔</span>
           </div>
         </div>
@@ -1536,15 +1573,15 @@
       <!-- A. Purchase Confirm Dialog -->
       <div class="dialog-overlay" id="purchase-dialog">
         <div class="confirm-card">
-          <div class="confirm-title">Purchase Product</div>
-          <div class="confirm-body" id="purchase-body">Do you want to purchase iPhone 15 Pro?</div>
+          <div class="confirm-title">تایید خرید کالا</div>
+          <div class="confirm-body" id="purchase-body">آیا تمایل به خرید گوشی iPhone 15 Pro دارید؟</div>
           <div class="confirm-price-row">
-            <span>Price:</span>
-            <span id="purchase-price" style="color:var(--primary-color);">999$</span>
+            <span>قیمت نهایی:</span>
+            <span id="purchase-price" style="color:var(--primary-color);">۹۹۹ دلار</span>
           </div>
           <div class="dialog-actions">
-            <button class="btn-cancel" onclick="closePurchaseDialog()">Cancel</button>
-            <button class="btn-confirm" onclick="confirmPurchase()">Purchase</button>
+            <button class="btn-cancel" onclick="closePurchaseDialog()">انصراف</button>
+            <button class="btn-confirm" onclick="confirmPurchase()">پرداخت و خرید</button>
           </div>
         </div>
       </div>
@@ -1553,55 +1590,55 @@
       <div class="rental-booking-overlay" id="rental-booking">
         <div class="booking-header">
           <span class="booking-back-btn" onclick="closeRentalBooking()">⬅</span>
-          <span class="booking-title">Book Equipment</span>
+          <span class="booking-title">رزرو و اجاره ماشین‌آلات</span>
         </div>
         <div class="booking-card">
-          <div class="confirm-title" id="rb-title">Concrete Mixer</div>
-          <div class="confirm-body" id="rb-desc">Heavy duty industrial concrete mixer.</div>
+          <div class="confirm-title" id="rb-title">تراکتور کشاورزی</div>
+          <div class="confirm-body" id="rb-desc">تراکتور پرقدرت چند منظوره کشاورزی.</div>
           <div class="booking-details-row">
             <div class="booking-date-selector">
-              <div style="font-size:10px; color:#666;">Start Date</div>
-              <div style="font-weight:bold; font-size:12px; margin-top:4px;">Today</div>
+              <div style="font-size:10px; color:#666;">تاریخ تحویل</div>
+              <div style="font-weight:bold; font-size:12px; margin-top:4px;">امروز</div>
             </div>
-            <div class="booking-date-selector" style="margin-left:12px;" onclick="addRentalDay()">
-              <div style="font-size:10px; color:#666;">End Date (Click to add days)</div>
-              <div style="font-weight:bold; font-size:12px; margin-top:4px; color:var(--primary-color);" id="rb-end">Tomorrow (+1 Day)</div>
+            <div class="booking-date-selector" style="margin-right:12px;" onclick="addRentalDay()">
+              <div style="font-size:10px; color:#666;">تاریخ عودت (کلیک جهت افزایش روز)</div>
+              <div style="font-weight:bold; font-size:12px; margin-top:4px; color:var(--primary-color);" id="rb-end">فردا (+۱ روز)</div>
             </div>
           </div>
         </div>
 
         <div class="booking-total-box">
-          <span id="rb-calc-days">2 days x 50$/day</span>
-          <span id="rb-total-price">100$</span>
+          <span id="rb-calc-days">۲ روز × ۱۲۰ دلار/روز</span>
+          <span id="rb-total-price">۲۴۰ دلار</span>
         </div>
 
-        <button class="chat-action-btn" onclick="confirmRentalBooking()">Confirm Rental Booking</button>
+        <button class="chat-action-btn" onclick="confirmRentalBooking()">تایید و ثبت نهایی اجاره</button>
       </div>
 
       <!-- C. Services Flow: Radar & Bids Simulator -->
       <div class="services-flow-overlay" id="services-flow">
         <!-- Broadcaster Radar -->
         <div class="radar-container" id="radar-view">
-          <div class="booking-header" style="position:absolute; top:16px; left:20px; width:100%;">
+          <div class="booking-header" style="position:absolute; top:16px; right:20px; width:100%;">
             <span class="booking-back-btn" onclick="closeServicesFlow()">✕</span>
-            <span class="booking-title" style="font-size:16px;">Searching Experts...</span>
+            <span class="booking-title" style="font-size:16px;">در حال جستجوی متخصص...</span>
           </div>
           <div class="radar-circle">
             <div class="radar-pulse"></div>
             <div class="radar-pulse" style="animation-delay: 0.9s;"></div>
             <span>📡</span>
           </div>
-          <div style="font-weight:bold; font-size:16px; margin-bottom:8px; color:var(--on-surface);">Broadcasting request...</div>
-          <div style="font-size:12px; color:#666; text-align:center;">Nearby experts are reviewing your request. Please wait.</div>
+          <div style="font-weight:bold; font-size:16px; margin-bottom:8px; color:var(--on-surface);">ارسال درخواست سرویس...</div>
+          <div style="font-size:12px; color:#666; text-align:center; padding: 0 16px;">درخواست شما به متخصصان اطراف ارسال شد. لطفا شکیبا باشید.</div>
         </div>
 
         <!-- Real-Time Offers List after radar matches -->
         <div class="offers-section" id="offers-view">
           <div class="booking-header">
             <span class="booking-back-btn" onclick="closeServicesFlow()">✕</span>
-            <span class="booking-title" style="font-size:16px;">Verified Experts (3)</span>
+            <span class="booking-title" style="font-size:16px;">پیشنهاد متخصصان (۳)</span>
           </div>
-          <div style="font-size:11px; color:#666; margin-bottom:16px;">We found 3 specialists ready to assist you:</div>
+          <div style="font-size:11px; color:#666; margin-bottom:16px;">۳ متخصص با مشخصات زیر آماده انجام درخواست شما هستند:</div>
           <div class="offers-list" id="offers-container">
             <!-- Offer Cards will be dynamically injected by JS timer -->
           </div>
@@ -1612,10 +1649,10 @@
       <div class="chat-overlay" id="chat-view">
         <div class="chat-header">
           <span class="booking-back-btn" onclick="closeChat()">⬅</span>
-          <div class="offer-avatar" id="chat-expert-avatar" style="width:36px; height:36px;"></div>
-          <div style="flex:1;">
-            <div class="offer-name" id="chat-expert-name">Ali Rezaei</div>
-            <div class="offer-specialty" id="chat-expert-specialty" style="margin:0;">Senior Plumber</div>
+          <div class="offer-avatar" id="chat-expert-avatar" style="width:36px; height:36px; margin-left:12px;"></div>
+          <div style="flex:1; text-align:right;">
+            <div class="offer-name" id="chat-expert-name">علی رضایی</div>
+            <div class="offer-specialty" id="chat-expert-specialty" style="margin:0;">متخصص ارشد لوله‌کشی</div>
           </div>
         </div>
 
@@ -1623,14 +1660,14 @@
           <!-- Live chat messages -->
         </div>
 
-        <div class="typing-indicator" id="expert-typing">Ali is typing...</div>
+        <div class="typing-indicator" id="expert-typing">علی در حال تایپ...</div>
 
         <div class="chat-footer">
           <div class="chat-input-row">
-            <input type="text" class="chat-input" id="chat-text-input" placeholder="Type a message or ask about price/ETA...">
+            <input type="text" class="chat-input" id="chat-text-input" placeholder="از متخصص بپرسید (هزینه، زمان رسیدن و...)">
             <button class="chat-send-btn" onclick="sendChatMessage()">➔</button>
           </div>
-          <button class="chat-action-btn" onclick="acceptExpertOffer()">Select & Confirm Proposed Price</button>
+          <button class="chat-action-btn" onclick="acceptExpertOffer()">انتخاب متخصص و تایید توافق قیمت</button>
         </div>
       </div>
 
@@ -1638,51 +1675,51 @@
       <div class="tracking-overlay" id="tracking-view">
         <div class="booking-header" style="width:100%; justify-content:space-between; margin-bottom:32px;">
           <span></span>
-          <span class="booking-title" style="font-size:16px;">Live Tracking</span>
+          <span class="booking-title" style="font-size:16px;">پیگیری زنده متخصص</span>
           <span class="booking-back-btn" onclick="resetAllServicesToSelection()">✕</span>
         </div>
 
         <div class="tracking-badge">🚀</div>
-        <div style="font-size:18px; font-weight:800; margin-bottom:8px;">Expert is on the way!</div>
-        <div style="font-size:12px; color:#666; margin-bottom:24px; text-align:center; padding: 0 16px;">The specialist has accepted your booking and is heading to your Tehran location.</div>
+        <div style="font-size:18px; font-weight:800; margin-bottom:8px;">متخصص در راه است!</div>
+        <div style="font-size:12px; color:#666; margin-bottom:24px; text-align:center; padding: 0 16px;">سرویس‌کار تایید نهایی شده و در حال حرکت به سمت موقعیت شما در تهران است.</div>
 
         <!-- Tracking details Card -->
-        <div class="booking-card" style="width:100%; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
+        <div class="booking-card" style="width:100%; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,0.05); text-align:right;">
           <div class="sheet-info-row" style="margin-bottom:16px;">
-            <div class="offer-avatar" id="track-avatar" style="width:50px; height:50px; background-image:url('https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150');"></div>
+            <div class="offer-avatar" id="track-avatar" style="width:50px; height:50px; background-image:url('https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150'); margin-left:16px;"></div>
             <div style="flex:1;">
-              <div class="offer-name" id="track-name">Ali Rezaei</div>
-              <div class="offer-specialty" id="track-specialty" style="margin:0;">Senior Plumbing Specialist</div>
+              <div class="offer-name" id="track-name">علی رضایی</div>
+              <div class="offer-specialty" id="track-specialty" style="margin:0;">متخصص ارشد تاسیسات و لوله‌کشی</div>
             </div>
           </div>
           <div class="divider" style="height:1px; background:#eee; margin-bottom:12px;"></div>
-          <div style="display:flex; justify-content:space-between; font-size:12px; color:#444; margin-bottom:10px;">
-            <span>Rating: <strong id="track-rating">⭐ 4.9</strong> (Verified)</span>
-            <span>Arrival: <strong style="color:var(--primary-color);">ETA 15 mins</strong></span>
+          <div style="display:flex; justify-content:space-between; font-size:12px; color:#444; margin-bottom:10px; flex-direction:row-reverse;">
+            <span>امتیاز: <strong id="track-rating">⭐ 4.9</strong> (تایید شده)</span>
+            <span>زمان رسیدن: <strong style="color:var(--primary-color);">۱۵ دقیقه دیگر</strong></span>
           </div>
-          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:bold; margin-top:12px;">
-            <span>Confirmed Price:</span>
-            <span style="color:var(--primary-color);" id="track-price">350,000 Tomans</span>
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:bold; margin-top:12px; flex-direction:row-reverse;">
+            <span>قیمت نهایی توافق شده:</span>
+            <span style="color:var(--primary-color);" id="track-price">۳۵۰,۰۰۰ تومان</span>
           </div>
         </div>
 
-        <button class="chat-action-btn" style="margin-top:16px;" onclick="alert('Live chat session re-opened!')">Message Specialist</button>
-        <button class="chat-action-btn" style="margin-top:10px; background:#eaeaea; color:#333;" onclick="resetAllServicesToSelection()">Cancel Request</button>
+        <button class="chat-action-btn" style="margin-top:16px;" onclick="alert('سشن چت مستقیم با متخصص مجددا باز شد!')">ارسال پیام مستقیم</button>
+        <button class="chat-action-btn" style="margin-top:10px; background:#eaeaea; color:#333;" onclick="resetAllServicesToSelection()">لغو درخواست سرویس</button>
       </div>
 
       <!-- F. Map Advanced Filter Sheet overlay -->
       <div class="filter-sheet-overlay" id="filter-sheet" onclick="closeFiltersOnBgClick()">
         <div class="filter-sheet-card" onclick="event.stopPropagation()">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <span style="font-weight:bold; font-size:16px; color:var(--on-surface);">Map Tuning Filters</span>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-direction:row-reverse;">
+            <span style="font-weight:bold; font-size:16px; color:var(--on-surface);">تنظیمات پیشرفته نقشه</span>
             <span style="cursor:pointer; font-weight:bold; font-size:16px; color:#888;" onclick="closeFilters()">✕</span>
           </div>
 
           <!-- Switch Toggle: Open Only -->
           <div class="filter-switch-row">
             <div>
-              <div style="font-weight:bold; font-size:13px;">Show Open Stores Only</div>
-              <div style="font-size:11px; color:#666; margin-top:2px;">Hide stores currently closed</div>
+              <div style="font-weight:bold; font-size:13px;">فقط مغازه‌های باز</div>
+              <div style="font-size:11px; color:#666; margin-top:2px;">پنهان کردن کسب‌وکارهای بسته در لحظه</div>
             </div>
             <label class="toggle-switch">
               <input type="checkbox" id="filter-open-only" onchange="applyTuningFilters()">
@@ -1693,17 +1730,17 @@
           <div style="height:1px; background:#eee; margin:16px 0;"></div>
 
           <!-- Rating Chooser -->
-          <div style="font-weight:bold; font-size:13px; margin-bottom:8px;">Minimum Rating</div>
+          <div style="font-weight:bold; font-size:13px; margin-bottom:8px;">حداقل امتیاز ستاره‌ای</div>
           <div class="rating-row">
-            <div class="filter-chip active" id="chip-rating-0" onclick="setRatingFilter(0)">Any</div>
-            <div class="filter-chip" id="chip-rating-4" onclick="setRatingFilter(4)">4.0+ ⭐</div>
-            <div class="filter-chip" id="chip-rating-45" onclick="setRatingFilter(4.5)">4.5+ ⭐</div>
-            <div class="filter-chip" id="chip-rating-48" onclick="setRatingFilter(4.8)">4.8+ ⭐</div>
+            <div class="filter-chip active" id="chip-rating-0" onclick="setRatingFilter(0)">هر امتیازی</div>
+            <div class="filter-chip" id="chip-rating-4" onclick="setRatingFilter(4)">۴.۰+ ⭐</div>
+            <div class="filter-chip" id="chip-rating-45" onclick="setRatingFilter(4.5)">۴.۵+ ⭐</div>
+            <div class="filter-chip" id="chip-rating-48" onclick="setRatingFilter(4.8)">۴.۸+ ⭐</div>
           </div>
 
           <div class="dialog-actions">
-            <button class="btn-cancel" onclick="resetFilters()">Reset Filters</button>
-            <button class="btn-confirm" onclick="closeFilters()">Apply Filters</button>
+            <button class="btn-cancel" onclick="resetFilters()">حذف فیلترها</button>
+            <button class="btn-confirm" onclick="closeFilters()">اعمال فیلترها</button>
           </div>
         </div>
       </div>
@@ -1712,19 +1749,19 @@
       <div class="nav-bar">
         <div class="nav-item active" id="nav-map" onclick="switchTab('map')">
           <div class="nav-icon">📍</div>
-          <div class="nav-label">Map</div>
+          <div class="nav-label">نقشه</div>
         </div>
         <div class="nav-item" id="nav-market" onclick="switchTab('market')">
           <div class="nav-icon">🛒</div>
-          <div class="nav-label">Buy</div>
+          <div class="nav-label">خرید کالا</div>
         </div>
         <div class="nav-item" id="nav-rental" onclick="switchTab('rental')">
           <div class="nav-icon">⚙️</div>
-          <div class="nav-label">Rental</div>
+          <div class="nav-label">اجاره ابزار</div>
         </div>
         <div class="nav-item" id="nav-profile" onclick="switchTab('profile')">
           <div class="nav-icon">👤</div>
-          <div class="nav-label">Profile</div>
+          <div class="nav-label">پروفایل</div>
         </div>
       </div>
 
@@ -1736,11 +1773,11 @@
 <script>
   // Mock Database
   const shops = {
-    s1: { id: 's1', name: 'Tech Hub', category: 'Electronics', rating: 4.8, reviews: 124, address: 'Tehran, Valiasr St, Block 4', hours: '09:00 - 22:00', isOpen: true, icon: '📱' },
-    s2: { id: 's2', name: 'Green Garden', category: 'Plants', rating: 4.5, reviews: 89, address: 'Tehran, Niavaran Ave, G1', hours: '08:00 - 20:00', isOpen: true, icon: '🌱' },
-    s3: { id: 's3', name: 'Coffee Corner', category: 'Cafe', rating: 4.9, reviews: 210, address: 'Tehran, Jordan St, C2', hours: '07:00 - 23:00', isOpen: false, icon: '☕' },
-    s4: { id: 's4', name: 'Gadget World', category: 'Electronics', rating: 4.2, reviews: 50, address: 'Tehran, Enghelab Sq', hours: '10:00 - 21:00', isOpen: true, icon: '📱' },
-    s5: { id: 's5', name: 'Flower Power', category: 'Plants', rating: 4.7, reviews: 30, address: 'Tehran, Pasdaran St', hours: '08:00 - 20:00', isOpen: true, icon: '🌱' }
+    s1: { id: 's1', name: 'مرکز فنی تک هاب', category: 'Electronics', rating: 4.8, reviews: 124, address: 'تهران، خیابان ولیعصر، پلاک ۴', hours: '۰۹:۰۰ الی ۲۲:۰۰', isOpen: true, icon: '📱' },
+    s2: { id: 's2', name: 'گلستان گرین گاردن', category: 'Plants', rating: 4.5, reviews: 89, address: 'تهران، خیابان نیاوران، پلاک ۱', hours: '۰۸:۰۰ الی ۲۰:۰۰', isOpen: true, icon: '🌱' },
+    s3: { id: 's3', name: 'کافه تخصصی کرنر', category: 'Cafe', rating: 4.9, reviews: 210, address: 'تهران، خیابان جردن، نبش پلاک ۲', hours: '۰۷:۰۰ الی ۲۳:۰۰', isOpen: false, icon: '☕' },
+    s4: { id: 's4', name: 'دنیای گجت ولیعصر', category: 'Electronics', rating: 4.2, reviews: 50, address: 'تهران، میدان انقلاب، پاساژ گجت', hours: '۱۰:۰۰ الی ۲۱:۰۰', isOpen: true, icon: '📱' },
+    s5: { id: 's5', name: 'گل‌فروشی فلاور پاور', category: 'Plants', rating: 4.7, reviews: 30, address: 'تهران، خیابان پاسداران، نبش کوچه ۵', hours: '۰۸:۰۰ الی ۲۰:۰۰', isOpen: true, icon: '🌱' }
   };
 
   // Tab switching
@@ -1844,7 +1881,6 @@
   }
 
   function onSearchBlur() {
-    // delay blur slightly to allow click to trigger
     setTimeout(() => {
       document.getElementById('suggestions-box').classList.remove('open');
     }, 200);
@@ -1857,7 +1893,6 @@
     updateSearchSuggestions();
   }
 
-  // Search input change listeners
   document.getElementById('map-search').addEventListener('input', function(e) {
     const val = e.target.value;
     document.getElementById('map-search-clear').style.display = val.length > 0 ? 'inline' : 'none';
@@ -1881,12 +1916,13 @@
       const shop = shops[id];
       if (shop.name.toLowerCase().includes(val) || shop.category.toLowerCase().includes(val)) {
         matchesCount++;
+        const displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
         itemsHtml += `
           <div class="suggestion-item" onclick="selectSuggestedShop('${id}')">
             <span>🏪</span>
-            <div style="flex:1;">
+            <div style="flex:1; text-align:right;">
               <div style="font-weight:bold;">${shop.name}</div>
-              <div style="font-size:11px; color:#666;">${shop.category} • ⭐ ${shop.rating}</div>
+              <div style="font-size:11px; color:#666;">${displayCategory} • ⭐ ${shop.rating}</div>
             </div>
           </div>
         `;
@@ -1897,7 +1933,7 @@
       box.innerHTML = itemsHtml;
       box.classList.add('open');
     } else {
-      box.innerHTML = '<div style="padding:16px; color:#888; font-size:12px; text-align:center;">No suggestions found.</div>';
+      box.innerHTML = '<div style="padding:16px; color:#888; font-size:12px; text-align:center;">موردی یافت نشد.</div>';
       box.classList.add('open');
     }
   }
@@ -1905,34 +1941,34 @@
   function selectSuggestedShop(shopId) {
     document.getElementById('suggestions-box').classList.remove('open');
     openQuickView(shopId);
-    alert(`Flying camera to ${shops[shopId].name}!`);
   }
 
   function openQuickView(shopId) {
     const shop = shops[shopId];
-    document.getElementById('qv-category').innerText = shop.category;
+    const displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
+    
+    document.getElementById('qv-category').innerText = displayCategory;
     document.getElementById('qv-name').innerText = shop.name;
     document.getElementById('qv-rating').innerText = shop.rating;
-    document.getElementById('qv-reviews').innerText = `(${shop.reviews} reviews)`;
+    document.getElementById('qv-reviews').innerText = `(${shop.reviews} نظر)`;
     document.getElementById('qv-address').innerText = shop.address;
-    document.getElementById('qv-hours').innerText = `Hours: ${shop.hours}`;
+    document.getElementById('qv-hours').innerText = `ساعت کاری: ${shop.hours}`;
     document.getElementById('qv-icon').innerText = shop.icon;
 
     const statusBadge = document.getElementById('qv-status');
     if (shop.isOpen) {
-      statusBadge.innerText = 'OPEN';
+      statusBadge.innerText = 'باز است';
       statusBadge.className = 'badge-open';
     } else {
-      statusBadge.innerText = 'CLOSED';
+      statusBadge.innerText = 'بسته است';
       statusBadge.className = 'badge-closed';
     }
 
-    // Set selected pin visual feedback
     document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('selected'));
     const targetPin = document.getElementById('pin-' + shopId);
     if (targetPin) {
       targetPin.classList.add('selected');
-      targetPin.style.display = 'flex'; // make sure it's visible
+      targetPin.style.display = 'flex'; 
     }
 
     // Move FABs out of way
@@ -1952,13 +1988,13 @@
   }
 
   function resetMapCamera() {
-    alert("Map centered on Tehran (35.6892, 51.3890).");
+    alert("نقشه روی تهران (۳۵.۶۸۹۲, ۵۱.۳۸۹۰) متمرکز شد.");
     closeQuickView();
   }
 
   function viewStoreProfile() {
     const name = document.getElementById('qv-name').innerText;
-    alert(`Navigating to profile mini-site of ${name}!`);
+    alert(`در حال انتقال به صفحه فروشگاه ${name}...`);
   }
 
   // =========================================
@@ -1967,7 +2003,7 @@
   let selectedProduct = null;
   function openPurchaseDialog(name, desc, price) {
     selectedProduct = { name, desc, price };
-    document.getElementById('purchase-body').innerText = `Do you want to purchase ${name}? \n(${desc})`;
+    document.getElementById('purchase-body').innerText = `آیا تمایل به خرید محصول ${name} دارید؟ \n(${desc})`;
     document.getElementById('purchase-price').innerText = price;
     document.getElementById('purchase-dialog').classList.add('open');
   }
@@ -1978,7 +2014,7 @@
 
   function confirmPurchase() {
     closePurchaseDialog();
-    showNotification(`Successfully purchased ${selectedProduct.name}!`);
+    showNotification(`خرید محصول ${selectedProduct.name} با موفقیت انجام شد!`);
   }
 
   // =========================================
@@ -2002,10 +2038,16 @@
   }
 
   function updateRentalCost() {
-    const endStr = rentalDays === 2 ? 'Tomorrow (+1 Day)' : `In ${rentalDays - 1} days (+${rentalDays - 1} Days)`;
+    const endStr = rentalDays === 2 ? 'فردا (+۱ روز)' : `در ${rentalDays - 1} روز آینده (+${rentalDays - 1} روز)`;
     document.getElementById('rb-end').innerText = endStr;
-    document.getElementById('rb-calc-days').innerText = `${rentalDays} days x ${selectedRental.pricePerDay}$/day`;
-    document.getElementById('rb-total-price').innerText = `${rentalDays * selectedRental.pricePerDay}$`;
+    document.getElementById('rb-calc-days').innerText = `${rentalDays} روز × ${selectedRental.pricePerDay} دلار/روز`;
+    document.getElementById('rb-total-price').innerText = `${rentalDays * selectedRental.pricePerDay} دلار`;
+  }
+
+  // Translates numbers to Persian digits helper
+  function toPersianDigits(n) {
+    const p = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+    return n.toString().replace(/[0-9]/g, function(w) { return p[+w]; });
   }
 
   function closeRentalBooking() {
@@ -2014,7 +2056,7 @@
 
   function confirmRentalBooking() {
     closeRentalBooking();
-    showNotification(`Booking confirmed for ${selectedRental.name} (${rentalDays} days)!`);
+    showNotification(`رزرو اجاره برای ${selectedRental.name} به مدت ${rentalDays} روز تایید شد!`);
   }
 
   // =========================================
@@ -2023,17 +2065,17 @@
   let walletVal = 150.00;
   function topUpWallet() {
     walletVal += 100.00;
-    document.getElementById('wallet-val').innerText = `${walletVal.toFixed(2)} $`;
-    showNotification("Wallet topped up by +100.00 $ successfully!");
+    document.getElementById('wallet-val').innerText = `${walletVal.toFixed(2)} دلار`;
+    showNotification("کیف پول الکترونیکی شما با موفقیت +۱۰۰ دلار شارژ شد!");
   }
 
   // =========================================
   // SERVICES HUB (RADAR & REALTIME OFFERS) LOGIC
   // =========================================
   const mockBids = [
-    { id: 'b1', name: 'Ali Rezaei', specialty: 'Senior Plumbing Specialist', rating: 4.9, jobs: 142, price: '350,000 Tomans', eta: '15 mins', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150', text: 'Hello! I am a certified senior plumber with all the necessary tools. I can resolve any leaks immediately.' },
-    { id: 'b2', name: 'Sina Mohammadi', specialty: 'Master Electrical Technician', rating: 4.8, jobs: 98, price: '290,000 Tomans', eta: '22 mins', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150', text: 'Hi! I specialize in residential electrical repairs and diagnostic safety. Ready to start.' },
-    { id: 'b3', name: 'Milad Karimi', specialty: 'AC & Cooling Expert', rating: 4.7, jobs: 215, price: '320,000 Tomans', eta: '18 mins', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150', text: 'Hello! 8+ years experience in cooling installations and maintenance. Can head over soon.' }
+    { id: 'b1', name: 'علی رضایی', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', rating: 4.9, jobs: 142, price: '۳۵۰,۰۰۰ تومان', eta: '۱۵ دقیقه', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی و بلوکه‌ها اقدام کنم.' },
+    { id: 'b2', name: 'سینا محمدی', specialty: 'تکنسین برق ساختمان و عیب‌یابی', rating: 4.8, jobs: 98, price: '۲۹۰,۰۰۰ تومان', eta: '۲۲ دقیقه', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارهای تست و عیب‌یابی کاملاً آماده است.' },
+    { id: 'b3', name: 'میلاد کریمی', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', rating: 4.7, jobs: 215, price: '۳۲۰,۰۰۰ تومان', eta: '۱۸ دقیقه', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150', text: 'سلام! بیش از ۸ سال تجربه در سرویس کولر گازی و شارژ گاز دارم. مایل هستید فورا هماهنگ کنم؟' }
   ];
 
   let activeOffers = [];
@@ -2041,7 +2083,6 @@
   let activeBidSelected = null;
 
   function openServicesFlow() {
-    // Start flow
     document.getElementById('radar-view').style.display = 'flex';
     document.getElementById('offers-view').style.display = 'none';
     document.getElementById('services-flow').classList.add('open');
@@ -2051,17 +2092,17 @@
     // Simulate bids arriving in real-time
     offerTimer1 = setTimeout(() => {
       addBidCard(mockBids[0]);
-      showNotification("New proposal from Ali Rezaei!");
+      showNotification("پیشنهاد جدید از علی رضایی دریافت شد!");
     }, 2000);
 
     offerTimer2 = setTimeout(() => {
       addBidCard(mockBids[1]);
-      showNotification("New proposal from Sina Mohammadi!");
+      showNotification("پیشنهاد جدید از سینا محمدی دریافت شد!");
     }, 4500);
 
     offerTimer3 = setTimeout(() => {
       addBidCard(mockBids[2]);
-      showNotification("New proposal from Milad Karimi!");
+      showNotification("پیشنهاد جدید از میلاد کریمی دریافت شد!");
     }, 6500);
 
     // Switch from radar to bids list after first match
@@ -2087,8 +2128,8 @@
         <div class="offer-specialty">${bid.specialty}</div>
         <div class="offer-meta">
           <span>⭐ ${bid.rating}</span>
-          <span>• ${bid.jobs} jobs</span>
-          <span>• ${bid.eta}</span>
+          <span>• ${bid.jobs} کار موفق</span>
+          <span>• رسیدن تا ${bid.eta}</span>
         </div>
       </div>
     `;
@@ -2111,7 +2152,6 @@
     document.getElementById('chat-expert-name').innerText = bid.name;
     document.getElementById('chat-expert-specialty').innerText = bid.specialty;
 
-    // Load initial intro message
     const msgBox = document.getElementById('chat-messages-box');
     msgBox.innerHTML = `
       <div class="msg msg-expert">${bid.text}</div>
@@ -2139,19 +2179,18 @@
     msgBox.appendChild(userMsg);
     msgBox.scrollTop = msgBox.scrollHeight;
 
-    // Simulate smart bot response
+    // Simulate smart bot response in Persian
     const textLower = text.toLowerCase();
     let reply = '';
-    if (textLower.includes('قیمت') || textLower.includes('هزینه') || textLower.includes('price') || textLower.includes('cost') || textLower.includes('تومان')) {
-      reply = `The proposed price of ${activeBidSelected.price} covers the visit fee and labor. If replacement parts are needed on-site, I can procure them for you with a receipt.`;
-    } else if (textLower.includes('زمان') || textLower.includes('کی') || textLower.includes('ساعت') || textLower.includes('when') || textLower.includes('time') || textLower.includes('eta')) {
-      reply = `I can leave right now with my fully-equipped service vehicle and reach your address within ${activeBidSelected.eta} of your booking confirmation!`;
+    if (textLower.includes('قیمت') || textLower.includes('هزینه') || textLower.includes('چقدر') || textLower.includes('price') || textLower.includes('cost') || textLower.includes('تومان')) {
+      reply = `قیمت پیشنهادی من به میزان ${activeBidSelected.price} شامل هزینه حضور و دستمزد اولیه کار است. در صورت نیاز به خرید قطعات، با فاکتور رسمی معتبر تهیه کرده و تقدیم می‌کنم.`;
+    } else if (textLower.includes('زمان') || textLower.includes('کی') || textLower.includes('ساعت') || textLower.includes('رسیدن') || textLower.includes('when') || textLower.includes('time') || textLower.includes('eta')) {
+      reply = `من کاملاً آماده با خودروی سرویس هستم و ابزارها هم تکمیل است. به محض تایید شما، نهایت تا ${activeBidSelected.eta} در موقعیت شما در تهران خواهم بود!`;
     } else {
-      reply = "Great! I've noted down the details. If you have any questions, feel free to ask. Or click the button below to accept my proposal so I can start driving!";
+      reply = "عالی! پیام شما را دریافت کردم. اگر سوال دیگری در این زمینه دارید بفرمایید، در غیر این صورت می‌توانید با کلیک بر روی دکمه زیر پیشنهاد را تایید کنید تا هماهنگی لوکیشن شما نهایی شود و راه بیفتم!";
     }
 
-    // Typing delay animation
-    document.getElementById('expert-typing').innerText = `${activeBidSelected.name} is typing...`;
+    document.getElementById('expert-typing').innerText = `${activeBidSelected.name} در حال نوشتن پاسخ...`;
     document.getElementById('expert-typing').style.display = 'block';
 
     setTimeout(() => {

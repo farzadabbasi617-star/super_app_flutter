@@ -42,9 +42,9 @@ class _MapPageState extends State<MapPage> {
   bool _isSearchFocused = false;
 
   final List<Map<String, String>> _categories = [
-    {'name': 'Electronics', 'icon': '📱'},
-    {'name': 'Plants', 'icon': '🌱'},
-    {'name': 'Cafe', 'icon': '☕'},
+    {'name': 'Electronics', 'icon': '📱', 'fa': 'الکترونیک'},
+    {'name': 'Plants', 'icon': '🌱', 'fa': 'گل و گیاه'},
+    {'name': 'Cafe', 'icon': '☕', 'fa': 'کافه'},
   ];
 
   Set<Marker> _markers = {};
@@ -206,10 +206,10 @@ class _MapPageState extends State<MapPage> {
                                     });
                                   },
                                   child: TextField(
-                                    decoration: const InputDecoration(
-                                      hintText: 'Search stores, services, cafes...',
-                                      border: InputBorder.none,
-                                    ),
+                                  decoration: const InputDecoration(
+                                    hintText: 'جستجوی فروشگاه، خدمات، کافه‌ها...',
+                                    border: InputBorder.none,
+                                  ),
                                     onChanged: (val) {
                                       setState(() {
                                         _searchQuery = val;
@@ -258,7 +258,7 @@ class _MapPageState extends State<MapPage> {
                               return Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: FilterChip(
-                                  label: const Text('All Stores'),
+                                  label: const Text('همه صنف‌ها'),
                                   selected: isSelected,
                                   onSelected: (_) {
                                     setState(() {
@@ -273,12 +273,13 @@ class _MapPageState extends State<MapPage> {
                             }
                             final cat = _categories[index - 1];
                             final catName = cat['name']!;
+                            final catFa = cat['fa']!;
                             final isSelected = _selectedCategory == catName;
 
                             return Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: FilterChip(
-                                label: Text(catName),
+                                label: Text(catFa),
                                 selected: isSelected,
                                 onSelected: (_) {
                                   setState(() {
@@ -321,7 +322,7 @@ class _MapPageState extends State<MapPage> {
                       context.push('/request-service');
                     },
                     icon: const Icon(Icons.handyman_outlined),
-                    label: const Text('Request Expert'),
+                    label: const Text('درخواست متخصص'),
                     backgroundColor: theme.colorScheme.primary,
                     foregroundColor: theme.colorScheme.onPrimary,
                   ),
@@ -350,7 +351,7 @@ class _MapPageState extends State<MapPage> {
       child: Container(
         constraints: const BoxConstraints(maxHeight: 240),
         child: matchedShops.isEmpty
-            ? const ListTile(title: Text('No results found.', style: TextStyle(color: Colors.grey)))
+            ? const ListTile(title: Text('موردی یافت نشد.', style: TextStyle(color: Colors.grey)))
             : ListView.builder(
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
@@ -401,7 +402,7 @@ class _MapPageState extends State<MapPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Map Tuning Filters',
+                        'تنظیمات پیشرفته نقشه',
                         style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       IconButton(
@@ -414,8 +415,8 @@ class _MapPageState extends State<MapPage> {
 
                   // 1. Show Open Only Toggle Switch
                   SwitchListTile(
-                    title: const Text('Show Open Stores Only', style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: const Text('Filters out closed shops in real-time'),
+                    title: const Text('فقط مغازه‌های باز', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: const Text('پنهان کردن کسب‌وکارهای بسته در لحظه'),
                     value: _showOnlyOpen,
                     activeColor: theme.colorScheme.primary,
                     onChanged: (val) {
@@ -427,14 +428,14 @@ class _MapPageState extends State<MapPage> {
                   const SizedBox(height: 10),
 
                   // 2. Minimum Rating Radio Row
-                  const Text('Minimum Rating', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const Text('حداقل امتیاز ستاره‌ای', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [0.0, 4.0, 4.5, 4.8].map((rating) {
                       final isSelected = _minRating == rating;
                       return ChoiceChip(
-                        label: Text(rating == 0.0 ? 'Any' : '$rating+ ⭐'),
+                        label: Text(rating == 0.0 ? 'هر امتیازی' : '$rating+ ⭐'),
                         selected: isSelected,
                         onSelected: (_) {
                           setModalState(() => _minRating = rating);
@@ -464,7 +465,7 @@ class _MapPageState extends State<MapPage> {
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
-                          child: const Text('Reset Filters'),
+                          child: const Text('حذف فیلترها'),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -477,7 +478,7 @@ class _MapPageState extends State<MapPage> {
                             backgroundColor: theme.colorScheme.primary,
                             foregroundColor: theme.colorScheme.onPrimary,
                           ),
-                          child: const Text('Apply Filters'),
+                          child: const Text('اعمال فیلترها'),
                         ),
                       ),
                     ],
@@ -527,7 +528,7 @@ class _MapPageState extends State<MapPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    shop.category,
+                    shop.category == 'Electronics' ? 'الکترونیک' : (shop.category == 'Plants' ? 'گل و گیاه' : (shop.category == 'Cafe' ? 'کافه' : shop.category)),
                     style: TextStyle(
                       color: theme.colorScheme.onPrimaryContainer,
                       fontSize: 12,
@@ -579,7 +580,7 @@ class _MapPageState extends State<MapPage> {
                         children: [
                           const Icon(Icons.star, color: Colors.amber, size: 18),
                           Text(' ${shop.rating}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                          Text(' (${shop.reviewCount} reviews)', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                          Text(' (${shop.reviewCount} نظر)', style: const TextStyle(color: Colors.grey, fontSize: 12)),
                         ],
                       ),
                       const SizedBox(height: 4),
@@ -602,7 +603,7 @@ class _MapPageState extends State<MapPage> {
                 Icon(Icons.access_time, size: 16, color: theme.colorScheme.primary),
                 const SizedBox(width: 6),
                 Text(
-                  'Hours: ${shop.operatingHours}',
+                  'ساعت کاری: ${shop.operatingHours}',
                   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                 ),
                 const Spacer(),
@@ -613,7 +614,7 @@ class _MapPageState extends State<MapPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    shop.isOpen ? 'OPEN' : 'CLOSED',
+                    shop.isOpen ? 'باز است' : 'بسته است',
                     style: TextStyle(
                       color: shop.isOpen ? Colors.green.shade900 : Colors.red.shade900,
                       fontSize: 11,
@@ -629,7 +630,7 @@ class _MapPageState extends State<MapPage> {
             SizedBox(
               width: double.infinity,
               child: AppButton(
-                text: 'View Store Profile',
+                text: 'مشاهده پروفایل فروشگاه',
                 onPressed: () {
                   context.push('/shop/${shop.id}');
                 },
