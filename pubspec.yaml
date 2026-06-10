@@ -38,6 +38,8 @@ dependencies:
   hive_flutter: ^1.1.0
 
 dev_dependencies:
+  bloc_test: ^9.1.7
+  integration_test: sdk: flutter
   mockito: ^5.4.4
   build_runner: ^2.4.8
   mockito: ^5.4.4
