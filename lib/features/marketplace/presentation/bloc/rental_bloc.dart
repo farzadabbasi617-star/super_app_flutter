@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../domain/repositories/rental_repository.dart';
+import '../../domain/usecases/book_equipment_usecase.dart';
 import '../../../core/error/failures.dart';
 
 abstract class RentalEvent extends Equatable {
@@ -33,21 +33,20 @@ class RentalBookingFailure extends RentalState {
 }
 
 class RentalBloc extends Bloc<RentalEvent, RentalState> {
-  final RentalRepository rentalRepository;
+  final BookEquipmentUseCase bookEquipment;
 
-  RentalBloc({required this.rentalRepository}) : super(RentalInitial()) {
+  RentalBloc({required this.bookEquipment}) : super(RentalInitial()) {
     on<BookRentalRequested>((event, emit) async {
       emit(RentalBookingLoading());
-      final result = await rentalRepository.bookEquipment(
+      final result = await bookEquipment.execute(
         productId: event.productId,
         startDate: event.start,
         endDate: event.end,
       );
-      if (result.isRight) {
-        emit(RentalBookingSuccess());
-      } else {
-        emit(RentalBookingFailure((result.left as Failure).message));
-      }
+      result.fold(
+        (failure) => emit(RentalBookingFailure(failure.message)),
+        (success) => emit(RentalBookingSuccess()),
+      );
     });
   }
 }

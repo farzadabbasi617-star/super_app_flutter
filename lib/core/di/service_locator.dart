@@ -21,7 +21,7 @@ import '../../features/services/domain/usecases/accept_service_request_usecase.d
 import '../../features/services/presentation/bloc/service_bloc.dart';
 import '../network/socket/socket_service.dart';
 import '../../features/marketplace/data/repositories/product_repository_impl.dart';
-import '../../features/marketplace/domain/repositories/product_repository.dart';
+import '../../features/marketplace/domain/repositories/product_//repository.dart';
 import '../../features/marketplace/domain/usecases/get_products_usecase.dart';
 import '../../features/marketplace/data/repositories/rental_repository_impl.dart';
 import '../../features/marketplace/domain/repositories/rental_repository.dart';
@@ -34,7 +34,7 @@ import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_wallet_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/payment/data/repositories/payment_repository_impl.dart';
-import '../..///payment/domain/repositories/payment_repository.dart';
+import '../../features/payment/domain/repositories/payment_//repository.dart';
 
 final sl = GetIt.instance;
 
@@ -71,14 +71,20 @@ void _initMap() {
   sl.registerLazySingleton<ShopRepository>(() => ShopRepositoryImpl());
   sl.registerLazySingleton(() => GetNearbyShopsUseCase(sl()));
   sl.registerLazySingleton(() => GetShopDetailsUseCase(sl()));
-  sl.registerFactory(() => MapBloc(shopRepository: sl())); // Will refactor BLoC to UseCases next
+  sl.registerFactory(() => MapBloc(
+    getNearbyShops: sl(),
+    getShopDetails: sl(),
+  ));
 }
 
 void _initServices() {
   sl.registerLazySingleton<ServiceRepository>(() => ServiceRepositoryImpl(sl()));
   sl.registerLazySingleton(() => CreateServiceRequestUseCase(sl()));
   sl.registerLazySingleton(() => AcceptServiceRequestUseCase(sl()));
-  sl.registerFactory(() => ServiceBloc(serviceRepository: sl())); // Will refactor BLoC next
+  sl.registerFactory(() => ServiceBloc(
+    createRequest: sl(),
+    acceptRequest: sl(),
+  ));
 }
 
 void _initMarketplace() {
@@ -86,16 +92,17 @@ void _initMarketplace() {
   sl.registerLazySingleton<RentalRepository>(() => RentalRepositoryImpl());
   sl.registerLazySingleton(() => GetProductsUseCase(sl()));
   sl.registerLazySingleton(() => BookEquipmentUseCase(sl()));
-  sl.// Fixed registration
-  sl.registerFactory(() => ProductBloc(productRepository: sl()));
-  sl.registerFactory(() => RentalBloc(rentalRepository: sl()));
+  sl.registerFactory(() => ProductBloc(getProducts: sl()));
+  sl.registerFactory(() => RentalBloc(bookEquipment: sl()));
 }
 
 void _initProfileAndPayment() {
   sl.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(sl()));
   sl.registerLazySingleton(() => GetProfileUseCase(sl()));
   sl.registerLazySingleton(() => UpdateWalletUseCase(sl()));
-  sl.// Fixed registration
-  sl.registerFactory(() => ProfileBloc(profileRepository: sl()));
+  sl.registerFactory(() => ProfileBloc(
+    getProfile: sl(),
+    updateWallet: sl(),
+  ));
   sl.registerLazySingleton<PaymentRepository>(() => PaymentRepositoryImpl(sl()));
 }
