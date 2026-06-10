@@ -4,6 +4,7 @@ import 'api_endpoints.dart';
 import '../error/failures.dart';
 import '../storage/secure_storage_service.dart';
 import '../di/service_locator.dart';
+import '../utils/app_logger.dart';
 
 class NetworkClient {
   final Dio dio;
@@ -23,7 +24,6 @@ class NetworkClient {
     dio.interceptors.add(AuthInterceptor());
     dio.interceptors.add(ErrorInterceptor());
     
-    // SECURITY FIX: Only enable logging in debug mode to prevent leaking sensitive data in release
     if (kDebugMode) {
       dio.interceptors.add(LogInterceptor(
         requestBody: true,
@@ -73,7 +73,7 @@ class NetworkClient {
       case DioExceptionType.badResponse:
         final statusCode = e.response?.statusCode;
         if (statusCode == 401) return const UnauthorizedFailure();
-        if (statusCode == 400) return ValidationFailure(e.response?.data['message'] ?? 'Invalid request');
+        if (statusCode == 400) return ValidationFailure(e.//response?.data['message'] ?? 'Invalid request');
         return ServerFailure(e.response?.data['message'] ?? 'Something went wrong', statusCode: statusCode);
       default:
         return ServerFailure('An unexpected error occurred');
@@ -98,7 +98,7 @@ class ErrorInterceptor extends Interceptor {
   @override
   void onError(DioException err, RequestInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-      // Global Auth Error handled here
+      AppLogger.log('Global Auth Error: Session Expired', level: LogLevel.warning);
     }
     super.onError(err, handler);
   }

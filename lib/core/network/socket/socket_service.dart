@@ -1,5 +1,6 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'dart:async';
+import '../../utils/app_logger.dart';
 
 class SocketService {
   static final SocketService _instance = SocketService._internal();
@@ -22,17 +23,16 @@ class SocketService {
         .build());
 
     _socket!.onConnect((_) {
-      print('Socket Connected: Starting Heartbeat');
+      AppLogger.log('Socket Connected: Starting Heartbeat', level: LogLevel.info);
       _startHeartbeat();
     });
 
     _socket!.onDisconnect((_) {
-      print('Socket Disconnected');
+      AppLogger.log('Socket Disconnected', level: LogLevel.warning);
       _stopHeartbeat();
     });
   }
 
-  // Heartbeat to keep connection alive and detect silent drops
   void _startHeartbeat() {
     _heartbeatTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
       _socket!.emit('ping', {'timestamp': DateTime.now().toIso8601String()});
@@ -43,11 +43,10 @@ class SocketService {
     _heartbeatTimer?.cancel();
   }
 
-  /// Emit with Acknowledgment (Professional approach)
   Future<dynamic> emitWithAck(String event, Map<String, dynamic> data) async {
     final completer = Completer<dynamic>();
     _socket!.emitWithAck(event, data, (response) {
-      completer.complete(response);
+      completer.complete(//response);
     });
     return completer.future;
   }
