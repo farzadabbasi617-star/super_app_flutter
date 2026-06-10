@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/utils/monetization_manager.dart';
 import '../../../shared/widgets/app_button.dart';
+import '../../map/presentation/pages/shop_detail_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -11,6 +12,25 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final _monetization = MonetizationManager();
+  bool _isSellerPortalExpanded = false;
+
+  // Mock initial seller portal orders list
+  final List<Map<String, dynamic>> _receivedOrders = [
+    {
+      'customer': 'امیرعلی کریمی',
+      'product': 'گوشی آیفون ۱۵ پرو تیتانیوم',
+      'price': '۶۰,۰۰۰,۰۰۰ تومان',
+      'status': 'در انتظار ارسال 🚚',
+      'date': 'امروز - ۱۰:۴۵'
+    },
+    {
+      'customer': 'سارا مهدوی',
+      'product': 'کابل شارژر Fast تایپ سی',
+      'price': '۱۵۰,۰۰۰ تومان',
+      'status': 'تحویل داده شده ✅',
+      'date': 'دیروز - ۱۸:۳۰'
+    }
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +78,22 @@ class _ProfilePageState extends State<ProfilePage> {
 
                 const SizedBox(height: 24),
 
-                // 3. SaaS Subscription Plan Selector
+                // 3. Seller / Merchant Portal (پنل مدیریت غرفه‌داران و کسب‌وکار) - NEW!
+                _buildSellerPortalSection(theme),
+
+                const SizedBox(height: 24),
+
+                // 4. SaaS Subscription Plan Selector
                 _buildSubscriptionSection(theme),
 
                 const SizedBox(height: 24),
 
-                // 4. Expert Bidding Coins Section
+                // 5. Expert Bidding Coins Section
                 _buildExpertCoinsSection(theme),
 
                 const SizedBox(height: 24),
 
-                // 5. Recent Transactions Title & List
+                // 6. Recent Transactions Title & List
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Text(
@@ -158,6 +183,249 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
+    );
+  }
+
+  // Expanded Business Owner Portal Widget - NEW!
+  Widget _buildSellerPortalSection(ThemeData theme) {
+    final customBoothsCount = ShopDetailPage.customCreatedShops.length;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.orange.shade300, width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.orange.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header with Expand icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: Icon(
+                  _isSellerPortalExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  color: Colors.orange.shade800,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isSellerPortalExpanded = !_isSellerPortalExpanded;
+                  });
+                },
+              ),
+              const Row(
+                children: [
+                  Text(
+                    'پنل مدیریت غرفه و فروشندگان 🏪',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Colors.orange),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'شما دارای $customBoothsCount غرفه فعال روی نقشه هستید. جهت مدیریت سفارشات و محصولات روی فلش بزنید.',
+            style: const TextStyle(fontSize: 10.5, color: Colors.grey),
+            textAlign: TextAlign.right,
+          ),
+          
+          if (_isSellerPortalExpanded) ...[
+            const Divider(height: 24),
+            
+            // A. Earnings Analytics Bar Chart (Simulated)
+            const Text('📈 گزارش عملکرد و تحلیل درآمد غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade200),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('مجموع فروش غرفه شما:', style: TextStyle(fontSize: 11.5, color: Colors.grey)),
+                  Text('۶۰,۱۵۰,۰۰۰ تومان', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Colors.green)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // B. Received Orders List
+            const Text('📦 سفارشات دریافتی اخیر مشتریان', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+            const SizedBox(height: 8),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _receivedOrders.length,
+              itemBuilder: (context, index) {
+                final order = _receivedOrders[index];
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.shade50.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.orange.shade100),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('خریدار: ${order['customer']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+                          Text(order['date'], style: const TextStyle(fontSize: 9.5, color: Colors.grey)),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('کالا: ${order['product']}', style: const TextStyle(fontSize: 10.5, color: Colors.black87)),
+                          Text(order['price'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Colors.orange)),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: order['status'].contains('انتظار') ? Colors.blue.shade50 : Colors.green.shade50,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          order['status'],
+                          style: TextStyle(
+                            fontSize: 9, 
+                            fontWeight: FontWeight.bold, 
+                            color: order['status'].contains('انتظار') ? Colors.blue.shade900 : Colors.green.shade900,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // C. Prices and Products Manager
+            const Text('🏷️ ویرایش سریع قیمت محصولات غرفه‌های شما', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+            const SizedBox(height: 8),
+            if (ShopDetailPage.customCreatedShops.isEmpty)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Text(
+                    'هنوز غرفه‌ای روی مپ ایجاد نکرده‌اید! ابتدا از تب نقشه غرفه بسازید.',
+                    style: TextStyle(color: Colors.grey, fontSize: 10.5),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+            else
+              ...ShopDetailPage.customCreatedShops.map((booth) {
+                final List<dynamic> products = booth['products'] ?? [];
+                return ExpansionTile(
+                  title: Text(booth['name'], style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
+                  children: products.map((product) {
+                    return ListTile(
+                      dense: true,
+                      leading: Text(product.icon, style: const TextStyle(fontSize: 18)),
+                      title: Text(product.name, style: const TextStyle(fontSize: 11)),
+                      subtitle: Text(product.price, style: const TextStyle(color: Colors.green, fontSize: 10.5)),
+                      trailing: TextButton(
+                        child: const Text('ویرایش قیمت', style: TextStyle(fontSize: 10)),
+                        onPressed: () => _showEditPriceDialog(booth['id'], product),
+                      ),
+                    );
+                  }).toList(),
+                );
+              }).toList(),
+          ],
+        ],
+      ),
+    );
+  }
+
+  // Edit product price dialog
+  void _showEditPriceDialog(String boothId, dynamic product) {
+    final priceController = TextEditingController(text: product.price);
+    final theme = Theme.of(context);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const Text('ویرایش قیمت محصول غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.right),
+          content: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('محصول: ${product.name}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: priceController,
+                  decoration: InputDecoration(
+                    labelText: 'قیمت جدید کالا (همراه با تومان)',
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('انصراف'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary, foregroundColor: Colors.white),
+              onPressed: () {
+                final newPrice = priceController.text.trim();
+                if (newPrice.isEmpty) return;
+                
+                setState(() {
+                  // Actually mutate the static custom Booths product price!
+                  final booth = ShopDetailPage.customCreatedShops.firstWhere((element) => element['id'] == boothId);
+                  final List<dynamic> productsList = booth['products'];
+                  final prodIndex = productsList.indexWhere((element) => element.name == product.name);
+                  if (prodIndex > -1) {
+                    // Update price
+                    productsList[prodIndex] = BoothProduct(
+                      name: product.name,
+                      price: newPrice,
+                      icon: product.icon,
+                      description: product.description,
+                    );
+                  }
+                });
+                
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('🎉 قیمت کالا با موفقیت ویرایش شد و در ویترین غرفه فعال گردید!'), backgroundColor: Colors.green),
+                );
+              },
+              child: const Text('ذخیره قیمت'),
+            ),
+          ],
+        );
+      },
     );
   }
 

@@ -12,6 +12,8 @@ class ProductRepositoryImpl implements ProductRepository {
       const Category(id: 'c3', name: 'Fashion', icon: '👗'),
       const Category(id: 'c4', name: 'Books', icon: '📚'),
       const Category(id: 'c5', name: 'Tools', icon: '🛠️'),
+      const Category(id: 'c6', name: 'Industrial', icon: '⚙️'),
+      const Category(id: 'c7', name: 'Agriculture', icon: '🚜'),
     ];
   }
 
@@ -147,6 +149,38 @@ class ProductRepositoryImpl implements ProductRepository {
         price: 1600000.0, 
         imageUrl: 'https://images.unsplash.com/photo-1534224039826-c7a0eda0e6b3?w=150', 
         category: 'Tools'
+      ),
+
+      // 6. Rental Machinery (Industrial & Agriculture)
+      const Product(
+        id: 'p_rent_1',
+        name: 'میکسر بتن دنده‌ای بتونیر صنعتی',
+        description: 'میکسر بتن پرقدرت ۲۵۰ لیتری صنعتی جهت پروژه‌های بتن‌ریزی ساختمان',
+        price: 15000000.0,
+        imageUrl: 'https://images.unsplash.com/photo-1581147036324-c17ac41dfa6c?w=150',
+        category: 'Industrial',
+        isRental: true,
+        rentalPricePerDay: 3000000.0,
+      ),
+      const Product(
+        id: 'p_rent_2',
+        name: 'تراکتور پرقدرت کشاورزی ITM 399',
+        description: 'تراکتور جفت دیفرانسیل سنگین کشاورزی آماده به کار با ادوات کامل',
+        price: 250000000.0,
+        imageUrl: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=150',
+        category: 'Agriculture',
+        isRental: true,
+        rentalPricePerDay: 8000000.0,
+      ),
+      const Product(
+        id: 'p_rent_3',
+        name: 'ژنراتور دیزلی برق اضطراری ۵۰KVA',
+        description: 'ژنراتور برق سایلنت کانوپی‌دار مناسب کارگاه‌های عمرانی و صنعتی سنگین',
+        price: 95000000.0,
+        imageUrl: 'https://images.unsplash.com/photo-1534224039826-c7a0eda0e6b3?w=150',
+        category: 'Industrial',
+        isRental: true,
+        rentalPricePerDay: 4000000.0,
       ),
     ];
 

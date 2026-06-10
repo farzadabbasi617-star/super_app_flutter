@@ -1987,37 +1987,61 @@
         <!-- ========================================= -->
         <!-- VIEW 3: RENTAL PAGE                       -->
         <!-- ========================================= -->
-        <div class="screen-content" id="view-rental" style="background:#fff;">
-          <div class="market-header" style="background:#fdfdfd;">
-            <div class="market-title" style="color:#d97706;">اجاره ماشین‌آلات صنعتی و کشاورزی</div>
-            <div class="chips-row" style="justify-content: center;">
-              <div class="filter-chip active">🚜 همه ادوات سنگین</div>
-              <div class="filter-chip">⚙️ صنعتی</div>
-              <div class="filter-chip">🌱 کشاورزی</div>
+        <div class="screen-content" id="view-rental" style="background:#f4f6f8; overflow-y: auto;">
+          <!-- Rental Header -->
+          <div class="market-header" style="background: white; padding: 12px 16px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; flex-direction: row-reverse; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-weight: bold; font-size: 13.5px; color: #d97706;">اجاره ماشین‌آلات صنعتی و کشاورزی 🚜</span>
             </div>
           </div>
 
-          <div class="product-grid">
-            <div class="product-card" onclick="openRentalBooking('میکسر بتن بتونیر', 'میکسر بتن سنگین صنعتی جهت پروژه‌های ساختمانی.', 3000000, '⚙️ صنعتی')">
-              <div class="badge-rental">اجاره‌ای</div>
-              <div class="product-img">⚙️</div>
-              <div class="product-name">میکسر بتن بتونیر</div>
-              <div class="product-price">۳,۰۰۰,۰۰۰ تومان/روز</div>
-              <div class="product-desc">میکسر بتن صنعتی سنگین</div>
+          <!-- ALL RENTALS LAYOUT (HOMEPAGE VIEW) -->
+          <div id="rental-homepage-view" style="display: block; padding-top: 10px;">
+            <!-- Category Section: Industrial -->
+            <div style="margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 16px; flex-direction: row-reverse; margin-bottom: 8px;">
+                <span style="font-weight: bold; font-size: 12px; color: #111;">⚙️ ادوات صنعتی و کارگاهی</span>
+                <span onclick="alert('شما در حال مشاهده همه ادوات صنعتی در شبیه‌ساز لایو هستید!')" style="font-size: 10px; color: #1a73e8; cursor: pointer; font-weight: bold;">مشاهده همه ➔</span>
+              </div>
+              <div style="display: flex; overflow-x: auto; gap: 12px; padding: 0 16px; direction: rtl; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+                <!-- Rental Card 1 -->
+                <div class="product-card-hor" style="background: white; border-radius: 12px; padding: 10px; min-width: 125px; width: 125px; text-align: right; box-shadow: 0 2px 6px rgba(0,0,0,0.03); position: relative; flex-shrink: 0;">
+                  <span style="position: absolute; top: 6px; left: 6px; background: #fee2e2; color: #dc2626; font-size: 8px; font-weight: bold; padding: 2px 6px; border-radius: 6px;">اجاره‌ای</span>
+                  <div onclick="openRentalBooking('میکسر بتن دنده‌ای بتونیر صنعتی', 'میکسر بتن پرقدرت ۲۵۰ لیتری صنعتی جهت پروژه‌های بتن‌ریزی ساختمان', 3000000, '⚙️ صنعتی')" style="cursor: pointer;">
+                    <div style="font-size: 28px; text-align: center; margin-bottom: 6px; background: #f9f9f9; padding: 8px; border-radius: 8px;">⚙️</div>
+                    <div style="font-weight: bold; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">میکسر بتن بتونیر</div>
+                    <div style="font-size: 9.5px; color: #d97706; font-weight: bold; margin-top: 4px;">۳,۰۰۰,۰۰۰ تومان / روز</div>
+                  </div>
+                </div>
+                <!-- Rental Card 2 -->
+                <div class="product-card-hor" style="background: white; border-radius: 12px; padding: 10px; min-width: 125px; width: 125px; text-align: right; box-shadow: 0 2px 6px rgba(0,0,0,0.03); position: relative; flex-shrink: 0;">
+                  <span style="position: absolute; top: 6px; left: 6px; background: #fee2e2; color: #dc2626; font-size: 8px; font-weight: bold; padding: 2px 6px; border-radius: 6px;">اجاره‌ای</span>
+                  <div onclick="openRentalBooking('ژنراتور دیزلی برق اضطراری ۵۰KVA', 'ژنراتور برق سایلنت کانوپی‌دار مناسب کارگاه‌های عمرانی و صنعتی سنگین', 4000000, '⚙️ صنعتی')" style="cursor: pointer;">
+                    <div style="font-size: 28px; text-align: center; margin-bottom: 6px; background: #f9f9f9; padding: 8px; border-radius: 8px;">⚡</div>
+                    <div style="font-weight: bold; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">ژنراتور برق ۵۰KVA</div>
+                    <div style="font-size: 9.5px; color: #d97706; font-weight: bold; margin-top: 4px;">۴,۰۰۰,۰۰۰ تومان / روز</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="product-card" onclick="openRentalBooking('تراکتور سنگین X-200', 'تراکتور قدرتمند چند منظوره کشاورزی با بهره‌وری بالا.', 7500000, '🌱 کشاورزی')">
-              <div class="badge-rental">اجاره‌ای</div>
-              <div class="product-img">🚜</div>
-              <div class="product-name">تراکتور سنگین X-200</div>
-              <div class="product-price">۷,۵۰۰,۰۰۰ تومان/روز</div>
-              <div class="product-desc">تراکتور پرقدرت کشاورزی</div>
-            </div>
-            <div class="product-card" onclick="openRentalBooking('ژنراتور برق 5kW', 'ژنراتور برق اضطراری مطمئن صنعتی.', 1800000, '⚙️ صنعتی')">
-              <div class="badge-rental">اجاره‌ای</div>
-              <div class="product-img">⚡</div>
-              <div class="product-name">ژنراتور برق 5kW</div>
-              <div class="product-price">۱,۸۰۰,۰۰۰ تومان/روز</div>
-              <div class="product-desc">ژنراتور برق پشتیبان مطمئن</div>
+
+            <!-- Category Section: Agriculture -->
+            <div style="margin-bottom: 16px; padding-bottom: 80px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 16px; flex-direction: row-reverse; margin-bottom: 8px;">
+                <span style="font-weight: bold; font-size: 12px; color: #111;">🚜 ماشین‌آلات سنگین کشاورزی</span>
+                <span onclick="alert('شما در حال مشاهده همه ماشین‌آلات کشاورزی در شبیه‌ساز لایو هستید!')" style="font-size: 10px; color: #1a73e8; cursor: pointer; font-weight: bold;">مشاهده همه ➔</span>
+              </div>
+              <div style="display: flex; overflow-x: auto; gap: 12px; padding: 0 16px; direction: rtl; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+                <!-- Rental Card 1 -->
+                <div class="product-card-hor" style="background: white; border-radius: 12px; padding: 10px; min-width: 125px; width: 125px; text-align: right; box-shadow: 0 2px 6px rgba(0,0,0,0.03); position: relative; flex-shrink: 0;">
+                  <span style="position: absolute; top: 6px; left: 6px; background: #fee2e2; color: #dc2626; font-size: 8px; font-weight: bold; padding: 2px 6px; border-radius: 6px;">اجاره‌ای</span>
+                  <div onclick="openRentalBooking('تراکتور پرقدرت کشاورزی ITM 399', 'تراکتور جفت دیفرانسیل سنگین کشاورزی آماده به کار با ادوات کامل', 8000000, '🚜 کشاورزی')" style="cursor: pointer;">
+                    <div style="font-size: 28px; text-align: center; margin-bottom: 6px; background: #f9f9f9; padding: 8px; border-radius: 8px;">🚜</div>
+                    <div style="font-weight: bold; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">تراکتور کشاورزی ITM</div>
+                    <div style="font-size: 9.5px; color: #d97706; font-weight: bold; margin-top: 4px;">۸,۰۰۰,۰۰۰ تومان / روز</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -4028,11 +4052,15 @@
     const endStr = rentalDays === 2 ? 'فردا (+۱ روز)' : `در ${rentalDays - 1} روز آینده (+${rentalDays - 1} روز)`;
     document.getElementById('rb-end').innerText = endStr;
     
-    const dailyPriceFormatted = selectedRental.pricePerDay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    const totalPriceFormatted = (rentalDays * selectedRental.pricePerDay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const baseTotal = rentalDays * selectedRental.pricePerDay;
+    const deposit = baseTotal * 0.20; // 20% deposit
+    const grandTotal = baseTotal + deposit;
 
-    document.getElementById('rb-calc-days').innerText = `${rentalDays} روز × ${dailyPriceFormatted} تومان/روز`;
-    document.getElementById('rb-total-price').innerText = `${totalPriceFormatted} تومان`;
+    const dailyPriceFormatted = selectedRental.pricePerDay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const grandTotalFormatted = grandTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    document.getElementById('rb-calc-days').innerText = `${rentalDays} روز × ${dailyPriceFormatted} ت/روز (+۲۰٪ وثیقه)`;
+    document.getElementById('rb-total-price').innerText = `${grandTotalFormatted} تومان`;
   }
 
   function closeRentalBooking() {
@@ -4040,8 +4068,19 @@
   }
 
   function confirmRentalBooking() {
-    closeRentalBooking();
-    showNotification(`رزرو اجاره برای ${selectedRental.name} به مدت ${rentalDays} روز تایید شد!`);
+    const baseTotal = rentalDays * selectedRental.pricePerDay;
+    const deposit = baseTotal * 0.20;
+    const grandTotal = baseTotal + deposit;
+
+    if (walletVal >= grandTotal) {
+      walletVal -= grandTotal;
+      closeRentalBooking();
+      addTransaction(`اجاره ادوات سنگین: ${selectedRental.name} (${rentalDays} روز)`, grandTotal, false, '🚜');
+      updateProfileUI();
+      showNotification(`🚜 رزرو اجاره برای ${selectedRental.name} به مدت ${rentalDays} روز تایید و مبلغ ضمانت از کیف پول کسر شد!`);
+    } else {
+      alert("❌ موجودی کیف پول شما برای این اجاره کافی نیست! ابتدا حساب خود را شارژ کنید.");
+    }
   }
 
   // =========================================
