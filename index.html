@@ -1866,49 +1866,120 @@
         <!-- ========================================= -->
         <!-- VIEW 2: MARKETPLACE PAGE                  -->
         <!-- ========================================= -->
-        <div class="screen-content" id="view-market" style="background:#fff; overflow-y: auto;">
-          <div class="market-header">
-            <div class="market-title">مارکت‌پلیس خرید و فروش کالا</div>
-            <div class="chips-row" style="justify-content: center; flex-wrap: wrap; gap: 4px;">
-              <div class="filter-chip active">🌐 همه کالاها</div>
-              <div class="filter-chip">📱 الکترونیک</div>
-              <div class="filter-chip">🏠 خانه</div>
-              <div class="filter-chip">👗 پوشاک</div>
-              <div class="filter-chip">📚 کتاب</div>
-              <div class="filter-chip">🛠️ ابزار</div>
+        <div class="screen-content" id="view-market" style="background:#f4f6f8; overflow-y: auto;">
+          <!-- Marketplace Header with Cart and Favorites -->
+          <div class="market-header" style="background: white; padding: 12px 16px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; flex-direction: row-reverse; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-weight: bold; font-size: 14px; color: #111;">بازارچه هوشمند کالا 🛍️</span>
+            </div>
+            
+            <!-- Icons Row -->
+            <div style="display: flex; gap: 14px; align-items: center;">
+              <!-- Fav toggle -->
+              <span id="btn-fav-filter" onclick="toggleFavFilter()" style="cursor: pointer; font-size: 16px; transition: all 0.2s;">
+                🤍
+              </span>
+              
+              <!-- Cart Icon with badge -->
+              <span onclick="openCartModal()" style="cursor: pointer; font-size: 18px; position: relative;">
+                🛒
+                <span id="cart-badge" style="display: none; position: absolute; top: -6px; right: -8px; background: red; color: white; font-size: 9px; font-weight: bold; border-radius: 50%; padding: 1px 4px; min-width: 12px; text-align: center;">0</span>
+              </span>
             </div>
           </div>
-          
-          <div class="product-grid" style="padding-bottom: 80px;">
-            <div class="product-card" onclick="openPurchaseDialog('گوشی آیفون ۱۵ پرو تیتانیوم', 'آخرین پرچمدار اپل با بدنه تیتانیومی و دوربین ۴۸ مگاپیکسلی', '۶۰,۰۰۰,۰۰۰ تومان')">
-              <div class="product-img">📱</div>
-              <div class="product-name" style="font-size:11.5px;">آیفون ۱۵ پرو</div>
-              <div class="product-price" style="font-size:11px;">۶۰,۰۰۰,۰۰۰ تومان</div>
-              <div class="product-desc" style="font-size:9.5px;">آخرین پرچمدار اپل تیتانیوم</div>
+
+          <!-- Promo Banner -->
+          <div style="background: linear-gradient(135deg, #e65100, #f57c00); margin: 12px 16px; border-radius: 16px; padding: 14px; color: white; text-align: right; direction: rtl; box-shadow: 0 4px 12px rgba(230,81,0,0.15);">
+            <div style="font-weight: bold; font-size: 12px; margin-bottom: 2px;">جشنواره شگفت‌انگیز سوپراپلیکیشن! 🎉</div>
+            <div style="font-size: 9.5px; color: rgba(255,255,255,0.95);">تخفیف‌های استثنایی بر روی کلیه صنف‌ها فقط امروز</div>
+          </div>
+
+          <!-- ALL PRODUCTS LAYOUT (HOMEPAGE VIEW) -->
+          <div id="market-homepage-view" style="display: block;">
+            <!-- Category Section: Electronics -->
+            <div style="margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 16px; flex-direction: row-reverse; margin-bottom: 8px;">
+                <span style="font-weight: bold; font-size: 12.5px; color: #111;">📱 الکترونیک و دیجیتال</span>
+                <span onclick="filterMarketCategoryTab('Electronics')" style="font-size: 10px; color: #1a73e8; cursor: pointer; font-weight: bold;">مشاهده همه ➔</span>
+              </div>
+              <div style="display: flex; overflow-x: auto; gap: 12px; padding: 0 16px; direction: rtl; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+                <!-- Product Card 1 -->
+                <div class="product-card-hor" style="background: white; border-radius: 12px; padding: 10px; min-width: 120px; width: 120px; text-align: right; box-shadow: 0 2px 6px rgba(0,0,0,0.03); position: relative; flex-shrink: 0;">
+                  <span onclick="toggleProductFav('p_elec_1')" class="heart-icon-btn" id="fav-p_elec_1" style="position: absolute; top: 6px; left: 6px; cursor: pointer; font-size: 12px;">🤍</span>
+                  <div onclick="openProductDetails('گوشی آیفون ۱۵ پرو تیتانیوم', 'آخرین پرچمدار اپل با بدنه تیتانیومی و تراشه A17 Pro', '۶۰,۰۰۰,۰۰۰ تومان', '📱')" style="cursor: pointer;">
+                    <div style="font-size: 28px; text-align: center; margin-bottom: 6px; background: #f9f9f9; padding: 8px; border-radius: 8px;">📱</div>
+                    <div style="font-weight: bold; font-size: 10.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">آیفون ۱۵ پرو</div>
+                    <div style="font-size: 10px; color: var(--primary-color); font-weight: bold; margin-top: 4px;">۶۰,۰۰۰,۰۰۰ تومان</div>
+                  </div>
+                </div>
+                <!-- Product Card 2 -->
+                <div class="product-card-hor" style="background: white; border-radius: 12px; padding: 10px; min-width: 120px; width: 120px; text-align: right; box-shadow: 0 2px 6px rgba(0,0,0,0.03); position: relative; flex-shrink: 0;">
+                  <span onclick="toggleProductFav('p_elec_2')" class="heart-icon-btn" id="fav-p_elec_2" style="position: absolute; top: 6px; left: 6px; cursor: pointer; font-size: 12px;">🤍</span>
+                  <div onclick="openProductDetails('هدفون بی‌سیم پرو مکس', 'هدفون ارگونومیک با نویز کنسلینگ فعال و بیس عمیق شگفت‌انگیز', '۱۲,۰۰۰,۰۰۰ تومان', '🎧')" style="cursor: pointer;">
+                    <div style="font-size: 28px; text-align: center; margin-bottom: 6px; background: #f9f9f9; padding: 8px; border-radius: 8px;">🎧</div>
+                    <div style="font-weight: bold; font-size: 10.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">هدفون پرو مکس</div>
+                    <div style="font-size: 10px; color: var(--primary-color); font-weight: bold; margin-top: 4px;">۱۲,۰۰۰,۰۰۰ تومان</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="product-card" onclick="openPurchaseDialog('سرخ‌کن بدون روغن فیلیپس', 'سرخ‌کن سایز بزرگ فیلیپس برای آشپزی رژیمی و سالم', '۴,۵۰۰,۰۰۰ تومان')">
-              <div class="product-img">🍳</div>
-              <div class="product-name" style="font-size:11.5px;">سرخ‌کن فیلیپس</div>
-              <div class="product-price" style="font-size:11px;">۴,۵۰۰,۰۰۰ تومان</div>
-              <div class="product-desc" style="font-size:9.5px;">آشپزی رژیمی و سالم آسان</div>
+
+            <!-- Category Section: Home -->
+            <div style="margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 16px; flex-direction: row-reverse; margin-bottom: 8px;">
+                <span style="font-weight: bold; font-size: 12.5px; color: #111;">🏠 لوازم خانگی</span>
+                <span onclick="filterMarketCategoryTab('Home')" style="font-size: 10px; color: #1a73e8; cursor: pointer; font-weight: bold;">مشاهده همه ➔</span>
+              </div>
+              <div style="display: flex; overflow-x: auto; gap: 12px; padding: 0 16px; direction: rtl; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+                <!-- Product Card 1 -->
+                <div class="product-card-hor" style="background: white; border-radius: 12px; padding: 10px; min-width: 120px; width: 120px; text-align: right; box-shadow: 0 2px 6px rgba(0,0,0,0.03); position: relative; flex-shrink: 0;">
+                  <span onclick="toggleProductFav('p_home_1')" class="heart-icon-btn" id="fav-p_home_1" style="position: absolute; top: 6px; left: 6px; cursor: pointer; font-size: 12px;">🤍</span>
+                  <div onclick="openProductDetails('سرخ‌کن بدون روغن فیلیپس XL', 'سرخ‌کن سایز بزرگ فیلیپس برای آشپزی رژیمی و سالم', '۴,۵۰۰,۰۰۰ تومان', '🍳')" style="cursor: pointer;">
+                    <div style="font-size: 28px; text-align: center; margin-bottom: 6px; background: #f9f9f9; padding: 8px; border-radius: 8px;">🍳</div>
+                    <div style="font-weight: bold; font-size: 10.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">سرخ‌کن فیلیپس</div>
+                    <div style="font-size: 10px; color: var(--primary-color); font-weight: bold; margin-top: 4px;">۴,۵۰۰,۰۰۰ تومان</div>
+                  </div>
+                </div>
+                <!-- Product Card 2 -->
+                <div class="product-card-hor" style="background: white; border-radius: 12px; padding: 10px; min-width: 120px; width: 120px; text-align: right; box-shadow: 0 2px 6px rgba(0,0,0,0.03); position: relative; flex-shrink: 0;">
+                  <span onclick="toggleProductFav('p_home_2')" class="heart-icon-btn" id="fav-p_home_2" style="position: absolute; top: 6px; left: 6px; cursor: pointer; font-size: 12px;">🤍</span>
+                  <div onclick="openProductDetails('اسپرسوساز اتوماتیک دلونگی', 'آماده‌سازی اسپرسو و کاپوچینو با فوم شیر غلیظ اتوماتیک', '۱۴,۰۰۰,۰۰۰ تومان', '☕')" style="cursor: pointer;">
+                    <div style="font-size: 28px; text-align: center; margin-bottom: 6px; background: #f9f9f9; padding: 8px; border-radius: 8px;">☕</div>
+                    <div style="font-weight: bold; font-size: 10.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">اسپرسوساز دلونگی</div>
+                    <div style="font-size: 10px; color: var(--primary-color); font-weight: bold; margin-top: 4px;">۱۴,۰۰۰,۰۰۰ تومان</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="product-card" onclick="openPurchaseDialog('کفش چرم مردانه تبریز', 'کفش چرم طبیعی صد در صد دست‌دوز تبریز با کفی طبی و نرم', '۱,۸۰۰,۰۰۰ تومان')">
-              <div class="product-img">👟</div>
-              <div class="product-name" style="font-size:11.5px;">کفش چرم تبریز</div>
-              <div class="product-price" style="font-size:11px;">۱,۸۰۰,۰۰۰ تومان</div>
-              <div class="product-desc" style="font-size:9.5px;">چرم طبیعی صد در صد دست‌دوز</div>
+
+            <!-- Category Section: Fashion -->
+            <div style="margin-bottom: 16px; padding-bottom: 80px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 16px; flex-direction: row-reverse; margin-bottom: 8px;">
+                <span style="font-weight: bold; font-size: 12.5px; color: #111;">👗 پوشاک و مد</span>
+                <span onclick="filterMarketCategoryTab('Fashion')" style="font-size: 10px; color: #1a73e8; cursor: pointer; font-weight: bold;">مشاهده همه ➔</span>
+              </div>
+              <div style="display: flex; overflow-x: auto; gap: 12px; padding: 0 16px; direction: rtl; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+                <!-- Product Card 1 -->
+                <div class="product-card-hor" style="background: white; border-radius: 12px; padding: 10px; min-width: 120px; width: 120px; text-align: right; box-shadow: 0 2px 6px rgba(0,0,0,0.03); position: relative; flex-shrink: 0;">
+                  <span onclick="toggleProductFav('p_fash_1')" class="heart-icon-btn" id="fav-p_fash_1" style="position: absolute; top: 6px; left: 6px; cursor: pointer; font-size: 12px;">🤍</span>
+                  <div onclick="openProductDetails('کفش چرم مردانه تبریز', 'کفش چرم طبیعی صد در صد دست‌دوز تبریز با کفی طبی و نرم', '۱,۸۰۰,۰۰۰ تومان', '👟')" style="cursor: pointer;">
+                    <div style="font-size: 28px; text-align: center; margin-bottom: 6px; background: #f9f9f9; padding: 8px; border-radius: 8px;">👟</div>
+                    <div style="font-weight: bold; font-size: 10.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">کفش چرم تبریز</div>
+                    <div style="font-size: 10px; color: var(--primary-color); font-weight: bold; margin-top: 4px;">۱,۸۰۰,۰۰۰ تومان</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="product-card" onclick="openPurchaseDialog('کتاب آموزش برنامه نویسی پایتون', 'کتاب مرجع یادگیری پایتون از صفر تا صد همراه با پروژه‌های کاربردی', '۲۵۰,۰۰۰ تومان')">
-              <div class="product-img">📚</div>
-              <div class="product-name" style="font-size:11.5px;">کتاب آموزش پایتون</div>
-              <div class="product-price" style="font-size:11px;">۲۵۰,۰۰۰ تومان</div>
-              <div class="product-desc" style="font-size:9.5px;">یادگیری پایتون از صفر تا صد</div>
+          </div>
+
+          <!-- FILTERED CATEGORY GRID VIEW -->
+          <div id="market-filtered-view" style="display: none; padding: 0 16px; padding-bottom: 80px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; margin-bottom: 12px; flex-direction: row-reverse;">
+              <span id="filtered-cat-title" style="font-weight: bold; font-size: 13px; color: #111;">درحال مشاهده: الکترونیک</span>
+              <span onclick="showMarketHomepage()" style="font-size: 11px; color: #1a73e8; cursor: pointer; font-weight: bold;">← بازگشت</span>
             </div>
-            <div class="product-card" onclick="openPurchaseDialog('جعبه ابزار ۸۵ پارچه رونیکس', 'کامل‌ترین جعبه ابزار چمدانی شامل آچارهای کروم وانادیوم رونیکس', '۲,۴۰۰,۰۰۰ تومان')">
-              <div class="product-img">🧰</div>
-              <div class="product-name" style="font-size:11.5px;">جعبه ابزار رونیکس</div>
-              <div class="product-price" style="font-size:11px;">۲,۴۰۰,۰۰۰ تومان</div>
-              <div class="product-desc" style="font-size:9.5px;">آچارهای کروم وانادیوم رونیکس</div>
+            <div id="filtered-products-grid" class="product-grid" style="padding: 0;">
+              <!-- Grid products will be injected -->
             </div>
           </div>
         </div>
