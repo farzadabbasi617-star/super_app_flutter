@@ -9,6 +9,7 @@ import '../bloc/map_event.dart';
 import '../bloc/map_state.dart';
 import '../../domain/entities/shop.dart';
 import 'shop_detail_page.dart';
+import '../../../../core/utils/monetization_manager.dart';
 import 'package:go_router/go_router.dart';
 import '../../../shared/widgets/app_button.dart';
 
@@ -212,6 +213,9 @@ class _MapPageState extends State<MapPage> {
   }
 
   double _getMarkerHue(String category) {
+    if (MonetizationManager().activeSubscription == 'Gold') {
+      return BitmapDescriptor.hueYellow; // Gilded markers for the entire ecosystem when Gold subscription is active!
+    }
     switch (category.toLowerCase()) {
       case 'electronics':
         return BitmapDescriptor.hueGreen;

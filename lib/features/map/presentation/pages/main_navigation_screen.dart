@@ -51,10 +51,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Colors.grey,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
-          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
-          BottomNavigationBarItem(icon: Icon(Icons.build), label: 'Rental'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.map_outlined), label: 'نقشه لایو'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: 'خرید کالا'),
+          BottomNavigationBarItem(icon: Icon(Icons.build_outlined), label: 'اجاره ابزار'),
+          BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet_outlined), label: 'کیف پول و مالی'),
         ],
       ),
     );

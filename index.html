@@ -1933,30 +1933,53 @@
         <!-- ========================================= -->
         <!-- VIEW 4: PROFILE PAGE                      -->
         <!-- ========================================= -->
-        <div class="screen-content" id="view-profile" style="background:#f6f8f9;">
-          <div class="profile-card">
-            <div class="profile-avatar">👨</div>
-            <div class="profile-name">امیرحسین عباسی</div>
-            <div class="profile-email">amir@superapp.ir</div>
+        <div class="screen-content" id="view-profile" style="background:#f6f8f9; padding-bottom: 80px; overflow-y: auto;">
+          <!-- Profile Card -->
+          <div class="profile-card" style="background: white; margin: 16px; border-radius: 20px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+            <div class="profile-avatar" style="font-size: 40px; margin-bottom: 8px;">👤</div>
+            <div class="profile-name" style="font-weight: bold; font-size: 15px;">فرزاد عباسی (غرفه‌دار و متخصص)</div>
+            <div class="profile-email" style="font-size: 11px; color: #777;">farzadabbasi@superapp.ir</div>
           </div>
 
-          <div class="wallet-card">
-            <div class="wallet-title">اعتبار کیف پول الکترونیکی</div>
-            <div class="wallet-balance" id="wallet-val">۱۰,۰۰۰,۰۰۰ تومان</div>
-            <button class="wallet-btn" onclick="topUpWallet()">شارژ سریع کیف پول (+۵,۰۰۰,۰۰۰ تومان)</button>
+          <!-- Wallet Card -->
+          <div class="wallet-card" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); margin: 16px; border-radius: 24px; padding: 24px; color: white; box-shadow: 0 8px 25px rgba(0,147,75,0.25);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-direction: row-reverse;">
+              <span style="font-size: 12px; color: rgba(255,255,255,0.85); font-weight: 500;">موجودی کیف پول دیجیتال 💳</span>
+              <span style="font-size: 20px;">💼</span>
+            </div>
+            <div class="wallet-balance" id="wallet-val" style="font-size: 26px; font-weight: bold; margin-bottom: 16px; font-family: monospace; text-align: right; direction: rtl;">۱۰,۰۰۰,۰۰۰ تومان</div>
+            <button class="wallet-btn" onclick="topUpWallet()" style="width: 100%; padding: 12px; border-radius: 12px; border: none; background: white; color: var(--primary-color); font-weight: bold; font-size: 12px; cursor: pointer; transition: all 0.2s;">⚡ شارژ سریع کیف پول (+۲۰۰,۰۰۰ تومان)</button>
           </div>
 
-          <div class="menu-item">
-            <span>📜 تاریخچه سفارش‌ها</span>
-            <span style="color:#aaa;">➔</span>
+          <!-- SaaS Subscription Options -->
+          <div style="background: white; margin: 16px; border-radius: 20px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); text-align: right;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-direction: row-reverse;">
+              <span class="badge-category" id="sub-badge" style="background: #f3f4f6; color: #4b5563; font-size: 10px; padding: 4px 10px; border-radius: 12px; font-weight: bold;">🥉 اشتراک برنزی (رایگان)</span>
+              <span style="font-weight: bold; font-size: 13px;">حق اشتراک غرفه‌داری (SaaS)</span>
+            </div>
+            <div style="font-size: 10.5px; color: #666; line-height: 1.5; margin-bottom: 16px;">با ارتقای اشتراک به سطح طلایی، پین‌های غرفه شما به رنگ طلایی مجلل و پالس‌زن درآمده و در نتایج جستجو اولویت‌دهی می‌شوند.</div>
+            <div id="sub-actions-row" style="display: flex; gap: 8px;">
+              <button onclick="upgradeSubscription('Gold', 600000)" style="flex: 1; padding: 10px; border-radius: 10px; border: none; background: #f2994a; color: white; font-weight: bold; font-size: 10.5px; cursor: pointer;">👑 اشتراک طلایی (۶۰۰,۰۰۰ ت)</button>
+              <button onclick="upgradeSubscription('Silver', 300000)" style="flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #ccc; background: white; color: #333; font-weight: bold; font-size: 10.5px; cursor: pointer;">🥈 نقره‌ای (۳۰۰,۰۰۰ ت)</button>
+            </div>
           </div>
-          <div class="menu-item">
-            <span>💳 روش‌های پرداخت من</span>
-            <span style="color:#aaa;">➔</span>
+
+          <!-- Bidding Coins Options -->
+          <div style="background: white; margin: 16px; border-radius: 20px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); text-align: right;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-direction: row-reverse;">
+              <span style="font-size: 12px; font-weight: bold; color: var(--primary-color);"><span id="coins-count-val">۱۵</span> سکه فعال 🪙</span>
+              <span style="font-weight: bold; font-size: 13px;">اعتبار پیشنهاد متخصصین</span>
+            </div>
+            <div style="font-size: 10.5px; color: #666; line-height: 1.5; margin-bottom: 16px;">متخصصان جهت ارسال قیمت پیشنهادی و چت روی درخواست مشتریان نیاز به سکه دارند (هر پیشنهاد ۱ سکه).</div>
+            <button onclick="buyBiddingCoins(50, 100000)" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--primary-color); background: white; color: var(--primary-color); font-weight: bold; font-size: 11px; cursor: pointer;">🛒 خرید بسته ۵۰ عددی سکه (۱۰۰,۰۰۰ تومان)</button>
           </div>
-          <div class="menu-item">
-            <span>🛠️ مرکز پشتیبانی آنلاین</span>
-            <span style="color:#aaa;">➔</span>
+
+          <!-- Recent Transactions -->
+          <div style="background: white; margin: 16px; border-radius: 20px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); text-align: right;">
+            <div style="font-weight: bold; font-size: 13px; margin-bottom: 12px; display: block;">تراکنش‌های اخیر و جریان‌های درآمدی</div>
+            <div id="transactions-container" style="display: flex; flex-direction: column; gap: 10px; direction: rtl;">
+              <!-- Tx list will be dynamically populated -->
+            </div>
           </div>
         </div>
 
@@ -3632,20 +3655,120 @@
   }
 
   // =========================================
-  // PROFILE LOGIC
+  // PROFILE LOGIC (MONETIZATION & SAAS)
   // =========================================
-  let walletVal = 10000000; 
+  let walletVal = 1250000; // 1,250,000 Tomans default to match Flutter MonetizationManager
+  let activeSubscription = 'Bronze'; // Bronze, Silver, Gold
+  let biddingCoins = 15; // 15 expert coins
+
+  let transactionsList = [
+    { title: 'شارژ مستقیم کیف پول دیجیتال', amount: 500000, isIncome: true, date: 'امروز', icon: '💳' },
+    { title: 'دریافت کارمزد تراکنش خدمت لوله‌کشی (علی رضایی)', amount: 35000, isIncome: true, date: 'دیروز', icon: '🛠️' },
+    { title: 'دریافت کارمزد فروش گجت در غرفه تک‌هاب', amount: 15000, isIncome: true, date: '۲ روز پیش', icon: '🛍️' },
+    { title: 'خرید بسته ۲۵تایی سکه پیشنهاد متخصص', amount: 50000, isIncome: false, date: '۳ روز پیش', icon: '🪙' }
+  ];
+
   function topUpWallet() {
-    walletVal += 5000000; 
-    const formatted = walletVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    document.getElementById('wallet-val').innerText = `${formatted} تومان`;
-    document.getElementById('rb-wallet-bal').innerText = `${formatted} تومان`;
-    showNotification("کیف پول الکترونیکی شما با موفقیت +۵,۰۰۰,۰۰۰ تومان شارژ شد!");
+    const amount = 200000;
+    walletVal += amount; 
+    addTransaction('شارژ سریع کیف پول دیجیتال', amount, true, '💳');
+    updateProfileUI();
+    showNotification(`کیف پول الکترونیکی شما با موفقیت +۲۰۰,۰۰۰ تومان شارژ شد!`);
   }
 
-  // Set initial wallet Toman string
-  document.getElementById('wallet-val').innerText = walletVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' تومان';
-  document.getElementById('rb-wallet-bal').innerText = walletVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' تومان';
+  function upgradeSubscription(tier, price) {
+    if (walletVal >= price) {
+      walletVal -= price;
+      activeSubscription = tier;
+      addTransaction(`خرید و ارتقای اشتراک به لایه ${tier == 'Gold' ? 'طلایی' : 'نقره‌ای'} غرفه‌داری`, price, false, '👑');
+      updateProfileUI();
+      
+      // Update badge visual
+      const badge = document.getElementById('sub-badge');
+      if (tier === 'Gold') {
+        badge.innerText = '👑 اشتراک طلایی فعال';
+        badge.style.background = '#fef3c7';
+        badge.style.color = '#d97706';
+        
+        // When Gold is purchased, make any custom or s1/s3 pins glow!
+        document.querySelectorAll('.map-pin').forEach(pin => {
+          if (pin.id === 'pin-s1' || pin.id === 'pin-s3' || pin.id.startsWith('pin-custom_')) {
+            pin.style.boxShadow = '0 0 20px #f2994a, 0 0 40px #f2994a';
+            const pulse = pin.querySelector('.map-pin-pulse');
+            if (pulse) pulse.style.animation = 'pinPulse 1s infinite';
+          }
+        });
+        showNotification("👑 تبریک! غرفه شما به سطح طلایی ارتقا یافت و پین‌های شما روی نقشه طلایی و پالس‌زن شدند!");
+      } else {
+        badge.innerText = '🥈 اشتراک نقره‌ای فعال';
+        badge.style.background = '#eff6ff';
+        badge.style.color = '#1d4ed8';
+        showNotification("🥈 اشتراک نقره‌ای غرفه‌داری برای شما فعال شد!");
+      }
+    } else {
+      alert("❌ موجودی کیف پول شما کافی نیست. لطفا ابتدا کیف پول خود را شارژ کنید!");
+    }
+  }
+
+  function buyBiddingCoins(count, price) {
+    if (walletVal >= price) {
+      walletVal -= price;
+      biddingCoins += count;
+      addTransaction(`خرید بسته ${count} عددی سکه پیشنهاد متخصص`, price, false, '🪙');
+      updateProfileUI();
+      showNotification(`🪙 بسته ${count} عددی سکه با موفقیت به کیف پول متخصص شما اضافه شد!`);
+    } else {
+      alert("❌ موجودی کیف پول شما کافی نیست. لطفا ابتدا کیف پول خود را شارژ کنید!");
+    }
+  }
+
+  function addTransaction(title, amount, isIncome, icon) {
+    transactionsList.unshift({
+      title: title,
+      amount: amount,
+      isIncome: isIncome,
+      date: 'هم‌اکنون',
+      icon: icon
+    });
+  }
+
+  function updateProfileUI() {
+    const formattedWallet = walletVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById('wallet-val').innerText = `${formattedWallet} تومان`;
+    document.getElementById('rb-wallet-bal').innerText = `${formattedWallet} تومان`;
+    document.getElementById('coins-count-val').innerText = biddingCoins;
+
+    // Render transactions list
+    const container = document.getElementById('transactions-container');
+    container.innerHTML = '';
+    transactionsList.forEach(tx => {
+      const formattedAmount = tx.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      const div = document.createElement('div');
+      div.style.display = 'flex';
+      div.style.justifyContent = 'space-between';
+      div.style.alignItems = 'center';
+      div.style.padding = '8px 0';
+      div.style.borderBottom = '1px solid #eee';
+      div.style.flexDirection = 'row-reverse';
+      
+      div.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px; flex-direction:row-reverse;">
+          <div style="width:28px; height:28px; border-radius:50%; background:#f3f4f6; display:flex; align-items:center; justify-content:center; font-size:14px;">${tx.icon}</div>
+          <div style="text-align:right;">
+            <div style="font-size:11px; font-weight:bold; color:#111;">${tx.title}</div>
+            <div style="font-size:9.5px; color:#999; margin-top:2px;">${tx.date}</div>
+          </div>
+        </div>
+        <div style="font-family:monospace; font-size:11px; font-weight:bold; color: ${tx.isIncome ? '#10b981' : '#ef4444'};">
+          ${tx.isIncome ? '+' : '-'}${formattedAmount} تومان
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // Initial call
+  updateProfileUI();
 
   // =========================================
   // SERVICES HUB (RADAR & REALTIME OFFERS) LOGIC
