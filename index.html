@@ -248,6 +248,11 @@
       margin-bottom: 2px;
     }
 
+    .nav-item.active .nav-icon {
+      transform: scale(1.15);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
     .nav-label {
       font-size: 10px;
       font-weight: 700;
@@ -383,6 +388,34 @@
       font-size: 13px;
       color: var(--on-surface);
       margin-left: 10px;
+    }
+
+    /* Suggestions List Card */
+    .suggestions-card {
+      background: var(--surface-color);
+      border-radius: 16px;
+      max-height: 200px;
+      overflow-y: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      display: none;
+    }
+
+    .suggestions-card.open {
+      display: block;
+    }
+
+    .suggestion-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .suggestion-item:hover {
+      background: #f5f5f5;
     }
 
     .chips-row {
@@ -1132,6 +1165,97 @@
       margin-bottom: 16px;
     }
 
+    /* MAP TUNING FILTER SHEET OVERLAY */
+    .filter-sheet-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1150;
+      display: none;
+      align-items: flex-end;
+    }
+
+    .filter-sheet-overlay.open {
+      display: flex;
+    }
+
+    .filter-sheet-card {
+      background: var(--surface-color);
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 -8px 24px rgba(0,0,0,0.15);
+      animation: sheetUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+    }
+
+    @keyframes sheetUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .filter-switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 16px 0;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .switch-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .switch-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .switch-slider {
+      background-color: var(--primary-color);
+    }
+
+    input:checked + .switch-slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Rating Chips */
+    .rating-row {
+      display: flex;
+      gap: 8px;
+      margin: 12px 0 24px;
+    }
+
     /* Notification Banner */
     .custom-snackbar {
       position: absolute;
@@ -1168,14 +1292,14 @@
     <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
     
     <ul class="features-list">
-      <li><span>۱</span> <strong>صفحه نقشه تعاملی:</strong> جستجو، فیلتر با چیپست‌های دسته‌بندی و بالا آمدن پین پروفایل سریع فروشگاه‌ها.</li>
-      <li><span>۲</span> <strong>تفکیک کامل فروشگاه‌ها:</strong> مارکت‌پلیس فقط برای خرید کالاها و صفحه رنتال به صورت اختصاصی برای اجاره ابزار و ماشین‌آلات سنگین کشاورزی/صنعتی.</li>
-      <li><span>۳</span> <strong>درخواست متخصص تعاملی:</strong> شبیه‌سازی ورود پیشنهادهای زنده با افکت زمان‌بندی شده و پالس رادار.</li>
-      <li><span>۴</span> <strong>مشاوره و چت زنده با متخصص:</strong> سیستم چت فعال با پاسخ‌دهی هوشمند ربات متخصص بر اساس سؤال شما درباره قیمت یا زمان رسیدن.</li>
+      <li><span>۱</span> <strong>پین‌های پالس‌زن و زیبای نقشه:</strong> نشانگرها با آیکون‌های صنف کاری به صورت زنده پالس و انیمیشن می‌زنند.</li>
+      <li><span>۲</span> <strong>سرچ و ساجستشن لایو نقشه:</strong> هنگام تایپ، لیست پیشنهادات باز می‌شود و کلیک بر روی آن نقشه را پرواز می‌دهد.</li>
+      <li><span>۳</span> <strong>باکس فیلترهای پیشرفته مپ:</strong> کلیک بر روی دکمه تنظیمات (Tune) بالا، فیلتر باز بودن و ریتینگ را به صورت لایو تغییر می‌دهد.</li>
+      <li><span>۴</span> <strong>مشاوره و چت زنده با متخصص:</strong> سیستم چت فعال با پاسخ‌دهی هوشمند ربات متخصص بر اساس سؤال شما.</li>
       <li><span>۵</span> <strong>ردیابی مدرن متخصص:</strong> صفحه کامل ردیابی با اطلاعات تاییدشده متخصص منتخب و قیمت توافق‌شده.</li>
     </ul>
 
-    <p style="font-size: 13px; font-style: italic; color: #888;">💡 روی مارکرهای نقشه، نوار سرچ دسته‌بندی‌ها، دکمه Request Expert و محصولات رنتال یا مارکت‌پلیس کلیک کنید تا تجربه نهایی برنامه را ببینید.</p>
+    <p style="font-size: 13px; font-style: italic; color: #888;">💡 روی آیکون Tune (تنظیمات) بالا کلیک کنید تا پنل فیلتر پیشرفته مپ را لایو تغییر دهید.</p>
   </div>
 
   <!-- RIGHT: Mobile Emulator Wrapper -->
@@ -1223,27 +1347,27 @@
 
             <!-- Map pins -->
             <!-- Pins s1: Tech Hub (Electronics) -->
-            <div class="map-pin" style="top: 48%; left: 45%; border-color: #00934b;" onclick="openQuickView('s1')" data-category="Electronics" data-name="Tech Hub">
+            <div class="map-pin" id="pin-s1" style="top: 48%; left: 45%; border-color: #00934b;" onclick="openQuickView('s1')" data-category="Electronics" data-name="Tech Hub">
               <div class="map-pin-pulse" style="border-color: #00934b;"></div>
               <span style="font-size: 18px;">📱</span>
             </div>
             <!-- Pins s2: Green Garden (Plants) -->
-            <div class="map-pin" style="top: 38%; left: 65%; border-color: #3b76af;" onclick="openQuickView('s2')" data-category="Plants" data-name="Green Garden">
+            <div class="map-pin" id="pin-s2" style="top: 38%; left: 65%; border-color: #3b76af;" onclick="openQuickView('s2')" data-category="Plants" data-name="Green Garden">
               <div class="map-pin-pulse" style="border-color: #3b76af;"></div>
               <span style="font-size: 18px;">🌱</span>
             </div>
             <!-- Pins s3: Coffee Corner (Cafe) -->
-            <div class="map-pin" style="top: 60%; left: 25%; border-color: #e28743;" onclick="openQuickView('s3')" data-category="Cafe" data-name="Coffee Corner">
+            <div class="map-pin" id="pin-s3" style="top: 60%; left: 25%; border-color: #e28743;" onclick="openQuickView('s3')" data-category="Cafe" data-name="Coffee Corner">
               <div class="map-pin-pulse" style="border-color: #e28743;"></div>
               <span style="font-size: 18px;">☕</span>
             </div>
             <!-- Pins s4: Gadget World (Electronics) -->
-            <div class="map-pin" style="top: 42%; left: 48%; border-color: #00934b;" onclick="openQuickView('s4')" data-category="Electronics" data-name="Gadget World">
+            <div class="map-pin" id="pin-s4" style="top: 42%; left: 48%; border-color: #00934b;" onclick="openQuickView('s4')" data-category="Electronics" data-name="Gadget World">
               <div class="map-pin-pulse" style="border-color: #00934b;"></div>
               <span style="font-size: 18px;">📱</span>
             </div>
             <!-- Pins s5: Flower Power (Plants) -->
-            <div class="map-pin" style="top: 32%; left: 55%; border-color: #3b76af;" onclick="openQuickView('s5')" data-category="Plants" data-name="Flower Power">
+            <div class="map-pin" id="pin-s5" style="top: 32%; left: 55%; border-color: #3b76af;" onclick="openQuickView('s5')" data-category="Plants" data-name="Flower Power">
               <div class="map-pin-pulse" style="border-color: #3b76af;"></div>
               <span style="font-size: 18px;">🌱</span>
             </div>
@@ -1253,8 +1377,14 @@
           <div class="map-search-container">
             <div class="search-card">
               <span>🔍</span>
-              <input type="text" class="search-input" id="map-search" placeholder="Search stores, cafes...">
-              <span>⚙️</span>
+              <input type="text" class="search-input" id="map-search" placeholder="Search stores, cafes..." onfocus="onSearchFocus()" onblur="onSearchBlur()">
+              <span id="map-search-clear" style="display:none; cursor:pointer; margin-right:8px;" onclick="clearMapSearch()">✕</span>
+              <span style="cursor:pointer;" onclick="openFilters()">⚙️</span>
+            </div>
+
+            <!-- Suggestions Overlay -->
+            <div class="suggestions-card" id="suggestions-box">
+              <!-- Dynamically populated suggestions -->
             </div>
             
             <div class="chips-row">
@@ -1266,11 +1396,11 @@
           </div>
 
           <!-- Interactive Action Buttons -->
-          <div class="fab-btn fab-location" onclick="resetMapCamera()">
+          <div class="fab-btn fab-location" id="loc-fab" onclick="resetMapCamera()">
             <span>🎯</span>
           </div>
 
-          <div class="fab-btn fab-request" onclick="openServicesFlow()">
+          <div class="fab-btn fab-request" id="req-fab" onclick="openServicesFlow()">
             <span>🛠️</span> Request Expert
           </div>
 
@@ -1540,6 +1670,44 @@
         <button class="chat-action-btn" style="margin-top:10px; background:#eaeaea; color:#333;" onclick="resetAllServicesToSelection()">Cancel Request</button>
       </div>
 
+      <!-- F. Map Advanced Filter Sheet overlay -->
+      <div class="filter-sheet-overlay" id="filter-sheet" onclick="closeFiltersOnBgClick()">
+        <div class="filter-sheet-card" onclick="event.stopPropagation()">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <span style="font-weight:bold; font-size:16px; color:var(--on-surface);">Map Tuning Filters</span>
+            <span style="cursor:pointer; font-weight:bold; font-size:16px; color:#888;" onclick="closeFilters()">✕</span>
+          </div>
+
+          <!-- Switch Toggle: Open Only -->
+          <div class="filter-switch-row">
+            <div>
+              <div style="font-weight:bold; font-size:13px;">Show Open Stores Only</div>
+              <div style="font-size:11px; color:#666; margin-top:2px;">Hide stores currently closed</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="filter-open-only" onchange="applyTuningFilters()">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div style="height:1px; background:#eee; margin:16px 0;"></div>
+
+          <!-- Rating Chooser -->
+          <div style="font-weight:bold; font-size:13px; margin-bottom:8px;">Minimum Rating</div>
+          <div class="rating-row">
+            <div class="filter-chip active" id="chip-rating-0" onclick="setRatingFilter(0)">Any</div>
+            <div class="filter-chip" id="chip-rating-4" onclick="setRatingFilter(4)">4.0+ ⭐</div>
+            <div class="filter-chip" id="chip-rating-45" onclick="setRatingFilter(4.5)">4.5+ ⭐</div>
+            <div class="filter-chip" id="chip-rating-48" onclick="setRatingFilter(4.8)">4.8+ ⭐</div>
+          </div>
+
+          <div class="dialog-actions">
+            <button class="btn-cancel" onclick="resetFilters()">Reset Filters</button>
+            <button class="btn-confirm" onclick="closeFilters()">Apply Filters</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Navigation Bottom Bar -->
       <div class="nav-bar">
         <div class="nav-item active" id="nav-map" onclick="switchTab('map')">
@@ -1568,11 +1736,11 @@
 <script>
   // Mock Database
   const shops = {
-    s1: { name: 'Tech Hub', category: 'Electronics', rating: '4.8', reviews: 124, address: 'Tehran, Valiasr St, Block 4', hours: '09:00 - 22:00', isOpen: true, icon: '📱' },
-    s2: { name: 'Green Garden', category: 'Plants', rating: '4.5', reviews: 89, address: 'Tehran, Niavaran Ave, G1', hours: '08:00 - 20:00', isOpen: true, icon: '🌱' },
-    s3: { name: 'Coffee Corner', category: 'Cafe', rating: '4.9', reviews: 210, address: 'Tehran, Jordan St, C2', hours: '07:00 - 23:00', isOpen: false, icon: '☕' },
-    s4: { name: 'Gadget World', category: 'Electronics', rating: '4.2', reviews: 50, address: 'Tehran, Enghelab Sq', hours: '10:00 - 21:00', isOpen: true, icon: '📱' },
-    s5: { name: 'Flower Power', category: 'Plants', rating: '4.7', reviews: 30, address: 'Tehran, Pasdaran St', hours: '08:00 - 20:00', isOpen: true, icon: '🌱' }
+    s1: { id: 's1', name: 'Tech Hub', category: 'Electronics', rating: 4.8, reviews: 124, address: 'Tehran, Valiasr St, Block 4', hours: '09:00 - 22:00', isOpen: true, icon: '📱' },
+    s2: { id: 's2', name: 'Green Garden', category: 'Plants', rating: 4.5, reviews: 89, address: 'Tehran, Niavaran Ave, G1', hours: '08:00 - 20:00', isOpen: true, icon: '🌱' },
+    s3: { id: 's3', name: 'Coffee Corner', category: 'Cafe', rating: 4.9, reviews: 210, address: 'Tehran, Jordan St, C2', hours: '07:00 - 23:00', isOpen: false, icon: '☕' },
+    s4: { id: 's4', name: 'Gadget World', category: 'Electronics', rating: 4.2, reviews: 50, address: 'Tehran, Enghelab Sq', hours: '10:00 - 21:00', isOpen: true, icon: '📱' },
+    s5: { id: 's5', name: 'Flower Power', category: 'Plants', rating: 4.7, reviews: 30, address: 'Tehran, Pasdaran St', hours: '08:00 - 20:00', isOpen: true, icon: '🌱' }
   };
 
   // Tab switching
@@ -1585,23 +1753,19 @@
 
     // Change status bar text color based on page style
     const statusBar = document.getElementById('phone-status-bar');
-    if (tabId === 'map') {
-      statusBar.className = 'status-bar dark-text';
-    } else {
-      statusBar.className = 'status-bar dark-text';
-    }
+    statusBar.className = 'status-bar dark-text';
   }
-
-  // Set default status bar style
-  document.getElementById('phone-status-bar').className = 'status-bar dark-text';
 
   // =========================================
   // MAP PAGE LOGIC
   // =========================================
   let mapCategory = null;
+  let showOpenOnly = false;
+  let minRating = 0;
+
   function filterMapCategory(cat) {
     mapCategory = cat;
-    document.querySelectorAll('.filter-chip').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.chips-row .filter-chip').forEach(el => el.classList.remove('active'));
     
     if (cat === null) {
       document.getElementById('chip-all').classList.add('active');
@@ -1613,35 +1777,136 @@
       document.getElementById('chip-cafe').classList.add('active');
     }
 
-    // Filter pins
-    document.querySelectorAll('.map-pin').forEach(pin => {
-      const pinCat = pin.getAttribute('data-category');
-      if (cat === null || pinCat === cat) {
-        pin.style.display = 'block';
-      } else {
-        pin.style.display = 'none';
-      }
-    });
-
+    applyTuningFilters();
     closeQuickView();
   }
 
-  // Real-time Map search text input
-  document.getElementById('map-search').addEventListener('input', function(e) {
-    const val = e.target.value.toLowerCase();
-    document.querySelectorAll('.map-pin').forEach(pin => {
-      const pinName = pin.getAttribute('data-name').toLowerCase();
-      const pinCat = pin.getAttribute('data-category').toLowerCase();
-      const matchesCategory = mapCategory === null || pinCat === mapCategory.toLowerCase();
-      const matchesSearch = val === '' || pinName.includes(val) || pinCat.includes(val);
+  // Live filtering calculation
+  function applyTuningFilters() {
+    showOpenOnly = document.getElementById('filter-open-only').checked;
+    const searchVal = document.getElementById('map-search').value.toLowerCase();
 
-      if (matchesCategory && matchesSearch) {
-        pin.style.display = 'block';
+    Object.keys(shops).forEach(id => {
+      const shop = shops[id];
+      const pin = document.getElementById('pin-' + id);
+      if (!pin) return;
+
+      const matchesCategory = mapCategory === null || shop.category === mapCategory;
+      const matchesSearch = searchVal === '' || shop.name.toLowerCase().includes(searchVal) || shop.category.toLowerCase().includes(searchVal);
+      const matchesOpen = !showOpenOnly || shop.isOpen;
+      const matchesRating = shop.rating >= minRating;
+
+      if (matchesCategory && matchesSearch && matchesOpen && matchesRating) {
+        pin.style.display = 'flex';
       } else {
         pin.style.display = 'none';
       }
     });
+  }
+
+  // Advanced Tune Bottom Sheet Filter opening
+  function openFilters() {
+    document.getElementById('filter-sheet').classList.add('open');
+  }
+
+  function closeFilters() {
+    document.getElementById('filter-sheet').classList.remove('open');
+  }
+
+  function closeFiltersOnBgClick() {
+    closeFilters();
+  }
+
+  function setRatingFilter(rating) {
+    minRating = rating;
+    document.querySelectorAll('.rating-row .filter-chip').forEach(el => el.classList.remove('active'));
+    
+    if (rating === 0) {
+      document.getElementById('chip-rating-0').classList.add('active');
+    } else if (rating === 4) {
+      document.getElementById('chip-rating-4').classList.add('active');
+    } else if (rating === 4.5) {
+      document.getElementById('chip-rating-45').classList.add('active');
+    } else if (rating === 4.8) {
+      document.getElementById('chip-rating-48').classList.add('active');
+    }
+    applyTuningFilters();
+  }
+
+  function resetFilters() {
+    document.getElementById('filter-open-only').checked = false;
+    setRatingFilter(0);
+  }
+
+  // Search input focus Suggestion Overlay
+  function onSearchFocus() {
+    updateSearchSuggestions();
+  }
+
+  function onSearchBlur() {
+    // delay blur slightly to allow click to trigger
+    setTimeout(() => {
+      document.getElementById('suggestions-box').classList.remove('open');
+    }, 200);
+  }
+
+  function clearMapSearch() {
+    document.getElementById('map-search').value = '';
+    document.getElementById('map-search-clear').style.display = 'none';
+    applyTuningFilters();
+    updateSearchSuggestions();
+  }
+
+  // Search input change listeners
+  document.getElementById('map-search').addEventListener('input', function(e) {
+    const val = e.target.value;
+    document.getElementById('map-search-clear').style.display = val.length > 0 ? 'inline' : 'none';
+    applyTuningFilters();
+    updateSearchSuggestions();
   });
+
+  function updateSearchSuggestions() {
+    const box = document.getElementById('suggestions-box');
+    const val = document.getElementById('map-search').value.toLowerCase();
+    
+    if (val === '') {
+      box.classList.remove('open');
+      return;
+    }
+
+    let itemsHtml = '';
+    let matchesCount = 0;
+
+    Object.keys(shops).forEach(id => {
+      const shop = shops[id];
+      if (shop.name.toLowerCase().includes(val) || shop.category.toLowerCase().includes(val)) {
+        matchesCount++;
+        itemsHtml += `
+          <div class="suggestion-item" onclick="selectSuggestedShop('${id}')">
+            <span>🏪</span>
+            <div style="flex:1;">
+              <div style="font-weight:bold;">${shop.name}</div>
+              <div style="font-size:11px; color:#666;">${shop.category} • ⭐ ${shop.rating}</div>
+            </div>
+          </div>
+        `;
+      }
+    });
+
+    if (matchesCount > 0) {
+      box.innerHTML = itemsHtml;
+      box.classList.add('open');
+    } else {
+      box.innerHTML = '<div style="padding:16px; color:#888; font-size:12px; text-align:center;">No suggestions found.</div>';
+      box.classList.add('open');
+    }
+  }
+
+  function selectSuggestedShop(shopId) {
+    document.getElementById('suggestions-box').classList.remove('open');
+    openQuickView(shopId);
+    alert(`Flying camera to ${shops[shopId].name}!`);
+  }
 
   function openQuickView(shopId) {
     const shop = shops[shopId];
@@ -1664,7 +1929,15 @@
 
     // Set selected pin visual feedback
     document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('selected'));
-    event.currentTarget.classList.add('selected');
+    const targetPin = document.getElementById('pin-' + shopId);
+    if (targetPin) {
+      targetPin.classList.add('selected');
+      targetPin.style.display = 'flex'; // make sure it's visible
+    }
+
+    // Move FABs out of way
+    document.getElementById('loc-fab').style.bottom = '280px';
+    document.getElementById('req-fab').style.bottom = '280px';
 
     document.getElementById('quick-view').classList.add('open');
   }
@@ -1672,6 +1945,10 @@
   function closeQuickView() {
     document.getElementById('quick-view').classList.remove('open');
     document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('selected'));
+
+    // Move FABs back down
+    document.getElementById('loc-fab').style.bottom = '100px';
+    document.getElementById('req-fab').style.bottom = '100px';
   }
 
   function resetMapCamera() {
@@ -1870,7 +2147,7 @@
     } else if (textLower.includes('زمان') || textLower.includes('کی') || textLower.includes('ساعت') || textLower.includes('when') || textLower.includes('time') || textLower.includes('eta')) {
       reply = `I can leave right now with my fully-equipped service vehicle and reach your address within ${activeBidSelected.eta} of your booking confirmation!`;
     } else {
-      reply = "Great! I've noted down the details. If you have any questions, feel free to ask. Or click the button below to accept my proposal so I can receive your coordinates and start heading over!";
+      reply = "Great! I've noted down the details. If you have any questions, feel free to ask. Or click the button below to accept my proposal so I can start driving!";
     }
 
     // Typing delay animation

@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import '../bloc/map_bloc.dart';
 import '../bloc/map_event.dart';
 import '../bloc/map_state.dart';
 import '../../domain/entities/shop.dart';
 import 'package:go_router/go_router.dart';
 import '../../../shared/widgets/app_button.dart';
+
+// 1. Cluster Item Wrapper for Shop (Implements ClusterItem)
+class ShopClusterItem with ClusterItem {
+  final Shop shop;
+
+  ShopClusterItem({required this.shop});
+
+  @override
+  LatLng get location => shop.location;
+}
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -17,6 +28,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   late GoogleMapController mapController;
+  late ClusterManager<ShopClusterItem> _clusterManager;
   final LatLng _initialPosition = const LatLng(35.6892, 51.3890);
 
   // Filter States
@@ -24,19 +36,91 @@ class _MapPageState extends State<MapPage> {
   String? _selectedCategory;
   Shop? _selectedShop;
 
+  // Advanced Tune Filters
+  bool _showOnlyOpen = false;
+  double _minRating = 0.0;
+  bool _isSearchFocused = false;
+
   final List<Map<String, String>> _categories = [
     {'name': 'Electronics', 'icon': '📱'},
     {'name': 'Plants', 'icon': '🌱'},
     {'name': 'Cafe', 'icon': '☕'},
   ];
 
+  Set<Marker> _markers = {};
+
   @override
   void initState() {
     super.initState();
+    _initClusterManager();
     // Initial load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<MapBloc>().add(LoadNearbyShopsRequested(_initialPosition));
     });
+  }
+
+  // 2. Initialize Google Maps Cluster Manager
+  void _initClusterManager() {
+    _clusterManager = ClusterManager<ShopClusterItem>(
+      [], // Initial empty list, will be updated dynamically
+      _updateMarkers,
+      markerBuilder: _getMarkerBuilder,
+    );
+  }
+
+  // Callback to update local markers set when cluster manager processes clusters
+  void _updateMarkers(Set<Marker> markers) {
+    setState(() {
+      _markers = markers;
+    });
+  }
+
+  // Builder function for clusters/markers
+  Future<Marker> _getMarkerBuilder(Cluster<ShopClusterItem> cluster) async {
+    return Marker(
+      markerId: MarkerId(cluster.getId()),
+      position: cluster.location,
+      onTap: () {
+        if (cluster.isMultiple) {
+          // If it is a cluster of multiple stores, zoom in on tap!
+          mapController.animateCamera(
+            CameraUpdate.newLatLngZoom(cluster.location, cluster.zoom + 2),
+          );
+        } else {
+          // If it is a single store marker, select and show bottom quick view!
+          final shop = cluster.items.first.shop;
+          setState(() {
+            _selectedShop = shop;
+          });
+          mapController.animateCamera(
+            CameraUpdate.newLatLngZoom(shop.location, 14.5),
+          );
+        }
+      },
+      icon: cluster.isMultiple 
+          ? await _getClusterIcon(cluster.count)
+          : BitmapDescriptor.defaultMarkerWithHue(_getMarkerHue(cluster.items.first.shop.category)),
+    );
+  }
+
+  // Generate dynamic cluster badge icons with counts
+  Future<BitmapDescriptor> _getClusterIcon(int count) async {
+    // In a real flutter app, we would use a canvas to draw a beautiful circular cluster badge
+    // with the count text in the center. For a robust build-friendly mock, we use default colored marker.
+    return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet);
+  }
+
+  double _getMarkerHue(String category) {
+    switch (category.toLowerCase()) {
+      case 'electronics':
+        return BitmapDescriptor.hueGreen;
+      case 'plants':
+        return BitmapDescriptor.hueBlue;
+      case 'cafe':
+        return BitmapDescriptor.hueOrange;
+      default:
+        return BitmapDescriptor.hueRed;
+    }
   }
 
   @override
@@ -45,54 +129,58 @@ class _MapPageState extends State<MapPage> {
     
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: BlocBuilder<MapBloc, MapState>(
+      body: BlocConsumer<MapBloc, MapState>(
+        listener: (context, state) {
+          if (state is MapLoaded) {
+            // Update cluster manager items when shops are loaded from repository
+            final clusterItems = state.shops.map((s) => ShopClusterItem(shop: s)).toList();
+            _clusterManager.setItems(clusterItems);
+          }
+        },
         builder: (context, state) {
           if (state is MapLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is MapLoaded) {
-            // Apply filtering in real-time on client side
+            // Filter shops on client-side dynamically in real-time
             final filteredShops = state.shops.where((shop) {
               final matchesCategory = _selectedCategory == null || shop.category == _selectedCategory;
               final matchesQuery = _searchQuery.isEmpty || 
                   shop.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
                   shop.category.toLowerCase().contains(_searchQuery.toLowerCase());
-              return matchesCategory && matchesQuery;
+              final matchesOpen = !_showOnlyOpen || shop.isOpen;
+              final matchesRating = shop.rating >= _minRating;
+              
+              return matchesCategory && matchesQuery && matchesOpen && matchesRating;
             }).toList();
+
+            // Sync the filtered list to the cluster manager
+            _clusterManager.setItems(filteredShops.map((s) => ShopClusterItem(shop: s)).toList());
 
             return Stack(
               children: [
                 // 1. Google Map View
                 GoogleMap(
                   initialCameraPosition: CameraPosition(target: _initialPosition, zoom: 13),
-                  onMapCreated: (controller) => mapController = controller,
+                  onMapCreated: (controller) {
+                    mapController = controller;
+                    _clusterManager.setMapId(controller.mapId);
+                  },
+                  onCameraMove: _clusterManager.onCameraMove,
+                  onCameraIdle: _clusterManager.onCameraIdle,
                   myLocationEnabled: false,
                   zoomControlsEnabled: false,
                   mapToolbarEnabled: false,
                   onTap: (_) {
-                    // Clicking on the map dismisses the selected shop sheet
                     setState(() {
                       _selectedShop = null;
+                      _isSearchFocused = false;
                     });
+                    FocusScope.of(context).unfocus();
                   },
-                  markers: filteredShops.map((shop) {
-                    return Marker(
-                      markerId: MarkerId(shop.id),
-                      position: shop.location,
-                      icon: BitmapDescriptor.defaultMarkerWithHue(_getMarkerHue(shop.category)),
-                      onTap: () {
-                        setState(() {
-                          _selectedShop = shop;
-                        });
-                        // Center camera on clicked shop
-                        mapController.animateCamera(
-                          CameraUpdate.newLatLngZoom(shop.location, 14.5),
-                        );
-                      },
-                    );
-                  }).toSet(),
+                  markers: _markers, // Controlled and populated dynamically by ClusterManager!
                 ),
 
-                // 2. Floating Search and Category Filter Container
+                // 2. Floating Search and Advanced Filters
                 Positioned(
                   top: 50,
                   left: 16,
@@ -111,20 +199,26 @@ class _MapPageState extends State<MapPage> {
                               const Icon(Icons.search, color: Colors.grey),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: TextField(
-                                  decoration: const InputDecoration(
-                                    hintText: 'Search stores, services, cafes...',
-                                    border: InputBorder.none,
-                                  ),
-                                  onChanged: (val) {
+                                child: Focus(
+                                  onFocusChange: (hasFocus) {
                                     setState(() {
-                                      _searchQuery = val;
-                                      // clear selected shop if it gets filtered out
-                                      if (_selectedShop != null && !filteredShops.contains(_selectedShop)) {
-                                        _selectedShop = null;
-                                      }
+                                      _isSearchFocused = hasFocus;
                                     });
                                   },
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      hintText: 'Search stores, services, cafes...',
+                                      border: InputBorder.none,
+                                    ),
+                                    onChanged: (val) {
+                                      setState(() {
+                                        _searchQuery = val;
+                                        if (_selectedShop != null && !filteredShops.contains(_selectedShop)) {
+                                          _selectedShop = null;
+                                        }
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                               if (_searchQuery.isNotEmpty)
@@ -138,17 +232,18 @@ class _MapPageState extends State<MapPage> {
                                 ),
                               const VerticalDivider(width: 16, thickness: 1),
                               IconButton(
-                                icon: Icon(Icons.tune, color: theme.colorScheme.primary),
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('Advanced map filters coming soon!')),
-                                  );
-                                },
+                                icon: Icon(Icons.tune, color: (_showOnlyOpen || _minRating > 0) ? Colors.orange : theme.colorScheme.primary),
+                                onPressed: () => _showFilterBottomSheet(context, theme),
                               ),
                             ],
                           ),
                         ),
                       ),
+                      
+                      // Search Suggestions Overlay List
+                      if (_isSearchFocused && _searchQuery.isNotEmpty)
+                        _buildSearchSuggestions(filteredShops),
+
                       const SizedBox(height: 10),
                       
                       // Category Filter Chips Row
@@ -202,7 +297,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
 
-                // 3. User Location Button
+                // 3. User Location Button (Adjusts height dynamically if sheet is open)
                 Positioned(
                   bottom: _selectedShop != null ? 280 : 100,
                   right: 16,
@@ -216,7 +311,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
 
-                // 4. Request Expert FAB (Sticky at the bottom-left)
+                // 4. Request Expert FAB
                 Positioned(
                   bottom: _selectedShop != null ? 280 : 100,
                   left: 16,
@@ -246,17 +341,154 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  double _getMarkerHue(String category) {
-    switch (category.toLowerCase()) {
-      case 'electronics':
-        return BitmapDescriptor.hueGreen;
-      case 'plants':
-        return BitmapDescriptor.hueBlue;
-      case 'cafe':
-        return BitmapDescriptor.hueOrange;
-      default:
-        return BitmapDescriptor.hueRed;
-    }
+  // Beautiful suggestions list overlay card
+  Widget _buildSearchSuggestions(List<Shop> matchedShops) {
+    return Card(
+      elevation: 8,
+      margin: const EdgeInsets.only(top: 4, left: 4, right: 4),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Container(
+        constraints: const BoxConstraints(maxHeight: 240),
+        child: matchedShops.isEmpty
+            ? const ListTile(title: Text('No results found.', style: TextStyle(color: Colors.grey)))
+            : ListView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                itemCount: matchedShops.length,
+                itemBuilder: (context, index) {
+                  final shop = matchedShops[index];
+                  return ListTile(
+                    leading: const Icon(Icons.storefront, color: Colors.grey),
+                    title: Text(shop.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('${shop.category} • ${shop.rating}⭐'),
+                    onTap: () {
+                      setState(() {
+                        _selectedShop = shop;
+                        _isSearchFocused = false;
+                      });
+                      FocusScope.of(context).unfocus();
+                      mapController.animateCamera(
+                        CameraUpdate.newLatLngZoom(shop.location, 14.5),
+                      );
+                    },
+                  );
+                },
+              ),
+      ),
+    );
+  }
+
+  // Modern Modal Bottom Sheet for Advanced Map Tuning (Filtering)
+  void _showFilterBottomSheet(BuildContext context, ThemeData theme) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Map Tuning Filters',
+                        style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  // 1. Show Open Only Toggle Switch
+                  SwitchListTile(
+                    title: const Text('Show Open Stores Only', style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: const Text('Filters out closed shops in real-time'),
+                    value: _showOnlyOpen,
+                    activeColor: theme.colorScheme.primary,
+                    onChanged: (val) {
+                      setModalState(() => _showOnlyOpen = val);
+                      setState(() => _showOnlyOpen = val);
+                    },
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 10),
+
+                  // 2. Minimum Rating Radio Row
+                  const Text('Minimum Rating', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [0.0, 4.0, 4.5, 4.8].map((rating) {
+                      final isSelected = _minRating == rating;
+                      return ChoiceChip(
+                        label: Text(rating == 0.0 ? 'Any' : '$rating+ ⭐'),
+                        selected: isSelected,
+                        onSelected: (_) {
+                          setModalState(() => _minRating = rating);
+                          setState(() => _minRating = rating);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Action Buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            setModalState(() {
+                              _showOnlyOpen = false;
+                              _minRating = 0.0;
+                            });
+                            setState(() {
+                              _showOnlyOpen = false;
+                              _minRating = 0.0;
+                            });
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          child: const Text('Reset Filters'),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            backgroundColor: theme.colorScheme.primary,
+                            foregroundColor: theme.colorScheme.onPrimary,
+                          ),
+                          child: const Text('Apply Filters'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget _buildQuickViewSheet(ThemeData theme, Shop shop) {
