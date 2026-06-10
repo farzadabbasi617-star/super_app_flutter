@@ -282,7 +282,7 @@
     }
 
     #screen-map.satellite {
-      background: #111b24; /* Satellite simulation color */
+      background: #111b24;
     }
 
     .map-canvas {
@@ -1320,6 +1320,94 @@
       flex-direction: row-reverse;
     }
 
+    /* ========================================= */
+    /* NEW: VIRTUAL BOOTH / MINI-SITE OVERLAY    */
+    /* ========================================= */
+    .booth-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-color);
+      z-index: 1180;
+      display: none;
+      flex-direction: column;
+      text-align: right;
+    }
+
+    .booth-overlay.open {
+      display: flex;
+    }
+
+    .booth-banner {
+      height: 140px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      position: relative;
+    }
+
+    .booth-back-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .booth-scroll-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .booth-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .booth-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .booth-category {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-bottom: 16px;
+    }
+
+    .booth-desc {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.6;
+      margin: 16px 0;
+    }
+
+    .booth-grid-title {
+      font-size: 15px;
+      font-weight: bold;
+      margin: 24px 0 12px;
+      border-right: 4px solid var(--primary-color);
+      padding-right: 8px;
+    }
+
     /* Notification Banner */
     .custom-snackbar {
       position: absolute;
@@ -1357,14 +1445,14 @@
     <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
     
     <ul class="features-list">
-      <li><span>۱</span> <strong>راهنمای شروع سریع نقشه:</strong> اضافه شدن کارت زیبا و متحرک راهنمای مپ در لود اولیه نقشه.</li>
-      <li><span>۲</span> <strong>تغییر نوع نقشه (Satellite/Standard):</strong> اضافه شدن دکمه تغییر استایل نقشه به حالت ماهواره‌ای.</li>
-      <li><span>۳</span> <strong>هاب پین‌های متخصصان:</strong> پین متخصصین با افکت پالس‌زن و آیکون اختصاصی.</li>
-      <li><span>۴</span> <strong>راهنمای پین‌ها (Map Legend):</strong> نوار شکیل راهنمای آیکون‌های صنف در پایین نقشه.</li>
-      <li><span>۵</span> <strong>فیلتر شعاع و سرچ زنده:</strong> فیلترینگ و اسلایدر شعاع کاملاً زنده و تعاملی.</li>
+      <li><span>۱</span> <strong>غرفه و مینی‌سایت اختصاصی کسب‌وکار:</strong> باز شدن غرفه مجازی و گالری محصولات با دکمه "مشاهده پروفایل غرفه"!</li>
+      <li><span>۲</span> <strong>خرید لایو از غرفه‌داران:</strong> کلیک روی هر کالا در ویترین غرفه فورا دیالوگ خرید را باز می‌کند.</li>
+      <li><span>۳</span> <strong>تغییر استایل نقشه به حالت ماهواره‌ای:</strong> دکمه کره زمین برای سوییچ زنده تم نقشه.</li>
+      <li><span>۴</span> <strong>راهنمای شروع سریع و پالس پین‌ها:</strong> کارت راهنمای روی مپ و افکت موجی زیبا برای علائم.</li>
+      <li><span>۵</span> <strong>فیلترهای پیشرفته و اسلایدر شعاع:</strong> فیلتر باز بودن و ریتینگ به همراه شعاع جستجوی کاملاً پویا.</li>
     </ul>
 
-    <p style="font-size: 13px; font-style: italic; color: #888;">💡 دکمه کره ماهواره‌ای را در پایین سمت راست نقشه لمس کنید تا استایل مپ فورا تغییر کند!</p>
+    <p style="font-size: 13px; font-style: italic; color: #888;">💡 روی یک پین نقشه کلیک کرده و سپس دکمه سبز رنگ <strong>«مشاهده پروفایل غرفه»</strong> را بزنید تا وارد مینی‌سایت تعاملی فروشگاه شوید.</p>
   </div>
 
   <!-- RIGHT: Mobile Emulator Wrapper -->
@@ -1523,8 +1611,8 @@
               <span id="qv-hours">ساعت کاری: ۰۹:۰۰ الی ۲۲:۰۰</span>
               <span class="badge-open" id="qv-status">باز است</span>
             </div>
-            <button class="sheet-btn" id="qv-action-btn" onclick="viewStoreProfile()">
-              <span>🏪</span> مشاهده پروفایل فروشگاه
+            <button class="sheet-btn" id="qv-action-btn" onclick="openShopBooth()">
+              <span>🏪</span> مشاهده پروفایل غرفه
             </button>
           </div>
         </div>
@@ -1674,6 +1762,11 @@
           <span id="rb-total-price">۲۴۰ دلار</span>
         </div>
 
+        <div class="booking-total-box" style="background:#fff; border:1px solid #eee; margin-top:-16px; margin-bottom:24px;">
+          <span style="font-size:11px; color:#555;">موجودی کیف پول شما:</span>
+          <span style="font-size:11.5px; color:var(--primary-color);" id="rb-wallet-bal">۱۵۰.۰۰ $</span>
+        </div>
+
         <button class="chat-action-btn" onclick="confirmRentalBooking()">تایید و ثبت نهایی اجاره</button>
       </div>
 
@@ -1815,6 +1908,40 @@
         </div>
       </div>
 
+      <!-- G. NEW: MERCHANT VIRTUAL BOOTH / MINI-SITE OVERLAY -->
+      <div class="booth-overlay" id="booth-overlay">
+        <div class="booth-banner" id="booth-banner">
+          <div class="booth-back-btn" onclick="closeShopBooth()">✕</div>
+          <span id="booth-large-icon">📱</span>
+        </div>
+        <div class="booth-scroll-content">
+          <div class="booth-badge-row">
+            <span class="badge-category" id="booth-category" style="background:#e6f4ea; color:#137333;">الکترونیک</span>
+            <span class="badge-open" id="booth-status-badge">باز است</span>
+          </div>
+          <div class="booth-title" id="booth-name">مرکز فنی تک هاب</div>
+          <div class="sheet-rating" style="margin-bottom:12px;">
+            <span>⭐</span> <span id="booth-rating" style="font-weight:bold;">4.8</span> <span style="color:#666;" id="booth-reviews">(۱۲۴ نظر)</span>
+          </div>
+          <div style="font-size:11.5px; color:#555;" id="booth-address">📍 تهران، خیابان ولیعصر، پلاک ۴</div>
+          <div style="font-size:11.5px; color:#555; margin-top:4px;" id="booth-phone">📞 +۹۸ ۲۱ ۸۸۷۷ ۶۶۵۵</div>
+          <div style="font-size:11.5px; color:#555; margin-top:4px;" id="booth-hours">🕒 ساعت کاری: ۰۹:۰۰ الی ۲۲:۰۰</div>
+
+          <div class="booth-desc" id="booth-about">بزرگترین مرکز تخصصی فروش گجت و تعمیرات سخت‌افزاری انواع موبایل و تبلت با قطعات اورجینال در تهران.</div>
+
+          <div class="booth-grid-title">ویترین و گالری محصولات غرفه</div>
+          <!-- Products will be dynamically generated based on shop selection -->
+          <div class="product-grid" id="booth-products-container" style="padding:0;">
+            <!-- Booth items -->
+          </div>
+          <div style="height:40px;"></div>
+        </div>
+
+        <div class="chat-footer">
+          <button class="chat-action-btn" onclick="alert('در حال اتصال به گفتگوی زنده با غرفه‌دار...')">شروع گفتگوی زنده با غرفه‌دار</button>
+        </div>
+      </div>
+
       <!-- Navigation Bottom Bar -->
       <div class="nav-bar">
         <div class="nav-item active" id="nav-map" onclick="switchTab('map')">
@@ -1843,15 +1970,110 @@
 <script>
   // Mock Database Shops & Experts
   const shops = {
-    s1: { id: 's1', name: 'مرکز فنی تک هاب', category: 'Electronics', rating: 4.8, reviews: 124, address: 'تهران، خیابان ولیعصر، پلاک ۴', hours: '۰۹:۰۰ الی ۲۲:۰۰', isOpen: true, icon: '📱', distance: 1.5, type: 'shop' },
-    s2: { id: 's2', name: 'گلستان گرین گاردن', category: 'Plants', rating: 4.5, reviews: 89, address: 'تهران، خیابان نیاوران، پلاک ۱', hours: '۰۸:۰۰ الی ۲۰:۰۰', isOpen: true, icon: '🌱', distance: 3.8, type: 'shop' },
-    s3: { id: 's3', name: 'کافه تخصصی کرنر', category: 'Cafe', rating: 4.9, reviews: 210, address: 'تهران، خیابان جردن، نبش پلاک ۲', hours: '۰۷:۰۰ الی ۲۳:۰۰', isOpen: false, icon: '☕', distance: 4.2, type: 'shop' },
-    s4: { id: 's4', name: 'دنیای گجت ولیعصر', category: 'Electronics', rating: 4.2, reviews: 50, address: 'تهران، میدان انقلاب، پاساژ گجت', hours: '۱۰:۰۰ الی ۲۱:۰۰', isOpen: true, icon: '📱', distance: 2.0, type: 'shop' },
-    s5: { id: 's5', name: 'گل‌فروشی فلاور پاور', category: 'Plants', rating: 4.7, reviews: 30, address: 'تهران، خیابان پاسداران، نبش کوچه ۵', hours: '۰۸:۰۰ الی ۲۰:۰۰', isOpen: true, icon: '🌱', distance: 6.0, type: 'shop' },
+    s1: { 
+      id: 's1', 
+      name: 'مرکز فنی تک هاب', 
+      category: 'Electronics', 
+      rating: 4.8, 
+      reviews: 124, 
+      address: 'تهران، خیابان ولیعصر، پلاک ۴', 
+      phone: '+۹۸ ۲۱ ۸۸۷۷ ۶۶۵۵',
+      hours: '۰۹:۰۰ الی ۲۲:۰۰', 
+      isOpen: true, 
+      icon: '📱', 
+      distance: 1.5, 
+      type: 'shop',
+      about: 'بزرگترین مرکز تخصصی فروش گجت و تعمیرات سخت‌افزاری انواع موبایل و تبلت با قطعات اورجینال و تحویل فوری در تهران.',
+      products: [
+        { name: 'iPhone 15 Pro', desc: 'آخرین پرچمدار اپل با بدنه تیتانیوم', price: '۹۹۹$', icon: '📱' },
+        { name: 'شارژر بی‌سیم Fast', desc: 'شارژر سریع مغناطیسی ۱۵ وات', price: '۴۵$', icon: '🔌' },
+        { name: 'پایه نگهدارنده تلسکوپی', desc: 'نگهدارنده تمام فلزی رومیزی گوشی', price: '۲۵$', icon: '📐' }
+      ]
+    },
+    s2: { 
+      id: 's2', 
+      name: 'گلستان گرین گاردن', 
+      category: 'Plants', 
+      rating: 4.5, 
+      reviews: 89, 
+      address: 'تهران، خیابان نیاوران، پلاک ۱', 
+      phone: '+۹۸ ۲۱ ۲۲۳۳ ۴۴۵۵',
+      hours: '۰۸:۰۰ الی ۲۰:۰۰', 
+      isOpen: true, 
+      icon: '🌱', 
+      distance: 3.8, 
+      type: 'shop',
+      about: 'پرورش و عرضه انواع گل و گیاهان آپارتمانی شاداب، بن‌سای‌های مینیاتوری متمایز و خاک ارگانیک غنی‌شده با ورمی‌کمپوست.',
+      products: [
+        { name: 'بن‌سای جینسینگ', desc: 'درختچه بن‌سای مینیاتوری شکیل', price: '۸۵$', icon: '🌳' },
+        { name: 'فیلودندرون برگ انجیری', desc: 'گیاه آپارتمانی پهن‌برگ بسیار جذاب', price: '۳۵$', icon: '🌿' },
+        { name: 'کود مایع رشد سریع نیتروژن', desc: 'کود مایع جهت شادابی و برگ‌دهی گیاه', price: '۱۵$', icon: '🧪' }
+      ]
+    },
+    s3: { 
+      id: 's3', 
+      name: 'کافه تخصصی کرنر', 
+      category: 'Cafe', 
+      rating: 4.9, 
+      reviews: 210, 
+      address: 'تهران، خیابان جردن، نبش پلاک ۲', 
+      phone: '+۹۸ ۲۱ ۲۲۰۲ ۲۲۱۱',
+      hours: '۰۷:۰۰ الی ۲۳:۰۰', 
+      isOpen: false, 
+      icon: '☕', 
+      distance: 4.2, 
+      type: 'shop',
+      about: 'کافه دنج و آرام با غنی‌ترین اسپرسو بار عربیکا اسپشیالتی و کرواسان‌های تازه و داغ پخت روز با فیلینگ شکلات بلژیکی.',
+      products: [
+        { name: 'آرتیسان لاته داغ', desc: 'اسپرسو دوبل با فوم شیر ابریشمی', price: '۴.۵$', icon: '☕' },
+        { name: 'کرواسان شکلات داغ', desc: 'کرواسان پخت روز با فیلینگ شکلات بلژیکی', price: '۳.۵$', icon: '🥐' },
+        { name: 'قهوه کلمبیا (۲۵۰ گرم)', desc: 'دانه‌های تازه برشته شده قهوه عربیکا کلمبیا', price: '۱۸$', icon: '🫘' }
+      ]
+    },
+    s4: { 
+      id: 's4', 
+      name: 'دنیای گجت ولیعصر', 
+      category: 'Electronics', 
+      rating: 4.2, 
+      reviews: 50, 
+      address: 'تهران، میدان انقلاب، پاساژ گجت', 
+      phone: '+۹۸ ۲۱ ۶۶۴۴ ۲۲۱۱',
+      hours: '۱۰:۰۰ الی ۲۱:۰۰', 
+      isOpen: true, 
+      icon: '📱', 
+      distance: 2.0, 
+      type: 'shop',
+      about: 'مرکز معتبر عرضه انواع لوازم جانبی دیجیتال، پاوربانک، قاب گوشی، گلس و تجهیزات گیمینگ موبایل.',
+      products: [
+        { name: 'پاوربانک ۲۰,۰۰۰ میلی‌آمپر', desc: 'پاوربانک فست شارژ با دو پورت خروجی', price: '۶۰$', icon: '🔋' },
+        { name: 'قاب مگنتی گوشی', desc: 'قاب محافظ فیبر کربنی مگ‌سیف', price: '۱۵$', icon: '🛡️' }
+      ]
+    },
+    s5: { 
+      id: 's5', 
+      name: 'گل‌فروشی فلاور پاور', 
+      category: 'Plants', 
+      rating: 4.7, 
+      reviews: 30, 
+      address: 'تهران، خیابان پاسداران، نبش کوچه ۵', 
+      phone: '+۹۸ ۲۱ ۲۲۸۸ ۳۳۴۴',
+      hours: '۰۸:۰۰ الی ۲۰:۰۰', 
+      isOpen: true, 
+      icon: '🌱', 
+      distance: 6.0, 
+      type: 'shop',
+      about: 'گالری تخصصی گل‌آرایی، سبد گل هدیه، دسته‌گل‌های مدرن عروسی و مناسبت‌ها با تازه‌ترین گل‌های شاخه‌بریده هلندی.',
+      products: [
+        { name: 'دسته‌گل داوودی صورتی', desc: 'پک شکیل دسته‌گل داوودی و ارکیده تازه', price: '۴۰$', icon: '💐' },
+        { name: 'گلدان سرامیکی پتوس', desc: 'پتوس رونده با رشد عالی و تصفیه‌کننده هوا', price: '۱۸$', icon: '🍀' }
+      ]
+    },
     e1: { id: 'e1', name: 'علی رضایی', category: 'Expert', rating: 4.9, reviews: 142, address: 'موقعیت زنده • ۱.۱ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۵۰,۰۰۰ تومان', isOpen: true, icon: '👨‍🔧', distance: 1.1, type: 'expert', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', avatar: '👨‍🔧', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی اقدام کنم.' },
     e2: { id: 'e2', name: 'سینا محمدی', category: 'Expert', rating: 4.8, reviews: 98, address: 'موقعیت زنده • ۲.۵ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۲۰,۰۰۰ تومان', isOpen: true, icon: '⚡', distance: 2.5, type: 'expert', specialty: 'تکنسین برق ساختمان و عیب‌یابی', avatar: '⚡', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارها کاملاً آماده است.' },
     e3: { id: 'e3', name: 'میلاد کریمی', category: 'Expert', rating: 4.7, reviews: 215, address: 'موقعیت زنده • ۸.۰ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۴۰,۰۰۰ تومان', isOpen: true, icon: '❄️', distance: 8.0, type: 'expert', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', avatar: '❄️', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم?' }
   };
+
+  let activeShopId = null;
 
   // Tab switching
   function switchTab(tabId) {
@@ -1892,7 +2114,7 @@
 
     applyTuningFilters();
     closeQuickView();
-    dismissOnboarding(); // Auto-dismiss tutorial on filter
+    dismissOnboarding(); 
   }
 
   // Real-time Radius change in bottom sheet
@@ -1938,7 +2160,7 @@
       mapArea.classList.add('satellite');
       vMap.classList.add('satellite-grid');
       river.style.stroke = '#1b3240';
-      circle.style.stroke = '#ffc107'; // yellow dashed ring
+      circle.style.stroke = '#ffc107'; 
       document.querySelectorAll('.map-street').forEach(st => st.style.stroke = '#333');
       document.getElementById('phone-status-bar').className = 'status-bar light-text';
       showNotification("نقشه به حالت عکس ماهواره‌ای تیره تغییر یافت 🛰️");
@@ -1947,7 +2169,7 @@
       mapArea.classList.remove('satellite');
       vMap.classList.remove('satellite-grid');
       river.style.stroke = '#a5c9e2';
-      circle.style.stroke = '#88b598'; // green dashed ring
+      circle.style.stroke = '#88b598'; 
       document.querySelectorAll('.map-street').forEach(st => st.style.stroke = '#fdfdfd');
       document.getElementById('phone-status-bar').className = 'status-bar dark-text';
       showNotification("نقشه به حالت طرح ساده شهری بازگشت 🗺️");
@@ -2074,6 +2296,7 @@
   function openQuickView(shopId) {
     const shop = shops[shopId];
     dismissOnboarding();
+    activeShopId = shopId;
     
     const qvBtn = document.getElementById('qv-action-btn');
     if (shop.type === 'expert') {
@@ -2116,9 +2339,9 @@
         statusBadge.className = 'badge-closed';
       }
 
-      qvBtn.innerHTML = `<span>🏪</span> مشاهده پروفایل فروشگاه`;
+      qvBtn.innerHTML = `<span>🏪</span> مشاهده پروفایل غرفه`;
       qvBtn.style.background = 'var(--primary-color)';
-      qvBtn.onclick = viewStoreProfile;
+      qvBtn.onclick = openShopBooth;
     }
 
     document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('selected'));
@@ -2165,6 +2388,60 @@
     document.getElementById('services-flow').classList.add('open');
     document.getElementById('radar-view').style.display = 'none';
     document.getElementById('offers-view').style.display = 'none';
+  }
+
+  // =========================================
+  // VIRTUAL MERCHANT BOOTH LOGIC
+  // =========================================
+  function openShopBooth() {
+    closeQuickView();
+    const shop = shops[activeShopId];
+    
+    // Header Style
+    const displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
+    document.getElementById('booth-category').innerText = displayCategory;
+    document.getElementById('booth-large-icon').innerText = shop.icon;
+    
+    const banner = document.getElementById('booth-banner');
+    if (shop.category === 'Electronics') {
+      banner.style.background = 'linear-gradient(135deg, #00934b, #212121)';
+    } else if (shop.category === 'Plants') {
+      banner.style.background = 'linear-gradient(135deg, #3b76af, #00934b)';
+    } else {
+      banner.style.background = 'linear-gradient(135deg, #e28743, #212121)';
+    }
+
+    document.getElementById('booth-status-badge').innerText = shop.isOpen ? 'باز است' : 'بسته است';
+    document.getElementById('booth-status-badge').className = shop.isOpen ? 'badge-open' : 'badge-closed';
+
+    document.getElementById('booth-name').innerText = shop.name;
+    document.getElementById('booth-rating').innerText = shop.rating;
+    document.getElementById('booth-reviews').innerText = `(${shop.reviews} نظر)`;
+    document.getElementById('booth-address').innerText = `📍 ${shop.address}`;
+    document.getElementById('booth-phone').innerText = `📞 ${shop.phone}`;
+    document.getElementById('booth-hours').innerText = `🕒 ساعت کاری: ${shop.hours}`;
+    document.getElementById('booth-about').innerText = shop.about;
+
+    // Load booth products in the booth grid
+    const container = document.getElementById('booth-products-container');
+    let productsHtml = '';
+    shop.products.forEach(p => {
+      productsHtml += `
+        <div class="product-card" onclick="openPurchaseDialog('${p.name}', '${p.desc}', '${p.price}')">
+          <div class="product-img" style="height: 80px;">${p.icon}</div>
+          <div class="product-name" style="font-size:11.5px;">${p.name}</div>
+          <div class="product-price" style="font-size:11.5px;">${p.price}</div>
+          <div class="product-desc" style="font-size:9.5px;">${p.desc}</div>
+        </div>
+      `;
+    });
+    container.innerHTML = productsHtml;
+
+    document.getElementById('booth-overlay').classList.add('open');
+  }
+
+  function closeShopBooth() {
+    document.getElementById('booth-overlay').classList.remove('open');
   }
 
   // =========================================
@@ -2230,6 +2507,7 @@
   function topUpWallet() {
     walletVal += 100.00;
     document.getElementById('wallet-val').innerText = `${walletVal.toFixed(2)} دلار`;
+    document.getElementById('rb-wallet-bal').innerText = `${walletVal.toFixed(2)} $`;
     showNotification("کیف پول الکترونیکی شما با موفقیت +۱۰۰ دلار شارژ شد!");
   }
 
@@ -2298,6 +2576,13 @@
       </div>
     `;
     container.appendChild(card);
+  }
+
+  function closeServicesFlow() {
+    clearTimeout(offerTimer1);
+    clearTimeout(offerTimer2);
+    clearTimeout(offerTimer3);
+    document.getElementById('services-flow').classList.remove('open');
   }
 
   // =========================================
