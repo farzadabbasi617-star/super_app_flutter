@@ -49,6 +49,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
   String _selectedTimeSlot = '۱۰:۳۰ صبح';
   bool _isBookingConfirmed = false;
   String? _bookedServiceName;
+  bool _isReminderSet = false;
 
   final List<String> _timeSlots = [
     '۰۹:۰۰ صبح',
@@ -169,7 +170,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
           'about': 'آزمایشگاه فوق تخصصی پایتخت با دستگاه‌های تمام اتوماتیک پیشرفته، ارائه دهنده کلیه آزمایش‌های روتین و پاتولوژی خون، بیوشیمی، ژنتیک و تست چک‌آپ دوره‌ای با ارسال سریع جواب آنلاین.',
           'avatar': '🧪',
           'products': const [
-            BoothProduct(name: 'تست چک‌آپ کامل سالیانه خون', price: '۴۵۰,۰۰۰ تومان', icon: '🧪', description: 'شامل فاکتورهای قند، چربی، کبد، کلیه و شمارش گلبولی'),
+            BoothProduct(name: 'تست چک‌آپ کامل سالیانه خون', price: '۴۵۰,۰۰۰ تومان', icon: '🧪', description: 'شامل فاکتورهای قند، کبد، تیروئید و اوره'),
             BoothProduct(name: 'آزمایش قند خون ناشتا و HbA1c', price: '۱۲۰,۰۰۰ تومان', icon: '🩸', description: 'بررسی دقیق سطح دیابت و قند سه ماهه'),
             BoothProduct(name: 'آزمایش غربالگری تیروئید کامل', price: '۱۸۰,۰۰۰ تومان', icon: '🦋', description: 'تست فاکتورهای هورمونی تیروئید T3, T4, TSH'),
           ],
@@ -343,6 +344,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                         setState(() {
                           _isBookingConfirmed = true;
                           _bookedServiceName = service.name;
+                          _isReminderSet = false; // Reset reminder for new appointment
                         });
                       },
                     ),
@@ -750,7 +752,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
             ],
           ),
 
-          // 3. SPECIALIST BOOKING CONFIRMED - DIGITAL APPOINTMENT TICKET OVERLAY (کارت نوبت دیجیتال)
+          // 3. SPECIALIST BOOKING CONFIRMED - DIGITAL TICKET OVERLAY (کارت نوبت دیجیتال با قابلیت یادآوری!)
           if (_isBookingConfirmed)
             Container(
               color: Colors.black.withOpacity(0.65),
@@ -795,7 +797,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                             children: [
                               _buildTicketRow('نام مرکز:', shop['name']),
                               const Divider(height: 16),
-                              _buildTicketRow('خدمت درخواستی:', _bookedServiceName ?? 'N/A'),
+                              _buildTicketRow('خدمت رزرو شده:', _bookedServiceName ?? 'N/A'),
                               const Divider(height: 16),
                               _buildTicketRow('تاریخ مراجعه:', '${_selectedDate.year}/${_selectedDate.month}/${_selectedDate.day}'),
                               const Divider(height: 16),
@@ -805,7 +807,38 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 20),
+
+                        // REMINDER ACTION BUTTON (جدید!)
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton.icon(
+                            icon: Icon(_isReminderSet ? Icons.notifications_active : Icons.notifications_none_outlined, size: 18, color: _isReminderSet ? Colors.green : null),
+                            label: Text(
+                              _isReminderSet ? 'یادآور فعال است (۱ ساعت قبل)' : '🔔 تنظیم یادآور هوشمند نوبت',
+                              style: TextStyle(fontSize: 12, color: _isReminderSet ? Colors.green : null, fontWeight: FontWeight.bold),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isReminderSet = !_isReminderSet;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(_isReminderSet 
+                                      ? 'یادآور هوشمند فعال شد! ۱ ساعت قبل از نوبت به شما نوتیفیکیشن فرستاده می‌شود.' 
+                                      : 'یادآور نوبت غیرفعال شد.'),
+                                  backgroundColor: _isReminderSet ? Colors.green : Colors.red,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 16),
 
                         // Actions
                         Row(
@@ -869,6 +902,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                 content: Text(isFixedClinic 
                     ? 'در حال برقراری تماس تلفنی با پذیرش ${shop['name']}...' 
                     : 'در حال اتصال به چت زنده غرفه‌دار (${shop['name']})...'),
+                borderOnForeground: true, // fallback safety
                 behavior: SnackBarBehavior.floating,
               ),
             );

@@ -1587,6 +1587,30 @@
       margin-bottom: 0;
     }
 
+    /* NEW: SYSTEM ALARM / PUSH NOTIFICATION ALERTS OVERLAY (شبیه‌ساز نوتیفیکیشن دزدگیر!) */
+    .system-push-banner {
+      position: absolute;
+      top: -120px;
+      left: 14px;
+      right: 14px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #000;
+      border-radius: 24px;
+      padding: 14px 18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      z-index: 3000;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(0,0,0,0.08);
+      cursor: pointer;
+    }
+
+    .system-push-banner.show {
+      top: 52px; /* slide down below the notch! */
+    }
+
     /* Notification Banner */
     .custom-snackbar {
       position: absolute;
@@ -1624,14 +1648,14 @@
     <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
     
     <ul class="features-list">
-      <li><span>۱</span> <strong>بال دوم خدمات (نوبت‌دهی آنلاین):</strong> رزرو نوبت حضوری برای مراکز درمانی، زیبایی و آزمایشگاه‌ها!</li>
-      <li><span>۲</span> <strong>کارت نوبت دیجیتال (Appointment Ticket):</strong> صدور خودکار رسید نوبت، کد رهگیری و دکمه مسیریابی.</li>
-      <li><span>۳</span> <strong>پین‌های پزشکی روی نقشه:</strong> آیکون‌های جدید `🩺` و `🧪` برای مراکز درمانی با لوکیشن ثابت.</li>
-      <li><span>۴</span> <strong>فرم جدید و پیشرفته عیب‌یابی:</strong> قبل از فراخوانی، جزئیات مشکل، برند و بودجه را مشخص کنید!</li>
-      <li><span>۵</span> <strong>بخش کامنت‌ها و اشتراک تصاویر:</strong> کاربران می‌توانند عکس خرید خود را به اشتراک بگذارند و امتیاز دهند!</li>
+      <li><span>۱</span> <strong>سیستم یادآور هوشمند نوبت کلینیک:</strong> اضافه شدن دکمه تنظیم آلارم در رسید نوبت دیجیتال!</li>
+      <li><span>۲</span> <strong>شبیه‌سازی زنده نوتیفیکیشن آلارم:</strong> با فشردن دکمه آلارم، یک تایمر معکوس برای دریافت نوتیفیکیشن فعال می‌شود!</li>
+      <li><span>۳</span> <strong>نوتیفیکیشن فشاری سیستم (Push Notification):</strong> پس از ۶ ثانیه، نوتیفیکیشن لایو با افکت و جزئیات نوبت از بالای گوشی ظاهر می‌شود!</li>
+      <li><span>۴</span> <strong>بال دوم خدمات (نوبت‌دهی آنلاین):</strong> رزرو نوبت حضوری برای مراکز درمانی، زیبایی و آزمایشگاه‌ها.</li>
+      <li><span>۵</span> <strong>پین‌های پزشکی روی نقشه:</strong> آیکون‌های جدید `🩺` و `🧪` برای مراکز درمانی با لوکیشن ثابت.</li>
     </ul>
 
-    <p style="font-size: 13px; font-style: italic; color: #888;">💡 روی پین <strong>کلیک درمانی آریا (🩺)</strong> نقشه کلیک کنید، دکمه رزرو نوبت را بزنید و فلو فوق‌العاده شیک انتخاب روز، ساعت و صدور کارت نوبت دیجیتال را لایو تجربه کنید!</p>
+    <p style="font-size: 13px; font-style: italic; color: #888;">💡 وارد مینی‌سایت <strong>کلینیک درمانی آریا (🩺)</strong> شوید. خدمتی را رزرو کنید؛ در کارت نوبت دیجیتال نهایی، دکمه <strong>«🔔 تنظیم یادآور هوشمند نوبت»</strong> را لمس کنید و ۶ ثانیه شکیبا باشید تا غافلگیری نوتیفیکیشن لایو سیستم را ببینید!</p>
   </div>
 
   <!-- RIGHT: Mobile Emulator Wrapper -->
@@ -1642,6 +1666,15 @@
     </div>
     
     <div class="screen">
+
+      <!-- SYSTEM PUSH NOTIFICATION ALARM BANNER (جدید!) -->
+      <div class="system-push-banner" id="system-alarm-banner" onclick="clickSystemAlarmBanner()">
+        <span style="font-size: 28px;">🔔</span>
+        <div style="flex:1; text-align:right;">
+          <div style="font-weight:bold; font-size:12px; color:#111; margin-bottom:2px;">یادآوری نوبت سوپراپلیکیشن ⏰</div>
+          <div style="font-size:10px; color:#333; line-height:1.4;" id="sab-body">امیرحسین عزیز، نوبت حضور شما در کلینیک درمانی آریا فرا رسیده است. لطفا جهت مراجعه آماده شوید.</div>
+        </div>
+      </div>
       
       <!-- Live Notification Banner inside mobile screen -->
       <div class="custom-snackbar" id="live-banner">
@@ -1677,7 +1710,7 @@
             </svg>
 
             <!-- Map pins -->
-            <!-- Shops (At-home / purchase) -->
+            <!-- Shops -->
             <div class="map-pin" id="pin-s1" style="top: 48%; left: 45%; border-color: #00934b;" onclick="openQuickView('s1')" data-category="Electronics" data-name="Tech Hub" data-type="shop" data-distance="1.5" data-rating="4.8" data-open="true">
               <div class="map-pin-pulse" style="border-color: #00934b;"></div>
               <span style="font-size: 18px;">📱</span>
@@ -1699,7 +1732,7 @@
               <span style="font-size: 18px;">🌱</span>
             </div>
 
-            <!-- Fixed Clinics & Labs (New!) -->
+            <!-- Fixed Clinics & Labs -->
             <div class="map-pin" id="pin-s6" style="top: 38%; left: 35%; border-color: #10b981;" onclick="openQuickView('s6')" data-category="Medical" data-name="کلینیک درمانی آریا" data-type="clinic" data-distance="1.5" data-rating="4.8" data-open="true">
               <div class="map-pin-pulse" style="border-color: #10b981;"></div>
               <span style="font-size: 18px;">🩺</span>
@@ -2242,7 +2275,7 @@
         </div>
       </div>
 
-      <!-- H. NEW: IN-CLINIC APPOINTMENT BOOKING SHEET (بال دوم!) -->
+      <!-- H. IN-CLINIC APPOINTMENT BOOKING SHEET -->
       <div class="appointment-sheet-overlay" id="appointment-sheet" onclick="closeAppointmentSheet()">
         <div class="appointment-sheet-card" onclick="event.stopPropagation()">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-direction:row-reverse;">
@@ -2277,7 +2310,7 @@
         </div>
       </div>
 
-      <!-- I. NEW: CLINIC APPOINTMENT DIGITAL TICKET OVERLAY -->
+      <!-- I. CLINIC APPOINTMENT DIGITAL TICKET OVERLAY -->
       <div class="ticket-overlay" id="ticket-overlay">
         <div class="ticket-card">
           <div class="ticket-badge">🩺</div>
@@ -2295,6 +2328,11 @@
             <div style="height:1px; background:rgba(0,0,0,0.05); margin:8px 0;"></div>
             <div class="ticket-row"><span>کد رهگیری نوبت:</span><strong style="color:var(--primary-color);" id="t-code">APT-5621</strong></div>
           </div>
+
+          <!-- REMINDER BUTTON FOR DISPATCHING ALARM (جدید!) -->
+          <button class="chat-action-btn" id="t-reminder-btn" style="background:#fff; color:var(--primary-color); border:1.5px solid var(--primary-color); margin-bottom:16px;" onclick="scheduleAppointmentReminder()">
+            <span>🔔</span> تنظیم یادآور هوشمند نوبت
+          </button>
 
           <div class="dialog-actions">
             <button class="btn-cancel" onclick="closeAppointmentTicket()">انصراف و بستن</button>
@@ -2329,7 +2367,7 @@
 </div>
 
 <script>
-  // Mock Database Shops & Experts & Fixed Clinics (🩺 & 🧪)
+  // Mock Database Shops & Experts & Fixed Clinics
   const shops = {
     s1: { 
       id: 's1', 
@@ -2439,13 +2477,13 @@
       about: 'گالری تخصصی گل‌آرایی، سبد گل هدیه، دسته‌گل‌های مدرن عروسی و مناسبت‌ها با تازه‌ترین گل‌های شاخه‌بریده هلندی.',
       products: [
         { name: 'دسته‌گل داوودی صورتی', desc: 'پک شکیل دسته‌گل داوودی و ارکیده تازه', price: '۲,۲۰۰,۰۰۰ تومان', icon: '💐' },
-        { name: 'گلدان سرامیکی پتوس', desc: 'پتوس رونده با رشد عالی و تصفیه‌کننده هوا', price: '۱,۰۰۰,۰۰۰ تومان', icon: '🍀' }
+        { name: 'گلدان سرامیکی پتوس', desc: 'پتوس رونده با رشد عالی و تصفیه‌کننده هوا', price: '۱,۰۰0,۰۰۰ تومان', icon: '🍀' }
       ],
       reviewsList: [
         { user: 'نسیم ناصری', rating: 5, comment: 'عالی بود دسته‌گلی که فرستادن دقیقا مثل عکس بود و گل‌ها کاملا تازه و با طراوت بودن.', img: null }
       ]
     },
-    s6: { // Fixed Center 1: Aria Clinic
+    s6: { 
       id: 's6', 
       name: 'کلینیک درمانی آریا', 
       category: 'Clinic', 
@@ -2467,7 +2505,7 @@
         { user: 'رضا امینی', rating: 5, comment: 'کلینیک بسیار مجهز و تمیزی بود. نوبت‌دهی آنلاین عالی کار کرد و سر وقت ویزیت شدم.', img: null }
       ]
     },
-    s7: { // Fixed Center 2: Paytakht Lab
+    s7: { 
       id: 's7', 
       name: 'آزمایشگاه تخصصی پایتخت', 
       category: 'Clinic', 
@@ -2489,7 +2527,7 @@
         { user: 'لیلا یوسفی', rating: 5, comment: 'آزمایش خون دادم، نمونه‌گیری بسیار ملایم و خوب بود. جواب را شب برایم آنلاین فرستادند.', img: null }
       ]
     },
-    s8: { // Fixed Center 3: Bahar Beauty
+    s8: { 
       id: 's8', 
       name: 'کلینیک زیبایی بهار', 
       category: 'Clinic', 
@@ -2667,6 +2705,7 @@
     updateSearchSuggestions();
   }
 
+  // Autocomplete suggestions close
   function onSearchBlur() {
     setTimeout(() => {
       document.getElementById('suggestions-box').classList.remove('open');
@@ -2767,7 +2806,7 @@
     } else if (shop.type === 'clinic') {
       const displayCategory = shop.id === 's6' ? 'پزشکی حضوری' : (shop.id === 's7' ? 'آزمایشگاه حضوری' : 'زیبایی حضوری');
       document.getElementById('qv-category').innerText = displayCategory;
-      document.getElementById('qv-category').style.background = '#fee2e2'; // Light rose for medical/clinics
+      document.getElementById('qv-category').style.background = '#fee2e2'; 
       document.getElementById('qv-category').style.color = '#dc2626';
 
       document.getElementById('qv-name').innerText = shop.name;
@@ -2780,10 +2819,9 @@
       document.getElementById('qv-status').innerText = 'مطب حضوری زنده';
       document.getElementById('qv-status').className = 'badge-open';
 
-      // Fixed Clinic Action: Book Appointment!
       qvBtn.innerHTML = `<span>🩺</span> رزرو نوبت حضوری و مشاهده کلینیک`;
       qvBtn.style.background = '#dc2626'; 
-      qvBtn.onclick = openShopBooth; // Opens virtual booth with booking services
+      qvBtn.onclick = openShopBooth; 
 
     } else {
       const displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
@@ -2867,7 +2905,6 @@
     closeQuickView();
     const shop = shops[activeShopId];
     
-    // Header Style
     let displayCategory = '';
     const banner = document.getElementById('booth-banner');
     const titleLabel = document.getElementById('booth-grid-title-label');
@@ -2916,11 +2953,10 @@
     document.getElementById('booth-hours').innerText = `🕒 ساعت کاری: ${shop.hours}`;
     document.getElementById('booth-about').innerText = shop.about;
 
-    // Load products/services
+    // Load products
     const container = document.getElementById('booth-products-container');
     let productsHtml = '';
     shop.products.forEach(p => {
-      // If it is a fixed clinic, clicking opens the Date/Time booking overlay instead of purchase dialog!
       const clickAction = shop.type === 'clinic' 
           ? `openAppointmentBooking('${p.name}', '${p.price}', '${p.icon}')`
           : `openPurchaseDialog('${p.name}', '${p.desc}', '${p.price}')`;
@@ -3012,11 +3048,13 @@
   }
 
   // =========================================
-  // CLINIC APPOINTMENT BOOKING LOGIC (بال دوم!)
+  // CLINIC APPOINTMENT BOOKING LOGIC 
   // =========================================
   let selectedServiceForAppointment = {};
   let selectedAppointmentDateOffset = 0;
   let selectedAppointmentTimeSlot = '۱۰:۳۰ صبح';
+  let isReminderScheduled = false;
+  let reminderTimeout = null;
 
   function openAppointmentBooking(name, price, icon) {
     selectedServiceForAppointment = { name, price, icon };
@@ -3024,8 +3062,8 @@
     document.getElementById('appointment-sheet').classList.add('open');
 
     // Populate actual date strings dynamically in modal choices
-    for (let offset = 0; day = 0, offset <= 2; offset++) {
-      finalDate = new Date();
+    for (let offset = 0; offset <= 2; offset++) {
+      const finalDate = new Date();
       finalDate.setDate(finalDate.getDate() + offset);
       document.getElementById('df-date-' + offset).innerText = `${finalDate.getMonth() + 1}/${finalDate.getDate()}`;
     }
@@ -3056,7 +3094,9 @@
 
   function submitClinicAppointment() {
     closeAppointmentSheet();
-    
+    isReminderScheduled = false; // reset reminder status
+    clearTimeout(reminderTimeout);
+
     // Populate Digital Ticket variables
     const shop = shops[activeShopId];
     document.getElementById('t-center-name').innerText = shop.name;
@@ -3070,8 +3110,73 @@
     const randomCode = Math.floor(1000 + Math.random() * 9000);
     document.getElementById('t-code').innerText = `APT-${randomCode}`;
 
-    // Open digital ticket
+    // Reset reminder button style
+    const remBtn = document.getElementById('t-reminder-btn');
+    remBtn.innerHTML = `<span>🔔</span> تنظیم یادآور هوشمند نوبت`;
+    remBtn.style.borderColor = 'var(--primary-color)';
+    remBtn.style.color = 'var(--primary-color)';
+
     document.getElementById('ticket-overlay').classList.add('open');
+  }
+
+  // 1. SMART REMINDER SCHEDULER & NOTIFICATION DISPATCH (شبیه‌ساز یادآور و نوتیفیکیشن زنده!)
+  function scheduleAppointmentReminder() {
+    const shop = shops[activeShopId];
+    const remBtn = document.getElementById('t-reminder-btn');
+
+    if (isReminderScheduled) {
+      // Cancel scheduled reminder
+      isReminderScheduled = false;
+      clearTimeout(reminderTimeout);
+      remBtn.innerHTML = `<span>🔔</span> تنظیم یادآور هوشمند نوبت`;
+      remBtn.style.borderColor = 'var(--primary-color)';
+      remBtn.style.color = 'var(--primary-color)';
+      showNotification("یادآور نوبت لغو شد.");
+      return;
+    }
+
+    isReminderScheduled = true;
+    remBtn.innerHTML = `<span>✓</span> یادآور فعال است (۱ ساعت قبل)`;
+    remBtn.style.borderColor = '#137333';
+    remBtn.style.color = '#137333';
+    showNotification("یادآور با موفقیت فعال شد! نوتیفیکیشن آزمایشی تا ۶ ثانیه دیگر ارسال می‌شود ⏰");
+
+    // Populate push banner with custom ticket info!
+    document.getElementById('sab-body').innerText = `امیرحسین عزیز، نوبت حضور شما برای "${selectedServiceForAppointment.name}" در "${shop.name}" به زودی فرا می‌رسد. لطفا آماده شوید.`;
+
+    // Trigger highly interactive simulated system push notification!
+    reminderTimeout = setTimeout(() => {
+      const banner = document.getElementById('system-alarm-banner');
+      banner.classList.add('show');
+      
+      // Sim sound
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.type = 'sine';
+        oscillator.frequency.value = 587.33; // D5 note
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        oscillator.start();
+        setTimeout(() => oscillator.stop(), 150);
+      } catch (e) {}
+
+      // Auto hide banner after 6 seconds
+      setTimeout(() => {
+        banner.classList.remove('show');
+      }, 7000);
+
+    }, 6000);
+  }
+
+  function clickSystemAlarmBanner() {
+    // Hide notification banner on click
+    document.getElementById('system-alarm-banner').classList.remove('show');
+    // Open the ticket
+    document.getElementById('ticket-overlay').classList.add('open');
+    showNotification("نمایش اطلاعات نوبت تایید شده از اعلان سیستم!");
   }
 
   function closeAppointmentTicket() {
@@ -3164,6 +3269,12 @@
   // =========================================
   // SERVICES HUB (RADAR & REALTIME OFFERS) LOGIC
   // =========================================
+  const mockBids = [
+    { id: 'b1', name: 'علی رضایی', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', rating: 4.9, jobs: 142, price: '۳۵۰,۰۰۰ تومان', eta: '۱۵ دقیقه', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی اقدام کنم.' },
+    { id: 'b2', name: 'سینا محمدی', specialty: 'تکنسین برق ساختمان و عیب‌یابی', rating: 4.8, jobs: 98, price: '۲۹۰,۰۰۰ تومان', eta: '۲۲ دقیقه', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارها کاملاً آماده است.' },
+    { id: 'b3', name: 'میلاد کریمی', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', rating: 4.7, jobs: 215, price: '۳۲۰,۰۰۰ تومان', eta: '۱۸ دقیقه', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم?' }
+  ];
+
   let activeOffers = [];
   let offerTimer1, offerTimer2, offerTimer3;
   let activeBidSelected = null;
@@ -3316,6 +3427,7 @@
     document.getElementById('service-category-panel').style.display = 'flex';
   }
 
+  // Budget formatting helper
   function onBudgetSliderChange(val) {
     const formatted = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     document.getElementById('df-budget-label').innerText = `حدود بودجه / قیمت پیشنهادی: ${formatted} تومان`;
