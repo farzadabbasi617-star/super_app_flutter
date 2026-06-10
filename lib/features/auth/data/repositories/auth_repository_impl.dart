@@ -1,21 +1,22 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
-import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../datasources/remote/auth_remote_datasource.dart';
+import '../datasources/local/auth_local_datasource.dart';
+import '../../domain/entities/user.dart';
 import '../../../core/error/failures.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final Dio dio;
-  AuthRepositoryImpl(this.dio);
+  final AuthRemoteDataSource remoteDataSource;
+  final AuthLocalDataSource localDataSource;
+
+  AuthRepositoryImpl({required this.remoteDataSource, required this.localDataSource});
 
   @override
   Future<Either<Failure, User>> login(String email, String password) async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      return Right(const User(
-        id: '1', email: 'farzad@example.com', fullName: 'Farzad Abbasi', 
-        phoneNumber: '09123456789', role: UserRole.customer
-      ));
+      final userModel = await remoteDataSource.login(email, password);
+      await localDataSource.saveUser(userModel);
+      return Right(userModel);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -24,8 +25,9 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, User>> register(String email, String password, String fullName, String phoneNumber, UserRole role) async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      return Right(User(id: '2', email: email, fullName: fullName, phoneNumber: phoneNumber, role: role));
+      final userModel = await remoteDataSource.register(email, password, fullName, phoneNumber, role);
+      await localDataSource.saveUser(userModel);
+      return Right(userModel);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -34,7 +36,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> logout() async {
     try {
-      await Future.delayed(const Duration(milliseconds: 500));
+      await localDataSource.clear();
       return const Right(null);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -43,6 +45,11 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, User?>> getCurrentUser() async {
-    return const Right(null);
+    try {
+      final user = await localDataSource.getUser();
+      return Right(user);
+    } catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
   }
 }

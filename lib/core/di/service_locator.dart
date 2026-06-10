@@ -5,37 +5,38 @@ import '../network/network_client.dart';
 import '../storage/secure_storage_service.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
+import '../../features/auth/data/datasources/remote/auth_remote_datasource.dart';
+import '../../features/auth/data/datasources/local/auth_local_datasource.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
-import '../../features/auth/domain/usecases/login_//usecase.dart';
+import '../../features/auth/domain/usecases/login_usecase.dart';
 import '../../features/auth/domain/usecases/register_usecase.dart';
-import '../..///features/auth/domain/usecases/logout_usecase.dart';
+import '../../features/auth/domain/usecases/logout_usecase.dart';
 import '../../features/map/data/repositories/shop_repository_impl.dart';
 import '../../features/map/domain/repositories/shop_repository.dart';
-import '../../features/map/domain/usecases/get_nearby_shops_//usecase.dart';
+import '../../features/map/domain/usecases/get_nearby_shops_usecase.dart';
 import '../../features/map/domain/usecases/get_shop_details_usecase.dart';
 import '../../features/map/presentation/bloc/map_bloc.dart';
 import '../../features/services/data/repositories/service_repository_impl.dart';
 import '../../features/services/domain/repositories/service_repository.dart';
 import '../../features/services/domain/usecases/create_service_request_usecase.dart';
-import '../../features/services/domain/usecases/accept_service_//request_usecase.dart';
+import '../../features/services/domain/usecases/accept_service_request_usecase.dart';
 import '../../features/services/presentation/bloc/service_bloc.dart';
 import '../network/socket/socket_service.dart';
-import '../../features/marketplace/data/repositories/product_//repository_impl.dart';
-import '../../features/marketplace/domain/repositories/product_//repository.dart';
-import '../../features/marketplace/domain/usecases/get_products_//usecase.dart';
-import '../../features/marketplace/data/repositories/rental_//repository_impl.dart';
-import '../../features/marketplace/domain/repositories/rental_//repository.dart';
+import '../../features/marketplace/data/repositories/product_repository_impl.dart';
+import '../../features/marketplace/domain/repositories/product_repository.dart';
+import '../../features/marketplace/domain/usecases/get_products_usecase.dart';
+import '../../features/marketplace/data/repositories/rental_repository_impl.dart';
+import '../../features/marketplace/domain/repositories/rental_repository.dart';
 import '../../features/marketplace/domain/usecases/book_equipment_usecase.dart';
 import '../../features/marketplace/presentation/bloc/product_bloc.dart';
 import '../../features/marketplace/presentation/bloc/rental_bloc.dart';
-import '../../features/profile/data/repositories/profile_//repository_impl.dart';
-import '../../features/profile/domain/repositories/profile_//repository.dart';
-import '../../features/profile/domain/usecases/get_profile_usecase.dart';
-import '../../features/profile/domain/usecases/update_wallet_//usecase.dart';
+import '../../features/profile/data/repositories/profile_repository_impl.dart';
+import '../../features/profile/domain/repositories/profile_repository.dart';
+import '../../features/profile/domain/usecases/get_//profile_usecase.dart';
+import '../../features/profile/domain/usecases/update_wallet_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
-import '../../features/payment/data/repositories/payment_//repository_impl.dart';
+import '../../features/payment/data/repositories/payment_repository_impl.dart';
 import '../../features/payment/domain/repositories/payment_//repository.dart';
-import '../utils/app_logger.dart';
 
 final sl = GetIt.instance;
 
@@ -46,7 +47,6 @@ Future<void> init() async {
   _initServices();
   _initMarketplace();
   _initProfileAndPayment();
-  AppLogger.log('Professional Service Locator fully initialized', level: LogLevel.info);
 }
 
 void _initCore() {
@@ -58,7 +58,12 @@ void _initCore() {
 }
 
 void _initAuth() {
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
+  sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(sl()));
+  sl.registerLazySingleton<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(sl()));
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
+    remoteDataSource: sl(),
+    localDataSource: sl(),
+  ));
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
