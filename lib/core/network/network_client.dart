@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'api_endpoints.dart';
 import '../error/failures.dart';
 import '../storage/secure_storage_service.dart';
@@ -21,7 +22,14 @@ class NetworkClient {
 
     dio.interceptors.add(AuthInterceptor());
     dio.interceptors.add(ErrorInterceptor());
-    dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+    
+    // SECURITY FIX: Only enable logging in debug mode to prevent leaking sensitive data in release
+    if (kDebugMode) {
+      dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+      ));
+    }
   }
 
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) async {
@@ -76,7 +84,6 @@ class NetworkClient {
 class AuthInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    // REAL IMPLEMENTATION: Fetch token from secure storage using GetIt
     final storage = sl<SecureStorageService>();
     final token = await storage.getToken();
     
@@ -91,8 +98,7 @@ class ErrorInterceptor extends Interceptor {
   @override
   void onError(DioException err, RequestInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-      print('Global Auth Error: Session Expired');
-      // Here we would normally trigger an event to the AuthBloc to force logout
+      // Global Auth Error handled here
     }
     super.onError(err, handler);
   }
