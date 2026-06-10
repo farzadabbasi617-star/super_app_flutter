@@ -24,6 +24,10 @@ class ServiceRequest extends Equatable {
   final String? assignedProfessionalSpecialty;
   final double? assignedProfessionalRating;
   final double? confirmedPrice;
+  final String? problemDescription;
+  final String? productBrand;
+  final String? budgetRange;
+  final String? preferredTechnicianLevel;
 
   const ServiceRequest({
     required this.id,
@@ -38,6 +42,10 @@ class ServiceRequest extends Equatable {
     this.assignedProfessionalSpecialty,
     this.assignedProfessionalRating,
     this.confirmedPrice,
+    this.problemDescription,
+    this.productBrand,
+    this.budgetRange,
+    this.preferredTechnicianLevel,
   });
 
   ServiceRequest copyWith({
@@ -48,6 +56,10 @@ class ServiceRequest extends Equatable {
     String? assignedProfessionalSpecialty,
     double? assignedProfessionalRating,
     double? confirmedPrice,
+    String? problemDescription,
+    String? productBrand,
+    String? budgetRange,
+    String? preferredTechnicianLevel,
   }) {
     return ServiceRequest(
       id: id,
@@ -62,6 +74,10 @@ class ServiceRequest extends Equatable {
       assignedProfessionalSpecialty: assignedProfessionalSpecialty ?? this.assignedProfessionalSpecialty,
       assignedProfessionalRating: assignedProfessionalRating ?? this.assignedProfessionalRating,
       confirmedPrice: confirmedPrice ?? this.confirmedPrice,
+      problemDescription: problemDescription ?? this.problemDescription,
+      productBrand: productBrand ?? this.productBrand,
+      budgetRange: budgetRange ?? this.budgetRange,
+      preferredTechnicianLevel: preferredTechnicianLevel ?? this.preferredTechnicianLevel,
     );
   }
 
@@ -79,5 +95,9 @@ class ServiceRequest extends Equatable {
         assignedProfessionalSpecialty,
         assignedProfessionalRating,
         confirmedPrice,
+        problemDescription,
+        productBrand,
+        budgetRange,
+        preferredTechnicianLevel,
       ];
 }

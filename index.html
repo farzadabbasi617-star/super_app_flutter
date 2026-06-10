@@ -1451,6 +1451,50 @@
       cursor: pointer;
     }
 
+    /* ========================================= */
+    /* NEW: SPECIALIST DISPATCH FORM OVERLAY     */
+    /* ========================================= */
+    .dispatch-form-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-color);
+      z-index: 1250;
+      display: none;
+      flex-direction: column;
+      padding: 24px;
+      text-align: right;
+      overflow-y: auto;
+    }
+
+    .dispatch-form-overlay.open {
+      display: flex;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-weight: bold;
+      font-size: 13.5px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--outline);
+      background: var(--surface-color);
+      font-size: 13px;
+      outline: none;
+      text-align: right;
+    }
+
     /* Notification Banner */
     .custom-snackbar {
       position: absolute;
@@ -1488,14 +1532,14 @@
     <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
     
     <ul class="features-list">
-      <li><span>۱</span> <strong>بخش کامنت‌ها و اشتراک تصاویر:</strong> کاربران می‌توانند عکس خرید خود را به اشتراک بگذارند و امتیاز دهند!</li>
-      <li><span>۲</span> <strong>ثبت زنده کامنت به همراه عکس:</strong> تجربه خرید خود را بنویسید، عکس آیفون را اتچ کنید و فورا ثبت کنید!</li>
-      <li><span>۳</span> <strong>تبدیل همه‌جانبه قیمت‌ها به تومان:</strong> تمام مبالغ در سراسر بخش‌ها (خرید، اجاره و خدمات) ریالی شدند.</li>
-      <li><span>۴</span> <strong>مینی‌سایت و غرفه اختصاصی:</strong> باز شدن غرفه مجازی و گالری محصولات با دکمه "مشاهده پروفایل غرفه"!</li>
+      <li><span>۱</span> <strong>فرم جدید و پیشرفته عیب‌یابی:</strong> قبل از فراخوانی، جزئیات مشکل، برند و بودجه پیشنهادی را مشخص کنید!</li>
+      <li><span>۲</span> <strong>شناخت هوشمند برند دستگاه:</strong> کادر برند به صورت خودکار فقط برای لوازم برقی و کولر فعال می‌شود.</li>
+      <li><span>۳</span> <strong>هماهنگی هوشمند چت و فرم:</strong> متخصص پیام خوش‌آمدگویی را بر اساس برند و عیب ارسالی شما تغییر می‌دهد!</li>
+      <li><span>۴</span> <strong>بخش کامنت‌ها و اشتراک تصاویر:</strong> کاربران می‌توانند عکس خرید خود را به اشتراک بگذارند و امتیاز دهند!</li>
       <li><span>۵</span> <strong>تغییر استایل نقشه ماهواره‌ای و رادار زنده:</strong> سوییچ زنده تم مپ و فیلتر شعاع جستجو.</li>
     </ul>
 
-    <p style="font-size: 13px; font-style: italic; color: #888;">💡 وارد غرفه <strong>تک هاب (📱)</strong> شوید. بخش نظرات را در پایین اسکرول کنید، متن دلخواه بنویسید، تیک افزودن تصویر خرید را بزنید و دکمه ثبت را لمس کنید تا معجزه شبیه‌ساز را ببینید!</p>
+    <p style="font-size: 13px; font-style: italic; color: #888;">💡 دکمه بزرگ <strong>«درخواست متخصص»</strong> پایین نقشه را بزنید. دسته‌بندی را انتخاب کنید تا فرم عیب‌یابی باز شود، آن را پر کنید و با زدن ثبت، تماشاگر معجزه هماهنگی چت و فرم باشید!</p>
   </div>
 
   <!-- RIGHT: Mobile Emulator Wrapper -->
@@ -1622,7 +1666,7 @@
             <span>🎯</span>
           </div>
 
-          <div class="fab-btn fab-request" id="req-fab" onclick="openServicesFlow()">
+          <div class="fab-btn fab-request" id="req-fab" onclick="openServicesFlowSelection()">
             <span>🛠️</span> درخواست متخصص
           </div>
 
@@ -1815,12 +1859,86 @@
 
       <!-- C. Services Flow: Radar & Bids Simulator -->
       <div class="services-flow-overlay" id="services-flow">
-        <!-- Broadcaster Radar -->
-        <div class="radar-container" id="radar-view">
-          <div class="booking-header" style="position:absolute; top:16px; right:20px; width:100%;">
+        <!-- Category Selection panel inside expert request -->
+        <div id="service-category-panel" style="padding:24px; text-align:right; width:100%; height:100%; display:flex; flex-direction:column;">
+          <div class="booking-header" style="margin-bottom:12px;">
             <span class="booking-back-btn" onclick="closeServicesFlow()">✕</span>
-            <span class="booking-title" style="font-size:16px;">در حال جستجوی متخصص...</span>
+            <span class="booking-title" style="font-size:16px;">به چه متخصصی نیاز دارید؟</span>
           </div>
+          <div style="font-size:11px; color:#666; margin-bottom:24px;">جهت تکمیل فرم هماهنگی عیب‌یابی، دسته‌بندی را انتخاب کنید:</div>
+          
+          <div class="offers-list">
+            <div class="menu-item" style="padding:14px; border-radius:12px; border:1px solid #eee; margin-bottom:10px;" onclick="openDispatchForm('لوله‌کشی و تاسیسات')">
+              <span>🔧 لوله‌کشی و تاسیسات</span>
+              <span style="color:#aaa;">➔</span>
+            </div>
+            <div class="menu-item" style="padding:14px; border-radius:12px; border:1px solid #eee; margin-bottom:10px;" onclick="openDispatchForm('برق‌کاری و سیم‌کشی')">
+              <span>⚡ برق‌کاری و سیم‌کشی</span>
+              <span style="color:#aaa;">➔</span>
+            </div>
+            <div class="menu-item" style="padding:14px; border-radius:12px; border:1px solid #eee; margin-bottom:10px;" onclick="openDispatchForm('نقاشی ساختمان')">
+              <span>🎨 نقاشی ساختمان</span>
+              <span style="color:#aaa;">➔</span>
+            </div>
+            <div class="menu-item" style="padding:14px; border-radius:12px; border:1px solid #eee; margin-bottom:10px;" onclick="openDispatchForm('سرویس کولر و تهویه')">
+              <span>❄️ سرویس کولر و تهویه</span>
+              <span style="color:#aaa;">➔</span>
+            </div>
+            <div class="menu-item" style="padding:14px; border-radius:12px; border:1px solid #eee; margin-bottom:10px;" onclick="openDispatchForm('نظافت و تمیزکاری')">
+              <span>🧹 نظافت و تمیزکاری</span>
+              <span style="color:#aaa;">➔</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SPECIALIST DISPATCH FORM OVERLAY (جدید!) -->
+        <div class="dispatch-form-overlay" id="dispatch-form-box">
+          <div class="booking-header">
+            <span class="booking-back-btn" onclick="backToServiceSelection()">⬅</span>
+            <span class="booking-title" id="df-title">جزئیات درخواست لوله‌کشی</span>
+          </div>
+          <div style="font-size:11px; color:#666; margin-bottom:20px;">لطفاً جهت هماهنگی بهتر با استادکار، فرم عیب‌یابی زیر را تکمیل کنید:</div>
+
+          <!-- Problem summary input -->
+          <div class="form-group">
+            <label class="form-label" id="df-problem-label">توضیح خلاصه مشکل ساختمان</label>
+            <textarea id="df-problem-text" rows="3" style="width:100%; border:1px solid var(--outline); border-radius:12px; padding:12px; font-size:12.5px; resize:none;" placeholder="مثلاً: لوله سینک ظرفشویی نشتی دارد و چکه می‌کند..."></textarea>
+          </div>
+
+          <!-- Brand drop down picker (conditional!) -->
+          <div class="form-group" id="df-brand-group" style="display:none;">
+            <label class="form-label">برند دستگاه شما</label>
+            <select class="form-select" id="df-brand-select">
+              <option value="جی‌پلاس (Gplus)">جی‌پلاس (Gplus)</option>
+              <option value="سامسونگ (Samsung)">سامسونگ (Samsung)</option>
+              <option value="ال‌جی (LG)">ال‌جی (LG)</option>
+              <option value="اسنوا (Snowa)">اسنوا (Snowa)</option>
+              <option value="او‌جنرال (O’General)">او‌جنرال (O’General)</option>
+              <option value="سایر برندها">سایر برندها / متفرقه</option>
+            </select>
+          </div>
+
+          <!-- Budget slider -->
+          <div class="form-group">
+            <label class="form-label" id="df-budget-label">حدود بودجه / قیمت پیشنهادی: ۳۰۰,۰۰۰ تومان</label>
+            <input type="range" id="df-budget-slider" min="100000" max="1500000" value="300000" step="50000" style="width:100%; accent-color:var(--primary-color);" oninput="onBudgetSliderChange(this.value)">
+          </div>
+
+          <!-- Tech Level choice -->
+          <div class="form-group">
+            <label class="form-label">سطح مهارت استادکار درخواستی</label>
+            <div class="rating-row" style="margin:0;">
+              <div class="filter-chip active" id="chip-level-senior" onclick="setTechLevel('senior')">استادکار ارشد (با تجربه)</div>
+              <div class="filter-chip" id="chip-level-junior" onclick="setTechLevel('junior')">تکنسین معمولی (پایه)</div>
+            </div>
+          </div>
+
+          <div style="height:32px;"></div>
+          <button class="chat-action-btn" onclick="submitSpecialistRequestForm()">ثبت و ارسال درخواست متخصص 🚀</button>
+        </div>
+
+        <!-- Broadcaster Radar -->
+        <div class="radar-container" id="radar-view" style="display:none;">
           <div class="radar-circle">
             <div class="radar-pulse"></div>
             <div class="radar-pulse" style="animation-delay: 0.9s;"></div>
@@ -1977,27 +2095,25 @@
             <!-- Booth items -->
           </div>
 
-          <!-- CUSTOMER REVIEWS & PHOTO SHARING SECTION (جدید!) -->
+          <!-- CUSTOMER REVIEWS & PHOTO SHARING SECTION -->
           <div class="booth-grid-title" style="margin-top:12px;">تجربیات خریداران و نظرات غرفه</div>
           
           <!-- Submit Review Form inside simulator -->
           <div class="submit-feedback-card">
             <div style="font-weight:bold; font-size:12px; margin-bottom:8px;">ثبت تجربه خرید و نظر جدید</div>
             
-            <!-- Dynamic Star Picker -->
             <div style="font-size:11px; color:#555;">امتیاز شما:</div>
             <div class="stars-row" id="feedback-stars">
               <span onclick="setFeedbackStars(1)">★</span>
               <span onclick="setFeedbackStars(2)">★</span>
               <span onclick="setFeedbackStars(3)">★</span>
               <span onclick="setFeedbackStars(4)">★</span>
-              <span onclick="setFeedbackStars(5)" style="color:Colors.amber;">★</span>
+              <span onclick="setFeedbackStars(5)" style="color:orange;">★</span>
             </div>
 
             <textarea id="feedback-text" rows="2" style="width:100%; border:1px solid #ccc; border-radius:10px; padding:10px; font-size:12px; resize:none;" placeholder="تجربه خرید خود یا برخورد غرفه‌دار را بنویسید..."></textarea>
             
             <div style="margin:12px 0; display:flex; justify-content:space-between; align-items:center;">
-              <!-- Toggle to simulate photo attach! -->
               <label style="display:flex; align-items:center; gap:6px; font-size:11px; color:#555; cursor:pointer;">
                 <input type="checkbox" id="attach-photo-toggle" style="accent-color:var(--primary-color);"> افزودن عکس کالای خریداری‌شده
               </label>
@@ -2287,35 +2403,11 @@
     closeFilters();
   }
 
-  function setRatingFilter(rating) {
-    minRating = rating;
-    document.querySelectorAll('.rating-row .filter-chip').forEach(el => el.classList.remove('active'));
-    
-    if (rating === 0) {
-      document.getElementById('chip-rating-0').classList.add('active');
-    } else if (rating === 4) {
-      document.getElementById('chip-rating-4').classList.add('active');
-    } else if (rating === 4.5) {
-      document.getElementById('chip-rating-45').classList.add('active');
-    } else if (rating === 4.8) {
-      document.getElementById('chip-rating-48').classList.add('active');
-    }
-    applyTuningFilters();
-  }
-
-  function resetFilters() {
-    document.getElementById('filter-open-only').checked = false;
-    document.getElementById('filter-radius').value = 5;
-    onRadiusSliderChange(5);
-    setRatingFilter(0);
-  }
-
   // Search input focus Suggestion Overlay
   function onSearchFocus() {
     updateSearchSuggestions();
   }
 
-  // Autocomplete suger suggestions close
   function onSearchBlur() {
     setTimeout(() => {
       document.getElementById('suggestions-box').classList.remove('open');
@@ -2470,6 +2562,11 @@
     closeQuickView();
   }
 
+  function viewStoreProfile() {
+    const name = document.getElementById('qv-name').innerText;
+    alert(`در حال انتقال به صفحه فروشگاه ${name}...`);
+  }
+
   function openDirectExpertConsultation(expertId) {
     closeQuickView();
     const bid = shops[expertId];
@@ -2606,6 +2703,107 @@
   }
 
   // =========================================
+  // SPECIALIST DISPATCH FORM LOGIC
+  // =========================================
+  let selectedServiceCategory = '';
+  let selectedTechLevel = 'senior';
+
+  function openServicesFlowSelection() {
+    document.getElementById('services-flow').classList.add('open');
+    document.getElementById('service-category-panel').style.display = 'flex';
+    document.getElementById('dispatch-form-box').classList.remove('open');
+    document.getElementById('radar-view').style.display = 'none';
+    document.getElementById('offers-view').style.display = 'none';
+  }
+
+  function openDispatchForm(categoryName) {
+    selectedServiceCategory = categoryName;
+    document.getElementById('service-category-panel').style.display = 'none';
+    document.getElementById('dispatch-form-box').classList.add('open');
+    document.getElementById('df-title').innerText = `جزئیات درخواست ${categoryName}`;
+    document.getElementById('df-problem-text').value = '';
+    document.getElementById('df-budget-slider').value = 300000;
+    onBudgetSliderChange(300000);
+    setTechLevel('senior');
+
+    // Show brand selection only for electronic devices and air conditioning!
+    const brandGroup = document.getElementById('df-brand-group');
+    if (categoryName.includes('برق') || categoryName.includes('کولر')) {
+      brandGroup.style.display = 'block';
+    } else {
+      brandGroup.style.display = 'none';
+    }
+  }
+
+  function backToServiceSelection() {
+    document.getElementById('dispatch-form-box').classList.remove('open');
+    document.getElementById('service-category-panel').style.display = 'flex';
+  }
+
+  function onBudgetSliderChange(val) {
+    const formatted = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById('df-budget-label').innerText = `حدود بودجه / قیمت پیشنهادی: ${formatted} تومان`;
+  }
+
+  function setTechLevel(level) {
+    selectedTechLevel = level;
+    document.getElementById('chip-level-senior').classList.remove('active');
+    document.getElementById('chip-level-junior').classList.remove('active');
+    
+    if (level === 'senior') {
+      document.getElementById('chip-level-senior').classList.add('active');
+    } else {
+      document.getElementById('chip-level-junior').classList.add('active');
+    }
+  }
+
+  function submitSpecialistRequestForm() {
+    const problem = document.getElementById('df-problem-text').value.trim();
+    if (problem === '') {
+      alert("لطفاً توضیح خلاصه مشکل را بنویسید!");
+      return;
+    }
+
+    const budgetVal = document.getElementById('df-budget-slider').value;
+    const formattedBudget = budgetVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' تومان';
+
+    const brandName = document.getElementById('df-brand-select').value;
+    const hasBrand = selectedServiceCategory.includes('برق') || selectedServiceCategory.includes('کولر');
+
+    // Prepare personalized bot greets according to what user typed in the form! (Highly Cognitive simulation!)
+    mockBids[0].text = `سلام وقت بخیر! من درخواست شما را برای تعمیر ${hasBrand ? brandName + ' ' : ''}${selectedServiceCategory} با عیبِ "${problem}" دیدم. ابزارهام توی ماشین آماده‌ست و می‌تونم سریعاً به سمت لوکیشن شما حرکت کنم.`;
+    mockBids[1].text = `درود بر شما. درخواست شما را جهت عیب‌یابی "${problem}" خواندم. با ابزار کامل و گارانتی کار می‌توانم تا چند دقیقه دیگر حرکت کنم.`;
+    mockBids[2].text = `سلام مخلصم. درخواست استادکار ${selectedTechLevel === 'senior' ? 'ارشد' : 'معمولی'} برای برطرف کردن "${problem}" را قبول کردم. با قیمت توافقی حدود ${formattedBudget} کار رو انجام می‌دهم.`;
+
+    // Start Radar simulation
+    document.getElementById('dispatch-form-box').classList.remove('open');
+    document.getElementById('radar-view').style.display = 'flex';
+
+    activeOffers = [];
+    document.getElementById('offers-container').innerHTML = '';
+
+    offerTimer1 = setTimeout(() => {
+      addBidCard(mockBids[0]);
+      showNotification("پیشنهاد جدید از علی رضایی دریافت شد!");
+    }, 2000);
+
+    offerTimer2 = setTimeout(() => {
+      addBidCard(mockBids[1]);
+      showNotification("پیشنهاد جدید از سینا محمدی دریافت شد!");
+    }, 4500);
+
+    offerTimer3 = setTimeout(() => {
+      addBidCard(mockBids[2]);
+      showNotification("پیشنهاد جدید از میلاد کریمی دریافت شد!");
+    }, 6500);
+
+    setTimeout(() => {
+      document.getElementById('radar-view').style.display = 'none';
+      document.getElementById('offers-view').style.display = 'flex';
+    }, 2200);
+  }
+
+  // =========================================
   // MARKETPLACE LOGIC
   // =========================================
   let selectedProduct = null;
@@ -2649,7 +2847,6 @@
     const endStr = rentalDays === 2 ? 'فردا (+۱ روز)' : `در ${rentalDays - 1} روز آینده (+${rentalDays - 1} روز)`;
     document.getElementById('rb-end').innerText = endStr;
     
-    // format Toman prices cleanly
     const dailyPriceFormatted = selectedRental.pricePerDay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     const totalPriceFormatted = (rentalDays * selectedRental.pricePerDay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
@@ -2675,7 +2872,7 @@
     const formatted = walletVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     document.getElementById('wallet-val').innerText = `${formatted} تومان`;
     document.getElementById('rb-wallet-bal').innerText = `${formatted} تومان`;
-    showNotification("کیف پول الکترونیکی شما با موفقیت +۵,۰۰۰,۰۰۰ تومان شارژ شد!");
+    showNotification("کیف پول الکترونیکی شما با موفقیت +۵,۰۰۰,۰۰0 تومان شارژ شد!");
   }
 
   // Set initial wallet Toman string
@@ -2685,45 +2882,9 @@
   // =========================================
   // SERVICES HUB (RADAR & REALTIME OFFERS) LOGIC
   // =========================================
-  const mockBids = [
-    { id: 'b1', name: 'علی رضایی', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', rating: 4.9, jobs: 142, price: '۳۵۰,۰۰۰ تومان', eta: '۱۵ دقیقه', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی اقدام کنم.' },
-    { id: 'b2', name: 'سینا محمدی', specialty: 'تکنسین برق ساختمان و عیب‌یابی', rating: 4.8, jobs: 98, price: '۲۹۰,۰۰۰ تومان', eta: '۲۲ دقیقه', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارها کاملاً آماده است.' },
-    { id: 'b3', name: 'میلاد کریمی', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', rating: 4.7, jobs: 215, price: '۳۲۰,۰۰۰ تومان', eta: '۱۸ دقیقه', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم?' }
-  ];
-
   let activeOffers = [];
   let offerTimer1, offerTimer2, offerTimer3;
   let activeBidSelected = null;
-
-  function openServicesFlow() {
-    document.getElementById('radar-view').style.display = 'flex';
-    document.getElementById('offers-view').style.display = 'none';
-    document.getElementById('services-flow').classList.add('open');
-    document.getElementById('offers-container').innerHTML = '';
-    activeOffers = [];
-
-    // Simulate bids arriving in real-time
-    offerTimer1 = setTimeout(() => {
-      addBidCard(mockBids[0]);
-      showNotification("پیشنهاد جدید از علی رضایی دریافت شد!");
-    }, 2000);
-
-    offerTimer2 = setTimeout(() => {
-      addBidCard(mockBids[1]);
-      showNotification("پیشنهاد جدید از سینا محمدی دریافت شد!");
-    }, 4500);
-
-    offerTimer3 = setTimeout(() => {
-      addBidCard(mockBids[2]);
-      showNotification("پیشنهاد جدید از میلاد کریمی دریافت شد!");
-    }, 6500);
-
-    // Switch from radar to bids list after first match
-    setTimeout(() => {
-      document.getElementById('radar-view').style.display = 'none';
-      document.getElementById('offers-view').style.display = 'flex';
-    }, 2200);
-  }
 
   function addBidCard(bid) {
     activeOffers.push(bid);
