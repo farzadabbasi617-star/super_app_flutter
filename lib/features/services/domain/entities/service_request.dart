@@ -19,7 +19,11 @@ class ServiceRequest extends Equatable {
   final LatLng location;
   final ServiceStatus status;
   final DateTime createdAt;
-  final double estimatedArrivalTime; / in minutes
+  final double estimatedArrivalTime; // in minutes
+  final String? assignedProfessionalName;
+  final String? assignedProfessionalSpecialty;
+  final double? assignedProfessionalRating;
+  final double? confirmedPrice;
 
   const ServiceRequest({
     required this.id,
@@ -30,12 +34,20 @@ class ServiceRequest extends Equatable {
     required this.status,
     required this.createdAt,
     this.estimatedArrivalTime = 0.0,
+    this.assignedProfessionalName,
+    this.assignedProfessionalSpecialty,
+    this.assignedProfessionalRating,
+    this.confirmedPrice,
   });
 
   ServiceRequest copyWith({
     String? professionalId,
     ServiceStatus? status,
     double? estimatedArrivalTime,
+    String? assignedProfessionalName,
+    String? assignedProfessionalSpecialty,
+    double? assignedProfessionalRating,
+    double? confirmedPrice,
   }) {
     return ServiceRequest(
       id: id,
@@ -46,9 +58,26 @@ class ServiceRequest extends Equatable {
       status: status ?? this.status,
       createdAt: createdAt,
       estimatedArrivalTime: estimatedArrivalTime ?? this.estimatedArrivalTime,
+      assignedProfessionalName: assignedProfessionalName ?? this.assignedProfessionalName,
+      assignedProfessionalSpecialty: assignedProfessionalSpecialty ?? this.assignedProfessionalSpecialty,
+      assignedProfessionalRating: assignedProfessionalRating ?? this.assignedProfessionalRating,
+      confirmedPrice: confirmedPrice ?? this.confirmedPrice,
     );
   }
 
   @override
-  List<Object?> get props => [id, customerId, professionalId, serviceType, location, status, createdAt, estimatedArrivalTime];
+  List<Object?> get props => [
+        id,
+        customerId,
+        professionalId,
+        serviceType,
+        location,
+        status,
+        createdAt,
+        estimatedArrivalTime,
+        assignedProfessionalName,
+        assignedProfessionalSpecialty,
+        assignedProfessionalRating,
+        confirmedPrice,
+      ];
 }

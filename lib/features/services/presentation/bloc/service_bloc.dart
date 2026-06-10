@@ -11,7 +11,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
 
   ServiceBloc({required this.createRequest, required this.acceptRequest}) : super(ServiceInitial()) {
     on<RequestServiceStarted>((event, emit) async {
-      emit(ServiceSearching());
+      emit(ServiceSearching(event.request));
       final result = await createRequest.execute(event.request);
       result.fold(
         (failure) => emit(ServiceFailure(failure.message)),
@@ -26,5 +26,17 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
         (_) => null,
       );
     }, transformer: sequential());
+
+    on<ServiceStatusUpdated>((event, emit) async {
+      if (event.request.status == ServiceStatus.accepted) {
+        emit(ServiceProfessionalAssigned(event.request));
+      } else if (event.request.status == ServiceStatus.onTheWay) {
+        emit(ServiceOnTheWay(event.request));
+      } else if (event.request.status == ServiceStatus.completed) {
+        emit(ServiceCompleted());
+      } else {
+        emit(ServiceSearching(event.request));
+      }
+    });
   }
 }

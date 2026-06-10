@@ -96,7 +96,7 @@ class ShopDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
                   Text('Featured Products', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                  constHizedBox(height: 16),
+                  const SizedBox(height: 16),
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),

@@ -25,6 +25,7 @@ import '../network/socket/socket_service.dart';
 import '../../features/marketplace/data/repositories/product_repository_impl.dart';
 import '../../features/marketplace/domain/repositories/product_repository.dart';
 import '../../features/marketplace/domain/usecases/get_products_usecase.dart';
+import '../../features/marketplace/domain/usecases/get_categories_usecase.dart';
 import '../../features/marketplace/data/repositories/rental_repository_impl.dart';
 import '../../features/marketplace/domain/repositories/rental_repository.dart';
 import '../../features/marketplace/domain/usecases/book_equipment_usecase.dart';
@@ -32,11 +33,11 @@ import '../../features/marketplace/presentation/bloc/product_bloc.dart';
 import '../../features/marketplace/presentation/bloc/rental_bloc.dart';
 import '../../features/profile/data/repositories/profile_repository_impl.dart';
 import '../../features/profile/domain/repositories/profile_repository.dart';
-import '../../features/profile/domain/usecases/get_/profile_usecase.dart';
+import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_wallet_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/payment/data/repositories/payment_repository_impl.dart';
-import '../../features/payment/domain/repositories/payment_/repository.dart';
+import '../../features/payment/domain/repositories/payment_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -87,7 +88,7 @@ void _initMap() {
 void _initServices() {
   sl.registerLazySingleton<ServiceRepository>(() => ServiceRepositoryImpl(sl()));
   sl.registerLazySingleton(() => CreateServiceRequestUseCase(sl()));
-  sl./ Register AcceptServiceRequestUseCase
+  // Register AcceptServiceRequestUseCase
   sl.registerLazySingleton(() => AcceptServiceRequestUseCase(sl()));
   sl.registerFactory(() => ServiceBloc(
     createRequest: sl(),
@@ -99,8 +100,9 @@ void _initMarketplace() {
   sl.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl());
   sl.registerLazySingleton<RentalRepository>(() => RentalRepositoryImpl());
   sl.registerLazySingleton(() => GetProductsUseCase(sl()));
+  sl.registerLazySingleton(() => GetCategoriesUseCase(sl()));
   sl.registerLazySingleton(() => BookEquipmentUseCase(sl()));
-  sl.registerFactory(() => ProductBloc(getProducts: sl()));
+  sl.registerFactory(() => ProductBloc(getProducts: sl(), getCategories: sl()));
   sl.registerFactory(() => RentalBloc(bookEquipment: sl()));
 }
 

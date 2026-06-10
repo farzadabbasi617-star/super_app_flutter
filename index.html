@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>Super App Simulator | شبیه‌ساز سوپراپلیکیشن</title>
+  <style>
+    :root {
+      --primary-color: #00934b;
+      --primary-light: #e6f4ea;
+      --secondary-color: #3b76af;
+      --bg-color: #f6f8f9;
+      --surface-color: #ffffff;
+      --on-surface: #1c1b1f;
+      --outline: #cac4d0;
+      --accent-color: #f2994a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background: #111215;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      max-width: 1100px;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Intro Info Panel */
+    .info-panel {
+      flex: 1;
+      min-width: 320px;
+      padding: 20px;
+    }
+
+    .info-panel h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 12px;
+    }
+
+    .info-panel p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #b0b3b8;
+      margin-bottom: 20px;
+    }
+
+    .features-list {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+
+    .features-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #e4e6eb;
+    }
+
+    .features-list li span {
+      background: rgba(0, 147, 75, 0.15);
+      color: var(--primary-color);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    /* Device Simulator styling */
+    .device-container {
+      position: relative;
+      width: 380px;
+      height: 780px;
+      background: #000;
+      border-radius: 48px;
+      padding: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 4px #2c2d30;
+      border: 4px solid #1a1a1c;
+    }
+
+    /* Notch & Camera */
+    .device-notch {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 24px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 10px;
+    }
+
+    .device-camera {
+      width: 8px;
+      height: 8px;
+      background: #1a1a1a;
+      border-radius: 50%;
+    }
+
+    .device-speaker {
+      width: 40px;
+      height: 4px;
+      background: #222;
+      border-radius: 2px;
+    }
+
+    /* Screen Frame */
+    .screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-color);
+      border-radius: 38px;
+      overflow: hidden;
+      color: #000;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 40px;
+      background: transparent;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 999;
+      color: #000;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .status-bar.dark-text {
+      color: #000;
+    }
+
+    .status-bar.light-text {
+      color: #fff;
+    }
+
+    .status-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .vpn-tag {
+      background: rgba(0,0,0,0.1);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 9px;
+    }
+
+    /* Main Navigation Layout */
+    .app-body {
+      flex: 1;
+      position: relative;
+      margin-top: 40px;
+      margin-bottom: 60px;
+      overflow: hidden;
+    }
+
+    .screen-content {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      flex-direction: column;
+    }
+
+    .screen-content.active {
+      display: flex;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: var(--surface-color);
+      border-top: 1px solid rgba(0,0,0,0.06);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999;
+      padding-bottom: 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #7c7c7c;
+      cursor: pointer;
+      flex: 1;
+      height: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item.active {
+      color: var(--primary-color);
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+
+    .nav-label {
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* Floating Actions */
+    .fab-btn {
+      position: absolute;
+      z-index: 500;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .fab-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .fab-location {
+      bottom: 20px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      background: var(--surface-color);
+      color: var(--primary-color);
+    }
+
+    .fab-request {
+      bottom: 20px;
+      left: 16px;
+      height: 44px;
+      padding: 0 16px;
+      background: var(--primary-color);
+      color: #fff;
+      font-size: 12px;
+      font-weight: bold;
+      gap: 6px;
+    }
+
+    /* ========================================= */
+    /* SCREEN 1: MAP PAGE                        */
+    /* ========================================= */
+    #screen-map {
+      background: #e3ece6;
+    }
+
+    /* Vector/SVG Map simulation */
+    .map-canvas {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Tehran Vector Grid */
+    .vector-grid {
+      width: 100%;
+      height: 100%;
+      stroke: rgba(255,255,255,0.4);
+      stroke-width: 1;
+      fill: none;
+    }
+
+    .map-pin {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border-radius: 50%;
+      border: 3px solid var(--primary-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    .map-pin-pulse {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid var(--primary-color);
+      animation: pinPulse 2s infinite;
+      opacity: 0;
+      z-index: -1;
+    }
+
+    @keyframes pinPulse {
+      0% { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    .map-pin:hover, .map-pin.selected {
+      transform: translate(-50%, -60%) scale(1.2);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    }
+
+    /* Floating Search Bar */
+    .map-search-container {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      z-index: 510;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .search-card {
+      background: var(--surface-color);
+      border-radius: 16px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .search-input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 13px;
+      color: var(--on-surface);
+      margin-left: 10px;
+    }
+
+    .chips-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 2px 4px;
+      scrollbar-width: none;
+    }
+
+    .chips-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-chip {
+      background: var(--surface-color);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
+    }
+
+    .filter-chip.active {
+      background: var(--primary-color);
+      color: #fff;
+      border-color: var(--primary-color);
+    }
+
+    /* Quick View Sheet on Map */
+    .quick-view-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface-color);
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 -8px 24px rgba(0,0,0,0.12);
+      transform: translateY(110%);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+      z-index: 600;
+    }
+
+    .quick-view-sheet.open {
+      transform: translateY(0);
+    }
+
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .badge-category {
+      background: var(--primary-light);
+      color: var(--primary-color);
+      font-size: 11px;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .sheet-close {
+      cursor: pointer;
+      font-size: 18px;
+      color: #aaa;
+    }
+
+    .sheet-info-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .sheet-img {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .sheet-text-container {
+      flex: 1;
+    }
+
+    .sheet-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .sheet-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .sheet-address {
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .sheet-details-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #444;
+    }
+
+    .badge-open {
+      background: #e6f4ea;
+      color: #137333;
+      font-weight: 800;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .badge-closed {
+      background: #fce8e6;
+      color: #c5221f;
+      font-weight: 800;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .sheet-btn {
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      outline: none;
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ========================================= */
+    /* SCREEN 2: MARKETPLACE PAGE                */
+    /* ========================================= */
+    .market-header {
+      background: var(--surface-color);
+      padding: 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .market-title {
+      font-size: 18px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .product-grid {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      align-content: start;
+    }
+
+    .product-card {
+      background: var(--surface-color);
+      border-radius: 16px;
+      padding: 10px;
+      border: 1px solid rgba(0,0,0,0.05);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100px;
+      border-radius: 10px;
+      background: #eaeaea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .product-name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .product-price {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 4px;
+    }
+
+    .product-desc {
+      font-size: 10px;
+      color: #666;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .badge-rental {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: var(--accent-color);
+      color: #fff;
+      font-size: 9px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+
+    /* Purchase Confirm Dialog Overlay */
+    .dialog-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .dialog-overlay.open {
+      display: flex;
+    }
+
+    .confirm-card {
+      background: var(--surface-color);
+      border-radius: 20px;
+      padding: 20px;
+      width: 100%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    .confirm-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .confirm-body {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .confirm-price-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .dialog-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .dialog-actions button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      background: #eaeaea;
+      color: #333;
+    }
+
+    .btn-confirm {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    /* ========================================= */
+    /* SCREEN 3: RENTAL PAGE                     */
+    /* ========================================= */
+    .rental-booking-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-color);
+      z-index: 1200;
+      display: none;
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    .rental-booking-overlay.open {
+      display: flex;
+    }
+
+    .booking-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .booking-back-btn {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .booking-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .booking-card {
+      background: var(--surface-color);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+
+    .booking-details-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 16px 0;
+    }
+
+    .booking-date-selector {
+      border: 1px solid var(--outline);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .booking-total-box {
+      background: var(--primary-light);
+      color: var(--primary-color);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 24px;
+    }
+
+    /* ========================================= */
+    /* SCREEN 4: PROFILE                         */
+    /* ========================================= */
+    .profile-card {
+      background: var(--surface-color);
+      padding: 24px;
+      text-align: center;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .profile-name {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .profile-email {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .wallet-card {
+      margin: 24px;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border-radius: 20px;
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(0,147,75,0.2);
+    }
+
+    .wallet-title {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 6px;
+    }
+
+    .wallet-balance {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .wallet-btn {
+      background: #fff;
+      color: var(--primary-color);
+      font-weight: 800;
+      border: none;
+      padding: 10px;
+      border-radius: 12px;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .menu-item {
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface-color);
+      cursor: pointer;
+    }
+
+    /* ========================================= */
+    /* REAL-TIME SERVICES FLOW (FAB & OFFERS)    */
+    /* ========================================= */
+    .services-flow-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-color);
+      z-index: 1300;
+      display: none;
+      flex-direction: column;
+    }
+
+    .services-flow-overlay.open {
+      display: flex;
+    }
+
+    /* Radar View */
+    .radar-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .radar-circle {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(0,147,75,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+      border: 1px solid rgba(0,147,75,0.1);
+    }
+
+    .radar-pulse {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid var(--primary-color);
+      animation: pulse 1.8s infinite;
+      opacity: 0;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.6);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    /* Real-Time Offers List */
+    .offers-section {
+      flex: 1;
+      padding: 20px;
+      display: none;
+      flex-direction: column;
+    }
+
+    .offers-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .offer-card {
+      background: var(--surface-color);
+      border-radius: 16px;
+      padding: 12px;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+      animation: slideIn 0.4s ease forwards;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .offer-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #ccc;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .offer-details {
+      flex: 1;
+    }
+
+    .offer-name-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2px;
+    }
+
+    .offer-name {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .offer-price {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary-color);
+    }
+
+    .offer-specialty {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .offer-meta {
+      display: flex;
+      gap: 10px;
+      font-size: 10px;
+      color: #555;
+    }
+
+    /* Consultation Chat overlay */
+    .chat-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-color);
+      z-index: 1400;
+      display: none;
+      flex-direction: column;
+    }
+
+    .chat-overlay.open {
+      display: flex;
+    }
+
+    .chat-header {
+      background: var(--surface-color);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .msg-expert {
+      background: var(--surface-color);
+      color: #000;
+      align-self: flex-start;
+      border-bottom-left-radius: 0;
+    }
+
+    .msg-customer {
+      background: var(--primary-color);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 0;
+    }
+
+    .typing-indicator {
+      font-size: 11px;
+      color: #666;
+      padding: 4px 16px;
+      font-style: italic;
+      display: none;
+    }
+
+    .chat-footer {
+      background: var(--surface-color);
+      padding: 12px;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: #f0f2f5;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .chat-send-btn {
+      background: transparent;
+      border: none;
+      color: var(--primary-color);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .chat-action-btn {
+      background: #137333;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    /* Tracking overlay */
+    .tracking-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-color);
+      z-index: 1500;
+      display: none;
+      flex-direction: column;
+      padding: 24px;
+      align-items: center;
+      overflow-y: auto;
+    }
+
+    .tracking-overlay.open {
+      display: flex;
+    }
+
+    .tracking-badge {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #e6f4ea;
+      color: #137333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+
+    /* Notification Banner */
+    .custom-snackbar {
+      position: absolute;
+      top: 50px;
+      left: 16px;
+      right: 16px;
+      background: #202124;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 12px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 2000;
+      animation: bannerSlide 0.3s ease forwards;
+    }
+
+    @keyframes bannerSlide {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- LEFT: Info Panel (Features presentation) -->
+  <div class="info-panel">
+    <h1>Super App Live Prototype</h1>
+    <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
+    
+    <ul class="features-list">
+      <li><span>۱</span> <strong>صفحه نقشه تعاملی:</strong> جستجو، فیلتر با چیپست‌های دسته‌بندی و بالا آمدن پین پروفایل سریع فروشگاه‌ها.</li>
+      <li><span>۲</span> <strong>تفکیک کامل فروشگاه‌ها:</strong> مارکت‌پلیس فقط برای خرید کالاها و صفحه رنتال به صورت اختصاصی برای اجاره ابزار و ماشین‌آلات سنگین کشاورزی/صنعتی.</li>
+      <li><span>۳</span> <strong>درخواست متخصص تعاملی:</strong> شبیه‌سازی ورود پیشنهادهای زنده با افکت زمان‌بندی شده و پالس رادار.</li>
+      <li><span>۴</span> <strong>مشاوره و چت زنده با متخصص:</strong> سیستم چت فعال با پاسخ‌دهی هوشمند ربات متخصص بر اساس سؤال شما درباره قیمت یا زمان رسیدن.</li>
+      <li><span>۵</span> <strong>ردیابی مدرن متخصص:</strong> صفحه کامل ردیابی با اطلاعات تاییدشده متخصص منتخب و قیمت توافق‌شده.</li>
+    </ul>
+
+    <p style="font-size: 13px; font-style: italic; color: #888;">💡 روی مارکرهای نقشه، نوار سرچ دسته‌بندی‌ها، دکمه Request Expert و محصولات رنتال یا مارکت‌پلیس کلیک کنید تا تجربه نهایی برنامه را ببینید.</p>
+  </div>
+
+  <!-- RIGHT: Mobile Emulator Wrapper -->
+  <div class="device-container">
+    <div class="device-notch">
+      <div class="device-speaker"></div>
+      <div class="device-camera"></div>
+    </div>
+    
+    <div class="screen">
+      
+      <!-- Live Notification Banner inside mobile screen -->
+      <div class="custom-snackbar" id="live-banner">
+        <span>⭐</span>
+        <span id="banner-text">پیشنهاد جدید از متخصص دریافت شد!</span>
+      </div>
+
+      <!-- Status Bar -->
+      <div class="status-bar light-text" id="phone-status-bar">
+        <div class="time">20:57 🕒</div>
+        <div class="status-icons">
+          <span class="vpn-tag">VPN</span>
+          <span>4.5G 📶</span>
+          <span>31% 🔋</span>
+        </div>
+      </div>
+
+      <!-- App body with active views -->
+      <div class="app-body">
+        
+        <!-- ========================================= -->
+        <!-- VIEW 1: MAP PAGE                          -->
+        <!-- ========================================= -->
+        <div class="screen-content active" id="view-map">
+          <div class="map-canvas">
+            <!-- Simulated Tehran Vector Grid Map background -->
+            <svg class="vector-grid" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <!-- Rivers, Streets, Areas -->
+              <path d="M 0,40 Q 30,50 60,35 T 100,50" stroke="#a5c9e2" stroke-width="6" fill="none" opacity="0.6"/>
+              <line x1="20" y1="0" x2="40" y2="100" stroke="#fdfdfd" stroke-width="4" opacity="0.8"/>
+              <line x1="0" y1="30" x2="100" y2="25" stroke="#fdfdfd" stroke-width="4" opacity="0.8"/>
+              <line x1="0" y1="75" x2="100" y2="80" stroke="#fdfdfd" stroke-width="3" opacity="0.8"/>
+              <circle cx="50" cy="50" r="40" stroke="#88b598" stroke-dasharray="3,3" stroke-width="1.5" />
+            </svg>
+
+            <!-- Map pins -->
+            <!-- Pins s1: Tech Hub (Electronics) -->
+            <div class="map-pin" style="top: 48%; left: 45%; border-color: #00934b;" onclick="openQuickView('s1')" data-category="Electronics" data-name="Tech Hub">
+              <div class="map-pin-pulse" style="border-color: #00934b;"></div>
+              <span style="font-size: 18px;">📱</span>
+            </div>
+            <!-- Pins s2: Green Garden (Plants) -->
+            <div class="map-pin" style="top: 38%; left: 65%; border-color: #3b76af;" onclick="openQuickView('s2')" data-category="Plants" data-name="Green Garden">
+              <div class="map-pin-pulse" style="border-color: #3b76af;"></div>
+              <span style="font-size: 18px;">🌱</span>
+            </div>
+            <!-- Pins s3: Coffee Corner (Cafe) -->
+            <div class="map-pin" style="top: 60%; left: 25%; border-color: #e28743;" onclick="openQuickView('s3')" data-category="Cafe" data-name="Coffee Corner">
+              <div class="map-pin-pulse" style="border-color: #e28743;"></div>
+              <span style="font-size: 18px;">☕</span>
+            </div>
+            <!-- Pins s4: Gadget World (Electronics) -->
+            <div class="map-pin" style="top: 42%; left: 48%; border-color: #00934b;" onclick="openQuickView('s4')" data-category="Electronics" data-name="Gadget World">
+              <div class="map-pin-pulse" style="border-color: #00934b;"></div>
+              <span style="font-size: 18px;">📱</span>
+            </div>
+            <!-- Pins s5: Flower Power (Plants) -->
+            <div class="map-pin" style="top: 32%; left: 55%; border-color: #3b76af;" onclick="openQuickView('s5')" data-category="Plants" data-name="Flower Power">
+              <div class="map-pin-pulse" style="border-color: #3b76af;"></div>
+              <span style="font-size: 18px;">🌱</span>
+            </div>
+          </div>
+
+          <!-- Top Search & Chips Overlay -->
+          <div class="map-search-container">
+            <div class="search-card">
+              <span>🔍</span>
+              <input type="text" class="search-input" id="map-search" placeholder="Search stores, cafes...">
+              <span>⚙️</span>
+            </div>
+            
+            <div class="chips-row">
+              <div class="filter-chip active" id="chip-all" onclick="filterMapCategory(null)">🌐 All</div>
+              <div class="filter-chip" id="chip-elec" onclick="filterMapCategory('Electronics')">📱 Tech</div>
+              <div class="filter-chip" id="chip-plant" onclick="filterMapCategory('Plants')">🌱 Plants</div>
+              <div class="filter-chip" id="chip-cafe" onclick="filterMapCategory('Cafe')">☕ Cafe</div>
+            </div>
+          </div>
+
+          <!-- Interactive Action Buttons -->
+          <div class="fab-btn fab-location" onclick="resetMapCamera()">
+            <span>🎯</span>
+          </div>
+
+          <div class="fab-btn fab-request" onclick="openServicesFlow()">
+            <span>🛠️</span> Request Expert
+          </div>
+
+          <!-- Quick View sliding panel -->
+          <div class="quick-view-sheet" id="quick-view">
+            <div class="sheet-header">
+              <span class="badge-category" id="qv-category">Electronics</span>
+              <span class="sheet-close" onclick="closeQuickView()">✕</span>
+            </div>
+            <div class="sheet-info-row">
+              <div class="sheet-img" id="qv-icon">📱</div>
+              <div class="sheet-text-container">
+                <div class="sheet-title" id="qv-name">Tech Hub</div>
+                <div class="sheet-rating">
+                  <span>⭐</span> <span id="qv-rating">4.8</span> <span style="color:#777; font-weight:normal;" id="qv-reviews">(124 reviews)</span>
+                </div>
+                <div class="sheet-address" id="qv-address">Tehran, Valiasr St, Block 4</div>
+              </div>
+            </div>
+            <div class="sheet-details-row">
+              <span id="qv-hours">Hours: 09:00 - 22:00</span>
+              <span class="badge-open" id="qv-status">OPEN</span>
+            </div>
+            <button class="sheet-btn" onclick="viewStoreProfile()">
+              <span>🏪</span> View Store Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- VIEW 2: MARKETPLACE PAGE                  -->
+        <!-- ========================================= -->
+        <div class="screen-content" id="view-market" style="background:#fff;">
+          <div class="market-header">
+            <div class="market-title">Marketplace (Buy)</div>
+            <div class="chips-row" style="justify-content: center;">
+              <div class="filter-chip active">🌐 All Products</div>
+              <div class="filter-chip">📱 Tech</div>
+              <div class="filter-chip">🏠 Home</div>
+            </div>
+          </div>
+          
+          <div class="product-grid">
+            <div class="product-card" onclick="openPurchaseDialog('iPhone 15 Pro', 'Latest Apple flagship', '999$')">
+              <div class="product-img">📱</div>
+              <div class="product-name">iPhone 15 Pro</div>
+              <div class="product-price">999$</div>
+              <div class="product-desc">Latest Apple flagship</div>
+            </div>
+            <div class="product-card" onclick="openPurchaseDialog('Air Fryer', 'Healthy cooking made easy', '120$')">
+              <div class="product-img">🏠</div>
+              <div class="product-name">Air Fryer</div>
+              <div class="product-price">120$</div>
+              <div class="product-desc">Healthy cooking made easy</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- VIEW 3: RENTAL PAGE                       -->
+        <!-- ========================================= -->
+        <div class="screen-content" id="view-rental" style="background:#fff;">
+          <div class="market-header" style="background:#fdfdfd;">
+            <div class="market-title" style="color:#d97706;">Industrial & Agricultural Rental</div>
+            <div class="chips-row" style="justify-content: center;">
+              <div class="filter-chip active">🚜 All Machinery</div>
+              <div class="filter-chip">⚙️ Industrial</div>
+              <div class="filter-chip">🌱 Agriculture</div>
+            </div>
+          </div>
+
+          <div class="product-grid">
+            <div class="product-card" onclick="openRentalBooking('Concrete Mixer', 'Heavy duty industrial concrete mixer.', 50, '⚙️ Industrial')">
+              <div class="badge-rental">Rental</div>
+              <div class="product-img">⚙️</div>
+              <div class="product-name">Concrete Mixer</div>
+              <div class="product-price">50$/day</div>
+              <div class="product-desc">Heavy duty industrial mixer</div>
+            </div>
+            <div class="product-card" onclick="openRentalBooking('Tractor X-200', 'High performance agricultural tractor.', 120, '🌱 Agriculture')">
+              <div class="badge-rental">Rental</div>
+              <div class="product-img">🚜</div>
+              <div class="product-name">Tractor X-200</div>
+              <div class="product-price">120$/day</div>
+              <div class="product-desc">High performance agricultural tractor</div>
+            </div>
+            <div class="product-card" onclick="openRentalBooking('Generator 5kW', 'Reliable power generator backup.', 30, '⚙️ Industrial')">
+              <div class="badge-rental">Rental</div>
+              <div class="product-img">⚡</div>
+              <div class="product-name">Generator 5kW</div>
+              <div class="product-price">30$/day</div>
+              <div class="product-desc">Reliable power backup</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- VIEW 4: PROFILE PAGE                      -->
+        <!-- ========================================= -->
+        <div class="screen-content" id="view-profile" style="background:#f6f8f9;">
+          <div class="profile-card">
+            <div class="profile-avatar">👨</div>
+            <div class="profile-name">Amir Hossein</div>
+            <div class="profile-email">amir@superapp.ir</div>
+          </div>
+
+          <div class="wallet-card">
+            <div class="wallet-title">Wallet Balance (کیف پول)</div>
+            <div class="wallet-balance" id="wallet-val">150.00 $</div>
+            <button class="wallet-btn" onclick="topUpWallet()">Top Up Wallet (+100$)</button>
+          </div>
+
+          <div class="menu-item">
+            <span>📜 Order History</span>
+            <span style="color:#aaa;">➔</span>
+          </div>
+          <div class="menu-item">
+            <span>💳 Payment Methods</span>
+            <span style="color:#aaa;">➔</span>
+          </div>
+          <div class="menu-item">
+            <span>🛠️ Support Centre</span>
+            <span style="color:#aaa;">➔</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================= -->
+      <!-- CHAT/BOOKING/REAL-TIME OVERLAYS           -->
+      <!-- ========================================= -->
+
+      <!-- A. Purchase Confirm Dialog -->
+      <div class="dialog-overlay" id="purchase-dialog">
+        <div class="confirm-card">
+          <div class="confirm-title">Purchase Product</div>
+          <div class="confirm-body" id="purchase-body">Do you want to purchase iPhone 15 Pro?</div>
+          <div class="confirm-price-row">
+            <span>Price:</span>
+            <span id="purchase-price" style="color:var(--primary-color);">999$</span>
+          </div>
+          <div class="dialog-actions">
+            <button class="btn-cancel" onclick="closePurchaseDialog()">Cancel</button>
+            <button class="btn-confirm" onclick="confirmPurchase()">Purchase</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- B. Rental Booking Sheet -->
+      <div class="rental-booking-overlay" id="rental-booking">
+        <div class="booking-header">
+          <span class="booking-back-btn" onclick="closeRentalBooking()">⬅</span>
+          <span class="booking-title">Book Equipment</span>
+        </div>
+        <div class="booking-card">
+          <div class="confirm-title" id="rb-title">Concrete Mixer</div>
+          <div class="confirm-body" id="rb-desc">Heavy duty industrial concrete mixer.</div>
+          <div class="booking-details-row">
+            <div class="booking-date-selector">
+              <div style="font-size:10px; color:#666;">Start Date</div>
+              <div style="font-weight:bold; font-size:12px; margin-top:4px;">Today</div>
+            </div>
+            <div class="booking-date-selector" style="margin-left:12px;" onclick="addRentalDay()">
+              <div style="font-size:10px; color:#666;">End Date (Click to add days)</div>
+              <div style="font-weight:bold; font-size:12px; margin-top:4px; color:var(--primary-color);" id="rb-end">Tomorrow (+1 Day)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="booking-total-box">
+          <span id="rb-calc-days">2 days x 50$/day</span>
+          <span id="rb-total-price">100$</span>
+        </div>
+
+        <button class="chat-action-btn" onclick="confirmRentalBooking()">Confirm Rental Booking</button>
+      </div>
+
+      <!-- C. Services Flow: Radar & Bids Simulator -->
+      <div class="services-flow-overlay" id="services-flow">
+        <!-- Broadcaster Radar -->
+        <div class="radar-container" id="radar-view">
+          <div class="booking-header" style="position:absolute; top:16px; left:20px; width:100%;">
+            <span class="booking-back-btn" onclick="closeServicesFlow()">✕</span>
+            <span class="booking-title" style="font-size:16px;">Searching Experts...</span>
+          </div>
+          <div class="radar-circle">
+            <div class="radar-pulse"></div>
+            <div class="radar-pulse" style="animation-delay: 0.9s;"></div>
+            <span>📡</span>
+          </div>
+          <div style="font-weight:bold; font-size:16px; margin-bottom:8px; color:var(--on-surface);">Broadcasting request...</div>
+          <div style="font-size:12px; color:#666; text-align:center;">Nearby experts are reviewing your request. Please wait.</div>
+        </div>
+
+        <!-- Real-Time Offers List after radar matches -->
+        <div class="offers-section" id="offers-view">
+          <div class="booking-header">
+            <span class="booking-back-btn" onclick="closeServicesFlow()">✕</span>
+            <span class="booking-title" style="font-size:16px;">Verified Experts (3)</span>
+          </div>
+          <div style="font-size:11px; color:#666; margin-bottom:16px;">We found 3 specialists ready to assist you:</div>
+          <div class="offers-list" id="offers-container">
+            <!-- Offer Cards will be dynamically injected by JS timer -->
+          </div>
+        </div>
+      </div>
+
+      <!-- D. Consultation Chat screen -->
+      <div class="chat-overlay" id="chat-view">
+        <div class="chat-header">
+          <span class="booking-back-btn" onclick="closeChat()">⬅</span>
+          <div class="offer-avatar" id="chat-expert-avatar" style="width:36px; height:36px;"></div>
+          <div style="flex:1;">
+            <div class="offer-name" id="chat-expert-name">Ali Rezaei</div>
+            <div class="offer-specialty" id="chat-expert-specialty" style="margin:0;">Senior Plumber</div>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages-box">
+          <!-- Live chat messages -->
+        </div>
+
+        <div class="typing-indicator" id="expert-typing">Ali is typing...</div>
+
+        <div class="chat-footer">
+          <div class="chat-input-row">
+            <input type="text" class="chat-input" id="chat-text-input" placeholder="Type a message or ask about price/ETA...">
+            <button class="chat-send-btn" onclick="sendChatMessage()">➔</button>
+          </div>
+          <button class="chat-action-btn" onclick="acceptExpertOffer()">Select & Confirm Proposed Price</button>
+        </div>
+      </div>
+
+      <!-- E. Tracking assigned expert screen -->
+      <div class="tracking-overlay" id="tracking-view">
+        <div class="booking-header" style="width:100%; justify-content:space-between; margin-bottom:32px;">
+          <span></span>
+          <span class="booking-title" style="font-size:16px;">Live Tracking</span>
+          <span class="booking-back-btn" onclick="resetAllServicesToSelection()">✕</span>
+        </div>
+
+        <div class="tracking-badge">🚀</div>
+        <div style="font-size:18px; font-weight:800; margin-bottom:8px;">Expert is on the way!</div>
+        <div style="font-size:12px; color:#666; margin-bottom:24px; text-align:center; padding: 0 16px;">The specialist has accepted your booking and is heading to your Tehran location.</div>
+
+        <!-- Tracking details Card -->
+        <div class="booking-card" style="width:100%; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,0.05);">
+          <div class="sheet-info-row" style="margin-bottom:16px;">
+            <div class="offer-avatar" id="track-avatar" style="width:50px; height:50px; background-image:url('https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150');"></div>
+            <div style="flex:1;">
+              <div class="offer-name" id="track-name">Ali Rezaei</div>
+              <div class="offer-specialty" id="track-specialty" style="margin:0;">Senior Plumbing Specialist</div>
+            </div>
+          </div>
+          <div class="divider" style="height:1px; background:#eee; margin-bottom:12px;"></div>
+          <div style="display:flex; justify-content:space-between; font-size:12px; color:#444; margin-bottom:10px;">
+            <span>Rating: <strong id="track-rating">⭐ 4.9</strong> (Verified)</span>
+            <span>Arrival: <strong style="color:var(--primary-color);">ETA 15 mins</strong></span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:bold; margin-top:12px;">
+            <span>Confirmed Price:</span>
+            <span style="color:var(--primary-color);" id="track-price">350,000 Tomans</span>
+          </div>
+        </div>
+
+        <button class="chat-action-btn" style="margin-top:16px;" onclick="alert('Live chat session re-opened!')">Message Specialist</button>
+        <button class="chat-action-btn" style="margin-top:10px; background:#eaeaea; color:#333;" onclick="resetAllServicesToSelection()">Cancel Request</button>
+      </div>
+
+      <!-- Navigation Bottom Bar -->
+      <div class="nav-bar">
+        <div class="nav-item active" id="nav-map" onclick="switchTab('map')">
+          <div class="nav-icon">📍</div>
+          <div class="nav-label">Map</div>
+        </div>
+        <div class="nav-item" id="nav-market" onclick="switchTab('market')">
+          <div class="nav-icon">🛒</div>
+          <div class="nav-label">Buy</div>
+        </div>
+        <div class="nav-item" id="nav-rental" onclick="switchTab('rental')">
+          <div class="nav-icon">⚙️</div>
+          <div class="nav-label">Rental</div>
+        </div>
+        <div class="nav-item" id="nav-profile" onclick="switchTab('profile')">
+          <div class="nav-icon">👤</div>
+          <div class="nav-label">Profile</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Mock Database
+  const shops = {
+    s1: { name: 'Tech Hub', category: 'Electronics', rating: '4.8', reviews: 124, address: 'Tehran, Valiasr St, Block 4', hours: '09:00 - 22:00', isOpen: true, icon: '📱' },
+    s2: { name: 'Green Garden', category: 'Plants', rating: '4.5', reviews: 89, address: 'Tehran, Niavaran Ave, G1', hours: '08:00 - 20:00', isOpen: true, icon: '🌱' },
+    s3: { name: 'Coffee Corner', category: 'Cafe', rating: '4.9', reviews: 210, address: 'Tehran, Jordan St, C2', hours: '07:00 - 23:00', isOpen: false, icon: '☕' },
+    s4: { name: 'Gadget World', category: 'Electronics', rating: '4.2', reviews: 50, address: 'Tehran, Enghelab Sq', hours: '10:00 - 21:00', isOpen: true, icon: '📱' },
+    s5: { name: 'Flower Power', category: 'Plants', rating: '4.7', reviews: 30, address: 'Tehran, Pasdaran St', hours: '08:00 - 20:00', isOpen: true, icon: '🌱' }
+  };
+
+  // Tab switching
+  function switchTab(tabId) {
+    document.querySelectorAll('.screen-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById('view-' + tabId).classList.add('active');
+    document.getElementById('nav-' + tabId).classList.add('active');
+
+    // Change status bar text color based on page style
+    const statusBar = document.getElementById('phone-status-bar');
+    if (tabId === 'map') {
+      statusBar.className = 'status-bar dark-text';
+    } else {
+      statusBar.className = 'status-bar dark-text';
+    }
+  }
+
+  // Set default status bar style
+  document.getElementById('phone-status-bar').className = 'status-bar dark-text';
+
+  // =========================================
+  // MAP PAGE LOGIC
+  // =========================================
+  let mapCategory = null;
+  function filterMapCategory(cat) {
+    mapCategory = cat;
+    document.querySelectorAll('.filter-chip').forEach(el => el.classList.remove('active'));
+    
+    if (cat === null) {
+      document.getElementById('chip-all').classList.add('active');
+    } else if (cat === 'Electronics') {
+      document.getElementById('chip-elec').classList.add('active');
+    } else if (cat === 'Plants') {
+      document.getElementById('chip-plant').classList.add('active');
+    } else if (cat === 'Cafe') {
+      document.getElementById('chip-cafe').classList.add('active');
+    }
+
+    // Filter pins
+    document.querySelectorAll('.map-pin').forEach(pin => {
+      const pinCat = pin.getAttribute('data-category');
+      if (cat === null || pinCat === cat) {
+        pin.style.display = 'block';
+      } else {
+        pin.style.display = 'none';
+      }
+    });
+
+    closeQuickView();
+  }
+
+  // Real-time Map search text input
+  document.getElementById('map-search').addEventListener('input', function(e) {
+    const val = e.target.value.toLowerCase();
+    document.querySelectorAll('.map-pin').forEach(pin => {
+      const pinName = pin.getAttribute('data-name').toLowerCase();
+      const pinCat = pin.getAttribute('data-category').toLowerCase();
+      const matchesCategory = mapCategory === null || pinCat === mapCategory.toLowerCase();
+      const matchesSearch = val === '' || pinName.includes(val) || pinCat.includes(val);
+
+      if (matchesCategory && matchesSearch) {
+        pin.style.display = 'block';
+      } else {
+        pin.style.display = 'none';
+      }
+    });
+  });
+
+  function openQuickView(shopId) {
+    const shop = shops[shopId];
+    document.getElementById('qv-category').innerText = shop.category;
+    document.getElementById('qv-name').innerText = shop.name;
+    document.getElementById('qv-rating').innerText = shop.rating;
+    document.getElementById('qv-reviews').innerText = `(${shop.reviews} reviews)`;
+    document.getElementById('qv-address').innerText = shop.address;
+    document.getElementById('qv-hours').innerText = `Hours: ${shop.hours}`;
+    document.getElementById('qv-icon').innerText = shop.icon;
+
+    const statusBadge = document.getElementById('qv-status');
+    if (shop.isOpen) {
+      statusBadge.innerText = 'OPEN';
+      statusBadge.className = 'badge-open';
+    } else {
+      statusBadge.innerText = 'CLOSED';
+      statusBadge.className = 'badge-closed';
+    }
+
+    // Set selected pin visual feedback
+    document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+
+    document.getElementById('quick-view').classList.add('open');
+  }
+
+  function closeQuickView() {
+    document.getElementById('quick-view').classList.remove('open');
+    document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('selected'));
+  }
+
+  function resetMapCamera() {
+    alert("Map centered on Tehran (35.6892, 51.3890).");
+    closeQuickView();
+  }
+
+  function viewStoreProfile() {
+    const name = document.getElementById('qv-name').innerText;
+    alert(`Navigating to profile mini-site of ${name}!`);
+  }
+
+  // =========================================
+  // MARKETPLACE LOGIC
+  // =========================================
+  let selectedProduct = null;
+  function openPurchaseDialog(name, desc, price) {
+    selectedProduct = { name, desc, price };
+    document.getElementById('purchase-body').innerText = `Do you want to purchase ${name}? \n(${desc})`;
+    document.getElementById('purchase-price').innerText = price;
+    document.getElementById('purchase-dialog').classList.add('open');
+  }
+
+  function closePurchaseDialog() {
+    document.getElementById('purchase-dialog').classList.remove('open');
+  }
+
+  function confirmPurchase() {
+    closePurchaseDialog();
+    showNotification(`Successfully purchased ${selectedProduct.name}!`);
+  }
+
+  // =========================================
+  // RENTAL LOGIC
+  // =========================================
+  let selectedRental = null;
+  let rentalDays = 2;
+
+  function openRentalBooking(name, desc, pricePerDay, cat) {
+    selectedRental = { name, desc, pricePerDay, cat };
+    rentalDays = 2;
+    document.getElementById('rb-title').innerText = name;
+    document.getElementById('rb-desc').innerText = desc;
+    updateRentalCost();
+    document.getElementById('rental-booking').classList.add('open');
+  }
+
+  function addRentalDay() {
+    rentalDays++;
+    updateRentalCost();
+  }
+
+  function updateRentalCost() {
+    const endStr = rentalDays === 2 ? 'Tomorrow (+1 Day)' : `In ${rentalDays - 1} days (+${rentalDays - 1} Days)`;
+    document.getElementById('rb-end').innerText = endStr;
+    document.getElementById('rb-calc-days').innerText = `${rentalDays} days x ${selectedRental.pricePerDay}$/day`;
+    document.getElementById('rb-total-price').innerText = `${rentalDays * selectedRental.pricePerDay}$`;
+  }
+
+  function closeRentalBooking() {
+    document.getElementById('rental-booking').classList.remove('open');
+  }
+
+  function confirmRentalBooking() {
+    closeRentalBooking();
+    showNotification(`Booking confirmed for ${selectedRental.name} (${rentalDays} days)!`);
+  }
+
+  // =========================================
+  // PROFILE LOGIC
+  // =========================================
+  let walletVal = 150.00;
+  function topUpWallet() {
+    walletVal += 100.00;
+    document.getElementById('wallet-val').innerText = `${walletVal.toFixed(2)} $`;
+    showNotification("Wallet topped up by +100.00 $ successfully!");
+  }
+
+  // =========================================
+  // SERVICES HUB (RADAR & REALTIME OFFERS) LOGIC
+  // =========================================
+  const mockBids = [
+    { id: 'b1', name: 'Ali Rezaei', specialty: 'Senior Plumbing Specialist', rating: 4.9, jobs: 142, price: '350,000 Tomans', eta: '15 mins', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150', text: 'Hello! I am a certified senior plumber with all the necessary tools. I can resolve any leaks immediately.' },
+    { id: 'b2', name: 'Sina Mohammadi', specialty: 'Master Electrical Technician', rating: 4.8, jobs: 98, price: '290,000 Tomans', eta: '22 mins', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150', text: 'Hi! I specialize in residential electrical repairs and diagnostic safety. Ready to start.' },
+    { id: 'b3', name: 'Milad Karimi', specialty: 'AC & Cooling Expert', rating: 4.7, jobs: 215, price: '320,000 Tomans', eta: '18 mins', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150', text: 'Hello! 8+ years experience in cooling installations and maintenance. Can head over soon.' }
+  ];
+
+  let activeOffers = [];
+  let offerTimer1, offerTimer2, offerTimer3;
+  let activeBidSelected = null;
+
+  function openServicesFlow() {
+    // Start flow
+    document.getElementById('radar-view').style.display = 'flex';
+    document.getElementById('offers-view').style.display = 'none';
+    document.getElementById('services-flow').classList.add('open');
+    document.getElementById('offers-container').innerHTML = '';
+    activeOffers = [];
+
+    // Simulate bids arriving in real-time
+    offerTimer1 = setTimeout(() => {
+      addBidCard(mockBids[0]);
+      showNotification("New proposal from Ali Rezaei!");
+    }, 2000);
+
+    offerTimer2 = setTimeout(() => {
+      addBidCard(mockBids[1]);
+      showNotification("New proposal from Sina Mohammadi!");
+    }, 4500);
+
+    offerTimer3 = setTimeout(() => {
+      addBidCard(mockBids[2]);
+      showNotification("New proposal from Milad Karimi!");
+    }, 6500);
+
+    // Switch from radar to bids list after first match
+    setTimeout(() => {
+      document.getElementById('radar-view').style.display = 'none';
+      document.getElementById('offers-view').style.display = 'flex';
+    }, 2200);
+  }
+
+  function addBidCard(bid) {
+    activeOffers.push(bid);
+    const container = document.getElementById('offers-container');
+    const card = document.createElement('div');
+    card.className = 'offer-card';
+    card.onclick = () => openConsultationChat(bid);
+    card.innerHTML = `
+      <div class="offer-avatar" style="background-image: url('${bid.avatar}');"></div>
+      <div class="offer-details">
+        <div class="offer-name-row">
+          <span class="offer-name">${bid.name}</span>
+          <span class="offer-price">${bid.price}</span>
+        </div>
+        <div class="offer-specialty">${bid.specialty}</div>
+        <div class="offer-meta">
+          <span>⭐ ${bid.rating}</span>
+          <span>• ${bid.jobs} jobs</span>
+          <span>• ${bid.eta}</span>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  }
+
+  function closeServicesFlow() {
+    clearTimeout(offerTimer1);
+    clearTimeout(offerTimer2);
+    clearTimeout(offerTimer3);
+    document.getElementById('services-flow').classList.remove('open');
+  }
+
+  // =========================================
+  // CONSULTATION CHAT LOGIC
+  // =========================================
+  function openConsultationChat(bid) {
+    activeBidSelected = bid;
+    document.getElementById('chat-expert-avatar').style.backgroundImage = `url('${bid.avatar}')`;
+    document.getElementById('chat-expert-name').innerText = bid.name;
+    document.getElementById('chat-expert-specialty').innerText = bid.specialty;
+
+    // Load initial intro message
+    const msgBox = document.getElementById('chat-messages-box');
+    msgBox.innerHTML = `
+      <div class="msg msg-expert">${bid.text}</div>
+    `;
+
+    document.getElementById('chat-view').classList.add('open');
+  }
+
+  function closeChat() {
+    document.getElementById('chat-view').classList.remove('open');
+  }
+
+  function sendChatMessage() {
+    const input = document.getElementById('chat-text-input');
+    const text = input.value.trim();
+    if (text === '') return;
+
+    input.value = '';
+    const msgBox = document.getElementById('chat-messages-box');
+    
+    // Add user message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'msg msg-customer';
+    userMsg.innerText = text;
+    msgBox.appendChild(userMsg);
+    msgBox.scrollTop = msgBox.scrollHeight;
+
+    // Simulate smart bot response
+    const textLower = text.toLowerCase();
+    let reply = '';
+    if (textLower.includes('قیمت') || textLower.includes('هزینه') || textLower.includes('price') || textLower.includes('cost') || textLower.includes('تومان')) {
+      reply = `The proposed price of ${activeBidSelected.price} covers the visit fee and labor. If replacement parts are needed on-site, I can procure them for you with a receipt.`;
+    } else if (textLower.includes('زمان') || textLower.includes('کی') || textLower.includes('ساعت') || textLower.includes('when') || textLower.includes('time') || textLower.includes('eta')) {
+      reply = `I can leave right now with my fully-equipped service vehicle and reach your address within ${activeBidSelected.eta} of your booking confirmation!`;
+    } else {
+      reply = "Great! I've noted down the details. If you have any questions, feel free to ask. Or click the button below to accept my proposal so I can receive your coordinates and start heading over!";
+    }
+
+    // Typing delay animation
+    document.getElementById('expert-typing').innerText = `${activeBidSelected.name} is typing...`;
+    document.getElementById('expert-typing').style.display = 'block';
+
+    setTimeout(() => {
+      document.getElementById('expert-typing').style.display = 'none';
+      const expertMsg = document.createElement('div');
+      expertMsg.className = 'msg msg-expert';
+      expertMsg.innerText = reply;
+      msgBox.appendChild(expertMsg);
+      msgBox.scrollTop = msgBox.scrollHeight;
+    }, 1500);
+  }
+
+  function acceptExpertOffer() {
+    closeChat();
+    closeServicesFlow();
+
+    // Set tracking details
+    document.getElementById('track-avatar').style.backgroundImage = `url('${activeBidSelected.avatar}')`;
+    document.getElementById('track-name').innerText = activeBidSelected.name;
+    document.getElementById('track-specialty').innerText = activeBidSelected.specialty;
+    document.getElementById('track-rating').innerText = `⭐ ${activeBidSelected.rating}`;
+    document.getElementById('track-price').innerText = activeBidSelected.price;
+
+    document.getElementById('tracking-view').classList.add('open');
+  }
+
+  function resetAllServicesToSelection() {
+    document.getElementById('tracking-view').classList.remove('open');
+    closeChat();
+    closeServicesFlow();
+  }
+
+  // =========================================
+  // UTILS: LIVE NOTIFICATION BANNER
+  // =========================================
+  function showNotification(text) {
+    const banner = document.getElementById('live-banner');
+    document.getElementById('banner-text').innerText = text;
+    banner.style.display = 'flex';
+    setTimeout(() => {
+      banner.style.display = 'none';
+    }, 3000);
+  }
+
+</script>
+</body>
+</html>
