@@ -1746,6 +1746,16 @@
               <span style="font-size: 18px;">💇‍♀️</span>
             </div>
 
+            <!-- Restaurants & Supermarkets -->
+            <div class="map-pin" id="pin-s9" style="top: 64%; left: 42%; border-color: #ec4899;" onclick="openQuickView('s9')" data-category="Restaurant" data-name="کباب‌سرای زعفران" data-type="shop" data-distance="2.3" data-rating="4.8" data-open="true">
+              <div class="map-pin-pulse" style="border-color: #ec4899;"></div>
+              <span style="font-size: 18px;">🍔</span>
+            </div>
+            <div class="map-pin" id="pin-s10" style="top: 30%; left: 46%; border-color: #06b6d4;" onclick="openQuickView('s10')" data-category="Supermarket" data-name="سوپرمارکت هایپر پلاس" data-type="shop" data-distance="3.1" data-rating="4.5" data-open="true">
+              <div class="map-pin-pulse" style="border-color: #06b6d4;"></div>
+              <span style="font-size: 18px;">🛒</span>
+            </div>
+
             <!-- Experts (Amber Glowing borders!) -->
             <div class="map-pin" id="pin-e1" style="top: 52%; left: 38%; border-color: #f2994a;" onclick="openQuickView('e1')" data-category="Expert" data-name="علی رضایی" data-type="expert" data-distance="1.1" data-rating="4.9" data-open="true">
               <div class="map-pin-pulse" style="border-color: #f2994a;"></div>
@@ -1783,6 +1793,8 @@
               <div class="filter-chip" id="chip-cafe" onclick="filterMapCategory('Cafe')">☕ کافه</div>
               <div class="filter-chip" id="chip-expert" onclick="filterMapCategory('Expert')">👨‍🔧 متخصصین</div>
               <div class="filter-chip" id="chip-clinic" onclick="filterMapCategory('Clinic')">🩺 مراکز حضوری</div>
+              <div class="filter-chip" id="chip-rest" onclick="filterMapCategory('Restaurant')">🍔 رستوران</div>
+              <div class="filter-chip" id="chip-super" onclick="filterMapCategory('Supermarket')">🛒 سوپرمارکت</div>
             </div>
           </div>
 
@@ -1811,10 +1823,13 @@
           </div>
 
           <!-- Map Legend bar guide -->
-          <div class="map-legend-card" id="map-legend">
+          <div class="map-legend-card" id="map-legend" style="flex-wrap: wrap; gap: 4px; padding: 10px; height: auto; border-radius: 16px;">
             <span>📱 الکترونیک</span>
             <span>🌱 گیاهان</span>
             <span>☕ کافه</span>
+            <span>🩺 کلینیک</span>
+            <span>🍔 رستوران</span>
+            <span>🛒 سوپر</span>
             <span style="color:var(--accent-color);">👷 متخصصین</span>
           </div>
 
@@ -2193,6 +2208,41 @@
 
           <div style="height:1px; background:#eee; margin:16px 0;"></div>
 
+          <!-- Active Categories Checkboxes -->
+          <div style="font-weight:bold; font-size:13px; margin-bottom:12px;">انتخاب صنف‌های فعال روی نقشه</div>
+          <div class="categories-checkbox-list" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 11.5px; text-align: right; direction: rtl; margin-bottom: 16px;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="cb-filter-electronics" checked onchange="toggleCategoryCheckbox('Electronics')">
+              <span>📱 الکترونیک</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="cb-filter-plants" checked onchange="toggleCategoryCheckbox('Plants')">
+              <span>🌱 گل و گیاه</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="cb-filter-cafe" checked onchange="toggleCategoryCheckbox('Cafe')">
+              <span>☕ کافه</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="cb-filter-expert" checked onchange="toggleCategoryCheckbox('Expert')">
+              <span>👨‍🔧 متخصصین</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="cb-filter-clinic" checked onchange="toggleCategoryCheckbox('Clinic')">
+              <span>🩺 مراکز حضوری</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="cb-filter-restaurant" checked onchange="toggleCategoryCheckbox('Restaurant')">
+              <span>🍔 غذا و رستوران</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="cb-filter-supermarket" checked onchange="toggleCategoryCheckbox('Supermarket')">
+              <span>🛒 سوپرمارکت</span>
+            </label>
+          </div>
+
+          <div style="height:1px; background:#eee; margin:16px 0;"></div>
+
           <!-- Rating Chooser -->
           <div style="font-weight:bold; font-size:13px; margin-bottom:8px;">حداقل امتیاز ستاره‌ای</div>
           <div class="rating-row">
@@ -2549,6 +2599,50 @@
         { user: 'زهرا راد', rating: 5, comment: 'من فیشیال پوست انجام دادم، پوستم خیلی شفاف شد و جوش‌های سرسیاه کاملا رفت. ممنونم از بهار.', img: null }
       ]
     },
+    s9: {
+      id: 's9',
+      name: 'کباب‌سرای زعفران',
+      category: 'Restaurant',
+      rating: 4.8,
+      reviews: 320,
+      address: 'تهران، خیابان ولیعصر، نرسیده به باغ فردوس، پلاک ۱۴',
+      phone: '+۹۸ ۲۱ ۲۲۰۴ ۲۲۰۵',
+      hours: '۱۲:۰۰ الی ۲۴:۰۰',
+      isOpen: true,
+      icon: '🍔',
+      distance: 2.3,
+      type: 'shop',
+      about: 'کباب‌سرای سنتی زعفران با بهترین گوشت تازه گوسفندی، طبخ کباب‌های اصیل ایرانی روی زغال طبیعی و سرو به همراه نان داغ تنوری.',
+      products: [
+        { name: 'کوبیده نگین‌دار زعفرانی', desc: 'دو سیخ کباب کوبیده گوسفندی با برنج ایرانی', price: '۲۸۰,۰۰۰ تومان', icon: '🍢' },
+        { name: 'جوجه کباب با استخوان', desc: 'جوجه کباب زعفرانی ذغالی با دورچین کامل', price: '۲۴۰,۰۰۰ تومان', icon: '🍗' }
+      ],
+      reviewsList: [
+        { user: 'حسین جلیلی', rating: 5, comment: 'طعم کباب کوبیده‌اش بی‌نظیر بود، نان داغ هم درجا پخت می‌شد. واقعا عالی بود.', img: null }
+      ]
+    },
+    s10: {
+      id: 's10',
+      name: 'سوپرمارکت هایپر پلاس',
+      category: 'Supermarket',
+      rating: 4.5,
+      reviews: 412,
+      address: 'تهران، خیابان فاطمی، نبش باباطاهر، پلاک ۴۵',
+      phone: '+۹۸ ۲۱ ۸۸۹۶ ۶۶۵۵',
+      hours: 'شبانه‌روزی (۲۴ ساعته)',
+      isOpen: true,
+      icon: '🛒',
+      distance: 3.1,
+      type: 'shop',
+      about: 'سوپرمارکت بزرگ و شبانه‌روزی هایپر پلاس دارای تمامی اقلام مصرفی، لبنیات تازه، تنقلات و شوینده‌ها با پیک سریع اختصاصی.',
+      products: [
+        { name: 'پک شیر و لبنیات تازه', desc: 'سه عدد شیر بطری کم‌چرب و پنیر سنتی', price: '۱۳۵,۰۰۰ تومان', icon: '🥛' },
+        { name: 'روغن آفتابگردان ۳ لیتری', desc: 'روغن مایع خالص مخصوص پخت و پز', price: '۲۱۰,۰۰۰ تومان', icon: '🧴' }
+      ],
+      reviewsList: [
+        { user: 'مریم نوری', rating: 4, comment: 'خرید نیمه‌شب داشتم، خیلی سریع در عرض ۲۰ دقیقه تحویل دادند. عالی و مطمئن.', img: null }
+      ]
+    },
     e1: { id: 'e1', name: 'علی رضایی', category: 'Expert', rating: 4.9, reviews: 142, address: 'موقعیت زنده • ۱.۱ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۵۰,۰۰۰ تومان', isOpen: true, icon: '👨‍🔧', distance: 1.1, type: 'expert', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', avatar: '👨‍🔧', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی اقدام کنم.' },
     e2: { id: 'e2', name: 'سینا محمدی', category: 'Expert', rating: 4.8, reviews: 98, address: 'موقعیت زنده • ۲.۵ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۲۰,۰۰۰ تومان', isOpen: true, icon: '⚡', distance: 2.5, type: 'expert', specialty: 'تکنسین برق ساختمان و عیب‌یابی', avatar: '⚡', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارها کاملاً آماده است.' },
     e3: { id: 'e3', name: 'میلاد کریمی', category: 'Expert', rating: 4.7, reviews: 215, address: 'موقعیت زنده • ۸.۰ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۴۰,۰۰۰ تومان', isOpen: true, icon: '❄️', distance: 8.0, type: 'expert', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', avatar: '❄️', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم?' }
@@ -2571,33 +2665,76 @@
   // =========================================
   // MAP PAGE LOGIC WITH REAL-TIME RADIUS
   // =========================================
-  let mapCategory = null;
+  let selectedCategories = ['Electronics', 'Plants', 'Cafe', 'Expert', 'Clinic', 'Restaurant', 'Supermarket'];
   let showOpenOnly = false;
   let minRating = 0;
   let searchRadius = 5.0; // Default radius
   let mapStyle = 'normal'; // Map style normal vs satellite
 
   function filterMapCategory(cat) {
-    mapCategory = cat;
-    document.querySelectorAll('.chips-row .filter-chip').forEach(el => el.classList.remove('active'));
-    
     if (cat === null) {
-      document.getElementById('chip-all').classList.add('active');
-    } else if (cat === 'Electronics') {
-      document.getElementById('chip-elec').classList.add('active');
-    } else if (cat === 'Plants') {
-      document.getElementById('chip-plant').classList.add('active');
-    } else if (cat === 'Cafe') {
-      document.getElementById('chip-cafe').classList.add('active');
-    } else if (cat === 'Expert') {
-      document.getElementById('chip-expert').classList.add('active');
-    } else if (cat === 'Clinic') {
-      document.getElementById('chip-clinic').classList.add('active');
+      selectedCategories = ['Electronics', 'Plants', 'Cafe', 'Expert', 'Clinic', 'Restaurant', 'Supermarket'];
+    } else {
+      selectedCategories = [cat];
     }
-
+    updateCategoryChipsUI();
     applyTuningFilters();
     closeQuickView();
     dismissOnboarding(); 
+  }
+
+  function toggleCategoryCheckbox(cat) {
+    const idx = selectedCategories.indexOf(cat);
+    if (idx > -1) {
+      selectedCategories.splice(idx, 1);
+    } else {
+      selectedCategories.push(cat);
+    }
+    updateCategoryChipsUI();
+    applyTuningFilters();
+  }
+
+  function updateCategoryChipsUI() {
+    const allPossible = ['Electronics', 'Plants', 'Cafe', 'Expert', 'Clinic', 'Restaurant', 'Supermarket'];
+    
+    // Update chip-all
+    const isAllSelected = allPossible.every(c => selectedCategories.includes(c));
+    const chipAll = document.getElementById('chip-all');
+    if (chipAll) {
+      if (isAllSelected) chipAll.classList.add('active');
+      else chipAll.classList.remove('active');
+    }
+
+    // Update other chips
+    const chipMapping = {
+      'Electronics': 'chip-elec',
+      'Plants': 'chip-plant',
+      'Cafe': 'chip-cafe',
+      'Expert': 'chip-expert',
+      'Clinic': 'chip-clinic',
+      'Restaurant': 'chip-rest',
+      'Supermarket': 'chip-super'
+    };
+
+    Object.keys(chipMapping).forEach(c => {
+      const chipId = chipMapping[c];
+      const chipEl = document.getElementById(chipId);
+      if (chipEl) {
+        if (selectedCategories.length === 1 && selectedCategories.includes(c)) {
+          chipEl.classList.add('active');
+        } else {
+          chipEl.classList.remove('active');
+        }
+      }
+    });
+
+    // Update checkboxes in the Advanced Filters modal too!
+    allPossible.forEach(c => {
+      const cb = document.getElementById('cb-filter-' + c.toLowerCase());
+      if (cb) {
+        cb.checked = selectedCategories.includes(c);
+      }
+    });
   }
 
   // Real-time Radius change in bottom sheet
@@ -2617,7 +2754,7 @@
       const pin = document.getElementById('pin-' + id);
       if (!pin) return;
 
-      const matchesCategory = mapCategory === null || shop.category === mapCategory || (mapCategory === 'Expert' && shop.type === 'expert') || (mapCategory === 'Clinic' && shop.type === 'clinic');
+      const matchesCategory = selectedCategories.includes(shop.category);
       const matchesSearch = searchVal === '' || shop.name.toLowerCase().includes(searchVal) || shop.category.toLowerCase().includes(searchVal);
       const matchesOpen = !showOpenOnly || shop.isOpen;
       const matchesRating = shop.rating >= minRating;
@@ -2697,6 +2834,9 @@
     document.getElementById('filter-open-only').checked = false;
     document.getElementById('filter-radius').value = 5;
     onRadiusSliderChange(5);
+    
+    selectedCategories = ['Electronics', 'Plants', 'Cafe', 'Expert', 'Clinic', 'Restaurant', 'Supermarket'];
+    updateCategoryChipsUI();
     setRatingFilter(0);
   }
 

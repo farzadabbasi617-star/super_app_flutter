@@ -65,7 +65,15 @@ class _MapPageState extends State<MapPage> {
 
   // Filter States
   String _searchQuery = '';
-  String? _selectedCategory;
+  Set<String> _selectedCategories = {
+    'Electronics',
+    'Plants',
+    'Cafe',
+    'Expert',
+    'Clinic',
+    'Restaurant',
+    'Supermarket',
+  };
   dynamic _selectedItem; // Holds either a Shop or a MapExpert
 
   // Advanced Tune Filters
@@ -83,6 +91,7 @@ class _MapPageState extends State<MapPage> {
     {'name': 'Plants', 'icon': '🌱', 'fa': 'گل و گیاه'},
     {'name': 'Cafe', 'icon': '☕', 'fa': 'کافه'},
     {'name': 'Expert', 'icon': '👨‍🔧', 'fa': 'متخصصین'},
+    {'name': 'Clinic', 'icon': '🩺', 'fa': 'کلینیک و مراکز حضوری'},
     {'name': 'Restaurant', 'icon': '🍔', 'fa': 'غذا و رستوران'},
     {'name': 'Supermarket', 'icon': '🛒', 'fa': 'سوپرمارکت'},
   ];
@@ -300,20 +309,18 @@ class _MapPageState extends State<MapPage> {
             return const Center(child: CircularProgressIndicator());
           } else if (state is MapLoaded) {
             // Filter both Shops and Experts dynamically
-            final List<Shop> filteredShops = _selectedCategory == 'Expert' 
-                ? [] 
-                : state.shops.where((shop) {
-                    final matchesCategory = _selectedCategory == null || shop.category == _selectedCategory;
-                    final matchesQuery = _searchQuery.isEmpty || 
-                        shop.name.toLowerCase().contains(_searchQuery.toLowerCase());
-                    final matchesOpen = !_showOnlyOpen || shop.isOpen;
-                    final matchesRating = shop.rating >= _minRating;
-                    final matchesRadius = _calculateDistance(_initialPosition, shop.location) <= _searchRadius;
-                    
-                    return matchesCategory && matchesQuery && matchesOpen && matchesRating && matchesRadius;
-                  }).toList();
+            final List<Shop> filteredShops = state.shops.where((shop) {
+              final matchesCategory = _selectedCategories.contains(shop.category);
+              final matchesQuery = _searchQuery.isEmpty || 
+                  shop.name.toLowerCase().contains(_searchQuery.toLowerCase());
+              final matchesOpen = !_showOnlyOpen || shop.isOpen;
+              final matchesRating = shop.rating >= _minRating;
+              final matchesRadius = _calculateDistance(_initialPosition, shop.location) <= _searchRadius;
+              
+              return matchesCategory && matchesQuery && matchesOpen && matchesRating && matchesRadius;
+            }).toList();
 
-            final List<MapExpert> filteredExperts = (_selectedCategory == null || _selectedCategory == 'Expert')
+            final List<MapExpert> filteredExperts = _selectedCategories.contains('Expert')
                 ? _allExperts.where((expert) {
                     final matchesQuery = _searchQuery.isEmpty || 
                         expert.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
@@ -431,7 +438,7 @@ class _MapPageState extends State<MapPage> {
                           itemCount: _categories.length + 1,
                           itemBuilder: (context, index) {
                             if (index == 0) {
-                              final isSelected = _selectedCategory == null;
+                              final isSelected = _selectedCategories.length == _categories.length;
                               return Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: FilterChip(
@@ -439,7 +446,7 @@ class _MapPageState extends State<MapPage> {
                                   selected: isSelected,
                                   onSelected: (_) {
                                     setState(() {
-                                      _selectedCategory = null;
+                                      _selectedCategories = _categories.map((c) => c['name']!).toSet();
                                       _selectedItem = null;
                                     });
                                   },
@@ -451,7 +458,7 @@ class _MapPageState extends State<MapPage> {
                             final cat = _categories[index - 1];
                             final catName = cat['name']!;
                             final catFa = cat['fa']!;
-                            final isSelected = _selectedCategory == catName;
+                            final isSelected = _selectedCategories.length == 1 && _selectedCategories.contains(catName);
 
                             return Padding(
                               padding: const EdgeInsets.only(right: 8.0),
@@ -460,7 +467,7 @@ class _MapPageState extends State<MapPage> {
                                 selected: isSelected,
                                 onSelected: (_) {
                                   setState(() {
-                                    _selectedCategory = isSelected ? null : catName;
+                                    _selectedCategories = {catName};
                                     _selectedItem = null;
                                     _showOnboarding = false;
                                   });
@@ -673,118 +680,156 @@ class _MapPageState extends State<MapPage> {
           builder: (context, setModalState) {
             return Container(
               padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'تنظیمات پیشرفته نقشه',
-                        style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'تنظیمات پیشرفته نقشه',
+                          style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
 
-                  // 1. Show Open Only Toggle Switch
-                  SwitchListTile(
-                    title: const Text('فقط مغازه‌های باز', style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: const Text('پنهان کردن کسب‌وکارهای بسته در لحظه'),
-                    value: _showOnlyOpen,
-                    activeColor: theme.colorScheme.primary,
-                    onChanged: (val) {
-                      setModalState(() => _showOnlyOpen = val);
-                      setState(() => _showOnlyOpen = val);
-                    },
-                  ),
-                  const Divider(),
+                    // 1. Show Open Only Toggle Switch
+                    SwitchListTile(
+                      title: const Text('فقط مغازه‌های باز', style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: const Text('پنهان کردن کسب‌وکارهای بسته در لحظه'),
+                      value: _showOnlyOpen,
+                      activeColor: theme.colorScheme.primary,
+                      onChanged: (val) {
+                        setModalState(() => _showOnlyOpen = val);
+                        setState(() => _showOnlyOpen = val);
+                      },
+                    ),
+                    const Divider(),
 
-                  // 2. Radius Slider
-                  const SizedBox(height: 10),
-                  Text(
-                    'شعاع جستجو در نقشه: ${_searchRadius.toStringAsFixed(1)} کیلومتر',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  Slider(
-                    value: _searchRadius,
-                    min: 1.0,
-                    max: 15.0,
-                    divisions: 14,
-                    label: '${_searchRadius.toStringAsFixed(0)}km',
-                    activeColor: theme.colorScheme.primary,
-                    onChanged: (val) {
-                      setModalState(() => _searchRadius = val);
-                      setState(() => _searchRadius = val);
-                    },
-                  ),
-                  const Divider(),
-                  const SizedBox(height: 10),
-
-                  // 3. Minimum Rating Choice Row
-                  const Text('حداقل امتیاز ستاره‌ای', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [0.0, 4.0, 4.5, 4.8].map((rating) {
-                      final isSelected = _minRating == rating;
-                      return ChoiceChip(
-                        label: Text(rating == 0.0 ? 'هر امتیازی' : '$rating+ ⭐'),
-                        selected: isSelected,
-                        onSelected: (_) {
-                          setModalState(() => _minRating = rating);
-                          setState(() => _minRating = rating);
+                    // 2. Active Categories Multi-Select Checkboxes
+                    const Text('صنف‌های فعال روی نقشه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    const SizedBox(height: 8),
+                    ..._categories.map((cat) {
+                      final catName = cat['name']!;
+                      final catFa = cat['fa']!;
+                      final catIcon = cat['icon']!;
+                      final isChecked = _selectedCategories.contains(catName);
+                      return CheckboxListTile(
+                        title: Text('$catIcon $catFa'),
+                        value: isChecked,
+                        activeColor: theme.colorScheme.primary,
+                        dense: true,
+                        onChanged: (val) {
+                          setModalState(() {
+                            if (val == true) {
+                              _selectedCategories.add(catName);
+                            } else {
+                              _selectedCategories.remove(catName);
+                            }
+                          });
+                          setState(() {
+                            if (val == true) {
+                              _selectedCategories.add(catName);
+                            } else {
+                              _selectedCategories.remove(catName);
+                            }
+                          });
                         },
+                        controlAffinity: ListTileControlAffinity.leading,
                       );
                     }).toList(),
-                  ),
-                  const SizedBox(height: 24),
+                    const Divider(),
 
-                  // Action Buttons
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            setModalState(() {
-                              _showOnlyOpen = false;
-                              _minRating = 0.0;
-                              _searchRadius = 5.0;
-                            });
-                            setState(() {
-                              _showOnlyOpen = false;
-                              _minRating = 0.0;
-                              _searchRadius = 5.0;
-                            });
+                    // 3. Radius Slider
+                    const SizedBox(height: 10),
+                    Text(
+                      'شعاع جستجو در نقشه: ${_searchRadius.toStringAsFixed(1)} کیلومتر',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    ),
+                    Slider(
+                      value: _searchRadius,
+                      min: 1.0,
+                      max: 15.0,
+                      divisions: 14,
+                      label: '${_searchRadius.toStringAsFixed(0)}km',
+                      activeColor: theme.colorScheme.primary,
+                      onChanged: (val) {
+                        setModalState(() => _searchRadius = val);
+                        setState(() => _searchRadius = val);
+                      },
+                    ),
+                    const Divider(),
+                    const SizedBox(height: 10),
+
+                    // 4. Minimum Rating Choice Row
+                    const Text('حداقل امتیاز ستاره‌ای', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [0.0, 4.0, 4.5, 4.8].map((rating) {
+                        final isSelected = _minRating == rating;
+                        return ChoiceChip(
+                          label: Text(rating == 0.0 ? 'هر امتیازی' : '$rating+ ⭐'),
+                          selected: isSelected,
+                          onSelected: (_) {
+                            setModalState(() => _minRating = rating);
+                            setState(() => _minRating = rating);
                           },
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Action Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              setModalState(() {
+                                _showOnlyOpen = false;
+                                _minRating = 0.0;
+                                _searchRadius = 5.0;
+                                _selectedCategories = _categories.map((c) => c['name']!).toSet();
+                              });
+                              setState(() {
+                                _showOnlyOpen = false;
+                                _minRating = 0.0;
+                                _searchRadius = 5.0;
+                                _selectedCategories = _categories.map((c) => c['name']!).toSet();
+                              });
+                            },
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            ),
+                            child: const Text('حذف فیلترها'),
                           ),
-                          child: const Text('حذف فیلترها'),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: theme.colorScheme.onPrimary,
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              backgroundColor: theme.colorScheme.primary,
+                              foregroundColor: theme.colorScheme.onPrimary,
+                            ),
+                            child: const Text('اعمال فیلترها'),
                           ),
-                          child: const Text('اعمال فیلترها'),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           },
