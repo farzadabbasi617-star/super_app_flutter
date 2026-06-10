@@ -6,20 +6,15 @@ import '../../../core/error/failures.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final Dio dio;
-
   AuthRepositoryImpl(this.dio);
 
   @override
   Future<Either<Failure, User>> login(String email, String password) async {
     try {
       await Future.delayed(const Duration(seconds: 1));
-      // Mocking successful login
       return Right(const User(
-        id: '1', 
-        email: 'farzad@example.com', 
-        fullName: 'Farzad Abbasi', 
-        phoneNumber: '09123456789',
-        role: UserRole.customer
+        id: '1', email: 'farzad@example.com', fullName: 'Farzad Abbasi', 
+        phoneNumber: '09123456789', role: UserRole.customer
       ));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
