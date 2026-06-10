@@ -1,22 +1,30 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import '../../domain/repositories/auth_repository.dart';
+import '../../domain/usecases/login_usecase.dart';
+import '../../domain/usecases/register_usecase.dart';
+import '../../domain/usecases/logout_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepository authRepository;
+  final LoginUseCase loginUseCase;
+  final RegisterUseCase registerUseCase;
+  final LogoutUseCase logoutUseCase;
 
-  AuthBloc({required this.authRepository}) : super(AuthInitial()) {
+  AuthBloc({
+    required this.loginUseCase,
+    required this.registerUseCase,
+    required this.logoutUseCase,
+  }) : super(AuthInitial()) {
+    
     on<AuthLoginRequested>(
       (event, emit) async {
         emit(AuthLoading());
-        try {
-          final user = await authRepository.login(event.email, event.password);
-          emit(AuthAuthenticated(user));
-        } catch (e) {
-          emit(AuthFailure(e.toString()));
-        }
+        final result = await loginUseCase.execute(event.email, event.password);
+        result.fold(
+          (failure) => emit(AuthFailure(failure.message)),
+          (user) => emit(AuthAuthenticated(user)),
+        );
       }, 
       transformer: restartable(),
     );
@@ -24,24 +32,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRegisterRequested>(
       (event, emit) async {
         emit(AuthLoading());
-        try {
-          final user = await authRepository.register(event.email, event.password, event.fullName, event.phoneNumber, event.role);
-          emit(AuthAuthenticated(user));
-        } catch (e) {
-          emit(AuthFailure(e.toString()));
-        }
+        final result = await registerUseCase.execute(event.email, event.password, event.fullName, event.phoneNumber, event.role);
+        result.fold(
+          (failure) => emit(AuthFailure(failure.message)),
+          (user) => emit(AuthAuthenticated(user)),
+        );
       }, 
       transformer: restartable(),
     );
 
     on<AuthLogoutRequested>(
       (event, emit) async {
-        try {
-          await authRepository.logout();
-          emit(AuthUnauthenticated());
-        } catch (e) {
-          emit(AuthFailure('Logout failed: ${e.toString()}'));
-        }
+        final result = await logoutUseCase.execute();
+        result.fold(
+          (failure) => emit(AuthFailure(failure.message)),
+          (_) => emit(AuthUnauthenticated()),
+        );
       }, 
       transformer: sequential(),
     );
