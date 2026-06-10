@@ -106,7 +106,7 @@
       padding: 12px;
       box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 4px #2c2d30;
       border: 4px solid #1a1a1c;
-      direction: ltr; /* keep notch/status symbols physically correct on top */
+      direction: ltr;
     }
 
     /* Notch & Camera */
@@ -151,7 +151,7 @@
       color: #000;
       display: flex;
       flex-direction: column;
-      direction: rtl; /* UI inside is RTL */
+      direction: rtl;
     }
 
     /* Status Bar */
@@ -275,7 +275,7 @@
 
     .fab-location {
       bottom: 20px;
-      left: 16px; /* swapped for RTL layout */
+      left: 16px;
       width: 44px;
       height: 44px;
       background: var(--surface-color);
@@ -284,7 +284,7 @@
 
     .fab-request {
       bottom: 20px;
-      right: 16px; /* swapped for RTL layout */
+      right: 16px;
       height: 44px;
       padding: 0 16px;
       background: var(--primary-color);
@@ -670,7 +670,7 @@
     .badge-rental {
       position: absolute;
       top: 6px;
-      left: 6px; /* swapped for RTL */
+      left: 6px;
       background: var(--accent-color);
       color: #fff;
       font-size: 9px;
@@ -1151,7 +1151,7 @@
       color: var(--primary-color);
       font-size: 20px;
       cursor: pointer;
-      transform: scaleX(-1); /* mirror arrow for RTL */
+      transform: scaleX(-1);
     }
 
     .chat-action-btn {
@@ -1329,14 +1329,14 @@
     <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
     
     <ul class="features-list">
-      <li><span>۱</span> <strong>پین‌های پالس‌زن و زیبای نقشه:</strong> نشانگرها با آیکون‌های صنف کاری به صورت زنده پالس و انیمیشن می‌زنند.</li>
-      <li><span>۲</span> <strong>سرچ و پیشنهادات لایو نقشه:</strong> هنگام تایپ، لیست پیشنهادات باز می‌شود و کلیک بر روی آن نقشه را پرواز می‌دهد.</li>
-      <li><span>۳</span> <strong>باکس فیلترهای پیشرفته مپ:</strong> کلیک بر روی دکمه تنظیمات (Tune) بالا، فیلتر باز بودن و ریتینگ را به صورت لایو تغییر می‌دهد.</li>
-      <li><span>۴</span> <strong>مشاوره و چت زنده با متخصص:</strong> سیستم چت فعال با پاسخ‌دهی هوشمند ربات متخصص بر اساس سؤال شما.</li>
-      <li><span>۵</span> <strong>ردیابی مدرن متخصص:</strong> صفحه کامل ردیابی با اطلاعات تاییدشده متخصص منتخب و قیمت توافق‌شده.</li>
+      <li><span>۱</span> <strong>نمایش زنده موقعیت متخصصین:</strong> متخصصان با نشانگرهای پالس‌زن نارنجی رنگ به مپ اضافه شدند!</li>
+      <li><span>۲</span> <strong>فیلتر شعاع جغرافیایی (Radius):</strong> با جابجایی اسلایدر شعاع، مغازه‌ها و متخصصان خارج از محدوده محو می‌شوند!</li>
+      <li><span>۳</span> <strong>درخواست و مشاوره مستقیم:</strong> با کلیک روی متخصص، مشخصاتش باز شده و می‌توانید چت را مستقیماً باز کنید.</li>
+      <li><span>۴</span> <strong>سرچ و ساجستشن هوشمند مپ:</strong> در کادر جستجو کلمه "علی" یا "کافه" را بزنید تا فورا باز شود.</li>
+      <li><span>۵</span> <strong>ردیابی زنده و پیگیری:</strong> پس از ثبت، متخصص انتخابی و قیمت با فاکتور دقیق ردیابی می‌شود.</li>
     </ul>
 
-    <p style="font-size: 13px; font-style: italic; color: #888;">💡 روی آیکون Tune (تنظیمات) بالا کلیک کنید تا پنل فیلتر پیشرفته مپ را لایو تغییر دهید.</p>
+    <p style="font-size: 13px; font-style: italic; color: #888;">💡 روی آیکون متخصصین روی نقشه کلیک کنید و دکمه چت مستقیم با او را لمس کنید.</p>
   </div>
 
   <!-- RIGHT: Mobile Emulator Wrapper -->
@@ -1374,7 +1374,6 @@
           <div class="map-canvas">
             <!-- Simulated Tehran Vector Grid Map background -->
             <svg class="vector-grid" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <!-- Rivers, Streets, Areas -->
               <path d="M 0,40 Q 30,50 60,35 T 100,50" stroke="#a5c9e2" stroke-width="6" fill="none" opacity="0.6"/>
               <line x1="20" y1="0" x2="40" y2="100" stroke="#fdfdfd" stroke-width="4" opacity="0.8"/>
               <line x1="0" y1="30" x2="100" y2="25" stroke="#fdfdfd" stroke-width="4" opacity="0.8"/>
@@ -1383,31 +1382,42 @@
             </svg>
 
             <!-- Map pins -->
-            <!-- Pins s1: Tech Hub (Electronics) -->
-            <div class="map-pin" id="pin-s1" style="top: 48%; left: 45%; border-color: #00934b;" onclick="openQuickView('s1')" data-category="Electronics" data-name="Tech Hub">
+            <!-- Shops -->
+            <div class="map-pin" id="pin-s1" style="top: 48%; left: 45%; border-color: #00934b;" onclick="openQuickView('s1')" data-category="Electronics" data-name="Tech Hub" data-type="shop" data-distance="1.5" data-rating="4.8" data-open="true">
               <div class="map-pin-pulse" style="border-color: #00934b;"></div>
               <span style="font-size: 18px;">📱</span>
             </div>
-            <!-- Pins s2: Green Garden (Plants) -->
-            <div class="map-pin" id="pin-s2" style="top: 38%; left: 65%; border-color: #3b76af;" onclick="openQuickView('s2')" data-category="Plants" data-name="Green Garden">
+            <div class="map-pin" id="pin-s2" style="top: 38%; left: 65%; border-color: #3b76af;" onclick="openQuickView('s2')" data-category="Plants" data-name="Green Garden" data-type="shop" data-distance="3.8" data-rating="4.5" data-open="true">
               <div class="map-pin-pulse" style="border-color: #3b76af;"></div>
               <span style="font-size: 18px;">🌱</span>
             </div>
-            <!-- Pins s3: Coffee Corner (Cafe) -->
-            <div class="map-pin" id="pin-s3" style="top: 60%; left: 25%; border-color: #e28743;" onclick="openQuickView('s3')" data-category="Cafe" data-name="Coffee Corner">
+            <div class="map-pin" id="pin-s3" style="top: 60%; left: 25%; border-color: #e28743;" onclick="openQuickView('s3')" data-category="Cafe" data-name="Coffee Corner" data-type="shop" data-distance="4.2" data-rating="4.9" data-open="false">
               <div class="map-pin-pulse" style="border-color: #e28743;"></div>
               <span style="font-size: 18px;">☕</span>
             </div>
-            <!-- Pins s4: Gadget World (Electronics) -->
-            <div class="map-pin" id="pin-s4" style="top: 42%; left: 48%; border-color: #00934b;" onclick="openQuickView('s4')" data-category="Electronics" data-name="Gadget World">
+            <div class="map-pin" id="pin-s4" style="top: 42%; left: 48%; border-color: #00934b;" onclick="openQuickView('s4')" data-category="Electronics" data-name="Gadget World" data-type="shop" data-distance="2.0" data-rating="4.2" data-open="true">
               <div class="map-pin-pulse" style="border-color: #00934b;"></div>
               <span style="font-size: 18px;">📱</span>
             </div>
-            <!-- Pins s5: Flower Power (Plants) -->
-            <div class="map-pin" id="pin-s5" style="top: 32%; left: 55%; border-color: #3b76af;" onclick="openQuickView('s5')" data-category="Plants" data-name="Flower Power">
+            <div class="map-pin" id="pin-s5" style="top: 32%; left: 55%; border-color: #3b76af;" onclick="openQuickView('s5')" data-category="Plants" data-name="Flower Power" data-type="shop" data-distance="6.0" data-rating="4.7" data-open="true">
               <div class="map-pin-pulse" style="border-color: #3b76af;"></div>
               <span style="font-size: 18px;">🌱</span>
             </div>
+
+            <!-- Experts (Amber Glowing borders!) -->
+            <div class="map-pin" id="pin-e1" style="top: 52%; left: 38%; border-color: #f2994a;" onclick="openQuickView('e1')" data-category="Expert" data-name="علی رضایی" data-type="expert" data-distance="1.1" data-rating="4.9" data-open="true">
+              <div class="map-pin-pulse" style="border-color: #f2994a;"></div>
+              <span style="font-size: 18px;">👨‍🔧</span>
+            </div>
+            <div class="map-pin" id="pin-e2" style="top: 44%; left: 60%; border-color: #f2994a;" onclick="openQuickView('e2')" data-category="Expert" data-name="سینا محمدی" data-type="expert" data-distance="2.5" data-rating="4.8" data-open="true">
+              <div class="map-pin-pulse" style="border-color: #f2994a;"></div>
+              <span style="font-size: 18px;">⚡</span>
+            </div>
+            <div class="map-pin" id="pin-e3" style="top: 56%; left: 68%; border-color: #f2994a;" onclick="openQuickView('e3')" data-category="Expert" data-name="میلاد کریمی" data-type="expert" data-distance="8.0" data-rating="4.7" data-open="true">
+              <div class="map-pin-pulse" style="border-color: #f2994a;"></div>
+              <span style="font-size: 18px;">❄️</span>
+            </div>
+
           </div>
 
           <!-- Top Search & Chips Overlay -->
@@ -1415,7 +1425,7 @@
             <div class="search-card">
               <span>🔍</span>
               <input type="text" class="search-input" id="map-search" placeholder="جستجوی فروشگاه، خدمات، کافه..." onfocus="onSearchFocus()" onblur="onSearchBlur()">
-              <span id="map-search-clear" style="display:none; cursor:pointer; margin-left:8px;" onclick="clearMapSearch()">✕</span>
+              <span id="map-search-clear" style="display:none; cursor:pointer; margin-right:8px;" onclick="clearMapSearch()">✕</span>
               <span style="cursor:pointer;" onclick="openFilters()">⚙️</span>
             </div>
 
@@ -1429,6 +1439,7 @@
               <div class="filter-chip" id="chip-elec" onclick="filterMapCategory('Electronics')">📱 الکترونیک</div>
               <div class="filter-chip" id="chip-plant" onclick="filterMapCategory('Plants')">🌱 گل و گیاه</div>
               <div class="filter-chip" id="chip-cafe" onclick="filterMapCategory('Cafe')">☕ کافه</div>
+              <div class="filter-chip" id="chip-expert" onclick="filterMapCategory('Expert')">👨‍🔧 متخصصین</div>
             </div>
           </div>
 
@@ -1441,7 +1452,7 @@
             <span>🛠️</span> درخواست متخصص
           </div>
 
-          <!-- Quick View sliding panel -->
+          <!-- Quick View sliding panel (Polymorphic Shop/Expert view) -->
           <div class="quick-view-sheet" id="quick-view">
             <div class="sheet-header">
               <span class="badge-category" id="qv-category">الکترونیک</span>
@@ -1461,7 +1472,7 @@
               <span id="qv-hours">ساعت کاری: ۰۹:۰۰ الی ۲۲:۰۰</span>
               <span class="badge-open" id="qv-status">باز است</span>
             </div>
-            <button class="sheet-btn" onclick="viewStoreProfile()">
+            <button class="sheet-btn" id="qv-action-btn" onclick="viewStoreProfile()">
               <span>🏪</span> مشاهده پروفایل فروشگاه
             </button>
           </div>
@@ -1729,6 +1740,14 @@
 
           <div style="height:1px; background:#eee; margin:16px 0;"></div>
 
+          <!-- Radius Slider for Simulator -->
+          <div style="margin-bottom:8px;">
+            <span style="font-weight:bold; font-size:13px;" id="filter-radius-label">شعاع جستجو: ۵.۰ کیلومتر</span>
+          </div>
+          <input type="range" id="filter-radius" min="1" max="10" value="5" step="1" style="width:100%; accent-color:var(--primary-color); margin-bottom:16px;" oninput="onRadiusSliderChange(this.value)">
+
+          <div style="height:1px; background:#eee; margin:16px 0;"></div>
+
           <!-- Rating Chooser -->
           <div style="font-weight:bold; font-size:13px; margin-bottom:8px;">حداقل امتیاز ستاره‌ای</div>
           <div class="rating-row">
@@ -1771,13 +1790,16 @@
 </div>
 
 <script>
-  // Mock Database
+  // Mock Database Shops & Experts
   const shops = {
-    s1: { id: 's1', name: 'مرکز فنی تک هاب', category: 'Electronics', rating: 4.8, reviews: 124, address: 'تهران، خیابان ولیعصر، پلاک ۴', hours: '۰۹:۰۰ الی ۲۲:۰۰', isOpen: true, icon: '📱' },
-    s2: { id: 's2', name: 'گلستان گرین گاردن', category: 'Plants', rating: 4.5, reviews: 89, address: 'تهران، خیابان نیاوران، پلاک ۱', hours: '۰۸:۰۰ الی ۲۰:۰۰', isOpen: true, icon: '🌱' },
-    s3: { id: 's3', name: 'کافه تخصصی کرنر', category: 'Cafe', rating: 4.9, reviews: 210, address: 'تهران، خیابان جردن، نبش پلاک ۲', hours: '۰۷:۰۰ الی ۲۳:۰۰', isOpen: false, icon: '☕' },
-    s4: { id: 's4', name: 'دنیای گجت ولیعصر', category: 'Electronics', rating: 4.2, reviews: 50, address: 'تهران، میدان انقلاب، پاساژ گجت', hours: '۱۰:۰۰ الی ۲۱:۰۰', isOpen: true, icon: '📱' },
-    s5: { id: 's5', name: 'گل‌فروشی فلاور پاور', category: 'Plants', rating: 4.7, reviews: 30, address: 'تهران، خیابان پاسداران، نبش کوچه ۵', hours: '۰۸:۰۰ الی ۲۰:۰۰', isOpen: true, icon: '🌱' }
+    s1: { id: 's1', name: 'مرکز فنی تک هاب', category: 'Electronics', rating: 4.8, reviews: 124, address: 'تهران، خیابان ولیعصر، پلاک ۴', hours: '۰۹:۰۰ الی ۲۲:۰۰', isOpen: true, icon: '📱', distance: 1.5, type: 'shop' },
+    s2: { id: 's2', name: 'گلستان گرین گاردن', category: 'Plants', rating: 4.5, reviews: 89, address: 'تهران، خیابان نیاوران، پلاک ۱', hours: '۰۸:۰۰ الی ۲۰:۰۰', isOpen: true, icon: '🌱', distance: 3.8, type: 'shop' },
+    s3: { id: 's3', name: 'کافه تخصصی کرنر', category: 'Cafe', rating: 4.9, reviews: 210, address: 'تهران، خیابان جردن، نبش پلاک ۲', hours: '۰۷:۰۰ الی ۲۳:۰۰', isOpen: false, icon: '☕', distance: 4.2, type: 'shop' },
+    s4: { id: 's4', name: 'دنیای گجت ولیعصر', category: 'Electronics', rating: 4.2, reviews: 50, address: 'تهران، میدان انقلاب، پاساژ گجت', hours: '۱۰:۰۰ الی ۲۱:۰۰', isOpen: true, icon: '📱', distance: 2.0, type: 'shop' },
+    s5: { id: 's5', name: 'گل‌فروشی فلاور پاور', category: 'Plants', rating: 4.7, reviews: 30, address: 'تهران، خیابان پاسداران، نبش کوچه ۵', hours: '۰۸:۰۰ الی ۲۰:۰۰', isOpen: true, icon: '🌱', distance: 6.0, type: 'shop' },
+    e1: { id: 'e1', name: 'علی رضایی', category: 'Expert', rating: 4.9, reviews: 142, address: 'موقعیت زنده • ۱.۱ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۵۰,۰۰۰ تومان', isOpen: true, icon: '👨‍🔧', distance: 1.1, type: 'expert', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', avatar: '👨‍🔧', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی اقدام کنم.' },
+    e2: { id: 'e2', name: 'سینا محمدی', category: 'Expert', rating: 4.8, reviews: 98, address: 'موقعیت زنده • ۲.۵ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۲۰,۰۰۰ تومان', isOpen: true, icon: '⚡', distance: 2.5, type: 'expert', specialty: 'تکنسین برق ساختمان و عیب‌یابی', avatar: '⚡', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارها کاملاً آماده است.' },
+    e3: { id: 'e3', name: 'میلاد کریمی', category: 'Expert', rating: 4.7, reviews: 215, address: 'موقعیت زنده • ۸.۰ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۴۰,۰۰۰ تومان', isOpen: true, icon: '❄️', distance: 8.0, type: 'expert', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', avatar: '❄️', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم؟' }
   };
 
   // Tab switching
@@ -1788,17 +1810,17 @@
     document.getElementById('view-' + tabId).classList.add('active');
     document.getElementById('nav-' + tabId).classList.add('active');
 
-    // Change status bar text color based on page style
     const statusBar = document.getElementById('phone-status-bar');
     statusBar.className = 'status-bar dark-text';
   }
 
   // =========================================
-  // MAP PAGE LOGIC
+  // MAP PAGE LOGIC WITH REAL-TIME RADIUS
   // =========================================
   let mapCategory = null;
   let showOpenOnly = false;
   let minRating = 0;
+  let searchRadius = 5.0; // Default radius
 
   function filterMapCategory(cat) {
     mapCategory = cat;
@@ -1812,10 +1834,19 @@
       document.getElementById('chip-plant').classList.add('active');
     } else if (cat === 'Cafe') {
       document.getElementById('chip-cafe').classList.add('active');
+    } else if (cat === 'Expert') {
+      document.getElementById('chip-expert').classList.add('active');
     }
 
     applyTuningFilters();
     closeQuickView();
+  }
+
+  // Real-time Radius change in bottom sheet
+  function onRadiusSliderChange(val) {
+    searchRadius = parseFloat(val);
+    document.getElementById('filter-radius-label').innerText = `شعاع جستجو: ${searchRadius.toFixed(1)} کیلومتر`;
+    applyTuningFilters();
   }
 
   // Live filtering calculation
@@ -1828,12 +1859,13 @@
       const pin = document.getElementById('pin-' + id);
       if (!pin) return;
 
-      const matchesCategory = mapCategory === null || shop.category === mapCategory;
+      const matchesCategory = mapCategory === null || shop.category === mapCategory || (mapCategory === 'Expert' && shop.type === 'expert');
       const matchesSearch = searchVal === '' || shop.name.toLowerCase().includes(searchVal) || shop.category.toLowerCase().includes(searchVal);
       const matchesOpen = !showOpenOnly || shop.isOpen;
       const matchesRating = shop.rating >= minRating;
+      const matchesRadius = shop.distance <= searchRadius;
 
-      if (matchesCategory && matchesSearch && matchesOpen && matchesRating) {
+      if (matchesCategory && matchesSearch && matchesOpen && matchesRating && matchesRadius) {
         pin.style.display = 'flex';
       } else {
         pin.style.display = 'none';
@@ -1872,6 +1904,8 @@
 
   function resetFilters() {
     document.getElementById('filter-open-only').checked = false;
+    document.getElementById('filter-radius').value = 5;
+    onRadiusSliderChange(5);
     setRatingFilter(0);
   }
 
@@ -1914,15 +1948,21 @@
 
     Object.keys(shops).forEach(id => {
       const shop = shops[id];
-      if (shop.name.toLowerCase().includes(val) || shop.category.toLowerCase().includes(val)) {
+      if (shop.name.toLowerCase().includes(val) || shop.category.toLowerCase().includes(val) || (shop.specialty && shop.specialty.toLowerCase().includes(val))) {
         matchesCount++;
-        const displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
+        let displayCategory = '';
+        if (shop.type === 'expert') {
+          displayCategory = 'متخصص آماده به کار';
+        } else {
+          displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
+        }
+
         itemsHtml += `
           <div class="suggestion-item" onclick="selectSuggestedShop('${id}')">
-            <span>🏪</span>
+            <span>${shop.type === 'expert' ? '👷' : '🏪'}</span>
             <div style="flex:1; text-align:right;">
               <div style="font-weight:bold;">${shop.name}</div>
-              <div style="font-size:11px; color:#666;">${displayCategory} • ⭐ ${shop.rating}</div>
+              <div style="font-size:11px; color:#666;">${displayCategory} • ⭐ ${shop.rating} (${shop.distance}km)</div>
             </div>
           </div>
         `;
@@ -1943,25 +1983,57 @@
     openQuickView(shopId);
   }
 
+  // Polymorphic Sheet Opener
   function openQuickView(shopId) {
     const shop = shops[shopId];
-    const displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
     
-    document.getElementById('qv-category').innerText = displayCategory;
-    document.getElementById('qv-name').innerText = shop.name;
-    document.getElementById('qv-rating').innerText = shop.rating;
-    document.getElementById('qv-reviews').innerText = `(${shop.reviews} نظر)`;
-    document.getElementById('qv-address').innerText = shop.address;
-    document.getElementById('qv-hours').innerText = `ساعت کاری: ${shop.hours}`;
-    document.getElementById('qv-icon').innerText = shop.icon;
+    // Distinguish UI card styling for Shop vs Expert
+    const qvBtn = document.getElementById('qv-action-btn');
+    if (shop.type === 'expert') {
+      document.getElementById('qv-category').innerText = 'متخصص تایید شده';
+      document.getElementById('qv-category').style.background = '#fef3c7';
+      document.getElementById('qv-category').style.color = '#d97706';
+      
+      document.getElementById('qv-name').innerText = shop.name;
+      document.getElementById('qv-rating').innerText = shop.rating;
+      document.getElementById('qv-reviews').innerText = `(${shop.specialty})`;
+      document.getElementById('qv-address').innerText = shop.address;
+      document.getElementById('qv-hours').innerText = shop.hours;
+      document.getElementById('qv-icon').innerText = shop.icon;
+      document.getElementById('qv-status').innerText = 'آماده به کار';
+      document.getElementById('qv-status').className = 'badge-open';
 
-    const statusBadge = document.getElementById('qv-status');
-    if (shop.isOpen) {
-      statusBadge.innerText = 'باز است';
-      statusBadge.className = 'badge-open';
+      // Set button to launch consultation chat directly!
+      qvBtn.innerHTML = `<span>💬</span> شروع مشاوره و چت مستقیم`;
+      qvBtn.style.background = '#f2994a'; // Accent orange for experts
+      qvBtn.onclick = () => openDirectExpertConsultation(shopId);
+
     } else {
-      statusBadge.innerText = 'بسته است';
-      statusBadge.className = 'badge-closed';
+      const displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
+      document.getElementById('qv-category').innerText = displayCategory;
+      document.getElementById('qv-category').style.background = 'var(--primary-light)';
+      document.getElementById('qv-category').style.color = 'var(--primary-color)';
+
+      document.getElementById('qv-name').innerText = shop.name;
+      document.getElementById('qv-rating').innerText = shop.rating;
+      document.getElementById('qv-reviews').innerText = `(${shop.reviews} نظر)`;
+      document.getElementById('qv-address').innerText = shop.address;
+      document.getElementById('qv-hours').innerText = `ساعت کاری: ${shop.hours}`;
+      document.getElementById('qv-icon').innerText = shop.icon;
+
+      const statusBadge = document.getElementById('qv-status');
+      if (shop.isOpen) {
+        statusBadge.innerText = 'باز است';
+        statusBadge.className = 'badge-open';
+      } else {
+        statusBadge.innerText = 'بسته است';
+        statusBadge.className = 'badge-closed';
+      }
+
+      // Set default shop behavior
+      qvBtn.innerHTML = `<span>🏪</span> مشاهده پروفایل فروشگاه`;
+      qvBtn.style.background = 'var(--primary-color)';
+      qvBtn.onclick = viewStoreProfile;
     }
 
     document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('selected'));
@@ -1995,6 +2067,16 @@
   function viewStoreProfile() {
     const name = document.getElementById('qv-name').innerText;
     alert(`در حال انتقال به صفحه فروشگاه ${name}...`);
+  }
+
+  // Direct launcher from Map pins to live Chat (Superb UX!)
+  function openDirectExpertConsultation(expertId) {
+    closeQuickView();
+    const bid = shops[expertId];
+    openConsultationChat(bid);
+    document.getElementById('services-flow').classList.add('open');
+    document.getElementById('radar-view').style.display = 'none';
+    document.getElementById('offers-view').style.display = 'none';
   }
 
   // =========================================
@@ -2044,12 +2126,6 @@
     document.getElementById('rb-total-price').innerText = `${rentalDays * selectedRental.pricePerDay} دلار`;
   }
 
-  // Translates numbers to Persian digits helper
-  function toPersianDigits(n) {
-    const p = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-    return n.toString().replace(/[0-9]/g, function(w) { return p[+w]; });
-  }
-
   function closeRentalBooking() {
     document.getElementById('rental-booking').classList.remove('open');
   }
@@ -2073,9 +2149,9 @@
   // SERVICES HUB (RADAR & REALTIME OFFERS) LOGIC
   // =========================================
   const mockBids = [
-    { id: 'b1', name: 'علی رضایی', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', rating: 4.9, jobs: 142, price: '۳۵۰,۰۰۰ تومان', eta: '۱۵ دقیقه', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی و بلوکه‌ها اقدام کنم.' },
-    { id: 'b2', name: 'سینا محمدی', specialty: 'تکنسین برق ساختمان و عیب‌یابی', rating: 4.8, jobs: 98, price: '۲۹۰,۰۰۰ تومان', eta: '۲۲ دقیقه', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارهای تست و عیب‌یابی کاملاً آماده است.' },
-    { id: 'b3', name: 'میلاد کریمی', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', rating: 4.7, jobs: 215, price: '۳۲۰,۰۰۰ تومان', eta: '۱۸ دقیقه', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150', text: 'سلام! بیش از ۸ سال تجربه در سرویس کولر گازی و شارژ گاز دارم. مایل هستید فورا هماهنگ کنم؟' }
+    { id: 'b1', name: 'علی رضایی', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', rating: 4.9, jobs: 142, price: '۳۵۰,۰۰۰ تومان', eta: '۱۵ دقیقه', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی اقدام کنم.' },
+    { id: 'b2', name: 'سینا محمدی', specialty: 'تکنسین برق ساختمان و عیب‌یابی', rating: 4.8, jobs: 98, price: '۲۹۰,۰۰۰ تومان', eta: '۲۲ دقیقه', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارها کاملاً آماده است.' },
+    { id: 'b3', name: 'میلاد کریمی', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', rating: 4.7, jobs: 215, price: '۳۲۰,۰۰۰ تومان', eta: '۱۸ دقیقه', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم؟' }
   ];
 
   let activeOffers = [];
@@ -2179,7 +2255,7 @@
     msgBox.appendChild(userMsg);
     msgBox.scrollTop = msgBox.scrollHeight;
 
-    // Simulate smart bot response in Persian
+    // Simulate smart bot response
     const textLower = text.toLowerCase();
     let reply = '';
     if (textLower.includes('قیمت') || textLower.includes('هزینه') || textLower.includes('چقدر') || textLower.includes('price') || textLower.includes('cost') || textLower.includes('تومان')) {
