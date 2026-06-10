@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/profile_bloc.dart';
-import '../bloc/profile_event.dart'; // We will define this separately or keep it in bloc file
-import '../bloc/profile_state.dart'; // We will define this separately or keep it in bloc file
+import '../bloc/profile_event.dart'; / We will define this separately or keep it in bloc file
+import '../bloc/profile_state.dart'; / We will define this separately or keep it in bloc file
 import '../../../shared/widgets/app_button.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -73,7 +73,7 @@ class ProfilePage extends StatelessWidget {
                           _buildMenuTile(theme, Icons.history, 'Order History', () {}),
                           _buildMenuTile(theme, Icons.payment, 'Payment Methods', () {}),
                           _buildMenuTile(theme, Icons.settings, 'Account Settings', () {}),
-                          _buildMenuTile(//Sentry/Crashlytics check’Sentry', Icons.bug_report, 'Report a Bug', () {}),
+                          _buildMenuTile(/Sentry/Crashlytics check’Sentry', Icons.bug_report, 'Report a Bug', () {}),
                           const Divider(height: 32),
                           _buildMenuTile(theme, Icons.logout, 'Logout', () {}, isLogout: true),
                         ],

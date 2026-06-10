@@ -19,7 +19,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     });
     
     on<ShopSelected>((event, emit) async {
-      // Logic for handling shop selection via getShopDetails
+      / Logic for handling shop selection via getShopDetails
     });
   }
 }

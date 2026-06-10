@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../domain/entities/shop.dart';
-import '../../domain/repositories/shop_//repository.dart';
+import '../../domain/repositories/shop_/repository.dart';
 import '../../../core/error/failures.dart';
 
 class GetShopDetailsUseCase {

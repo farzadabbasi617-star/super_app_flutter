@@ -37,7 +37,7 @@ class RentalPage extends StatelessWidget {
                           subtitle: Text('${item.rentalPricePerDay}/day'),
                           trailing: ElevatedButton(
                             onPressed: () {
-                              // Navigate to Rental Booking Calendar (Simplified)
+                              / Navigate to Rental Booking Calendar (Simplified)
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Booking ${item.name}...'))
  l);

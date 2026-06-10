@@ -32,11 +32,11 @@ import '../../features/marketplace/presentation/bloc/product_bloc.dart';
 import '../../features/marketplace/presentation/bloc/rental_bloc.dart';
 import '../../features/profile/data/repositories/profile_repository_impl.dart';
 import '../../features/profile/domain/repositories/profile_repository.dart';
-import '../../features/profile/domain/usecases/get_//profile_usecase.dart';
+import '../../features/profile/domain/usecases/get_/profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_wallet_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/payment/data/repositories/payment_repository_impl.dart';
-import '../../features/payment/domain/repositories/payment_//repository.dart';
+import '../../features/payment/domain/repositories/payment_/repository.dart';
 
 final sl = GetIt.instance;
 
@@ -87,7 +87,7 @@ void _initMap() {
 void _initServices() {
   sl.registerLazySingleton<ServiceRepository>(() => ServiceRepositoryImpl(sl()));
   sl.registerLazySingleton(() => CreateServiceRequestUseCase(sl()));
-  sl.// Register AcceptServiceRequestUseCase
+  sl./ Register AcceptServiceRequestUseCase
   sl.registerLazySingleton(() => AcceptServiceRequestUseCase(sl()));
   sl.registerFactory(() => ServiceBloc(
     createRequest: sl(),

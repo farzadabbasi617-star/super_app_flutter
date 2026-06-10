@@ -80,7 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Text('Create an account to start using our services', style: theme.textTheme.bodyLarge),
                 const SizedBox(height: 32),
                 
-                // Role Selection
+                / Role Selection
                 Text('I want to join as a:', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 12),
                 Row(

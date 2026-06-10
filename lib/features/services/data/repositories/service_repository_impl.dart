@@ -11,8 +11,8 @@ class ServiceRepositoryImpl implements ServiceRepository {
 
   @override
   Future<void> createRequest(ServiceRequest request) async {
-    // 1. API call to create request in DB
-    // 2. Socket emit to notify nearby professionals
+    / 1. API call to create request in DB
+    / 2. Socket emit to notify nearby professionals
     await _socketService.emitWithAck('request_service', {
       'requestId': request.id,
       'location': {'lat': request.location.latitude, 'lng': request.location.longitude},

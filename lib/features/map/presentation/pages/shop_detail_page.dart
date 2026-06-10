@@ -24,7 +24,7 @@ class ShopDetailPage extends StatelessWidget {
                   fit: StackFit.expand,
                   children: [
                     Image.network(
-                      'https://via.placeholder.com/400x300', 
+                      'https:/via.placeholder.com/400x300', 
                       fit: BoxFit.cover,
                     ),
                     const DecoratedBox(
@@ -114,7 +114,7 @@ class ShopDetailPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(child: Image.network('https://via.placeholder.com/150', fit: BoxFit.cover, width: double.infinity)),
+                            Expanded(child: Image.network('https:/via.placeholder.com/150', fit: BoxFit.cover, width: double.infinity)),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(

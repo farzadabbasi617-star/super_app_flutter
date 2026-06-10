@@ -5,5 +5,5 @@ abstract class ServiceRepository {
   Future<void> acceptRequest(String requestId, String professionalId);
   Future<void> updateStatus(String requestId, ServiceStatus status);
   Stream<ServiceRequest> watchRequestStatus(String requestId);
-  Stream<ServiceRequest> watchIncomingRequests(); // For professionals
+  Stream<ServiceRequest> watchIncomingRequests(); / For professionals
 }

@@ -73,7 +73,7 @@ class NetworkClient {
       case DioExceptionType.badResponse:
         final statusCode = e.response?.statusCode;
         if (statusCode == 401) return const UnauthorizedFailure();
-        if (statusCode == 400) return ValidationFailure(e.//response?.data['message'] ?? 'Invalid request');
+        if (statusCode == 400) return ValidationFailure(e./response?.data['message'] ?? 'Invalid request');
         return ServerFailure(e.response?.data['message'] ?? 'Something went wrong', statusCode: statusCode);
       default:
         return ServerFailure('An unexpected error occurred');

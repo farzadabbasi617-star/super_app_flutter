@@ -13,7 +13,7 @@ class SocketService {
   IO.Socket get socket => _socket!;
 
   void initSocket(String token) {
-    _socket = IO.io('https://api.superapp.com/socket', 
+    _socket = IO.io('https:/api.superapp.com/socket', 
       IO.OptionBuilder()
         .setTransports(['websocket'])
         .setAuth({'token': token})
@@ -46,7 +46,7 @@ class SocketService {
   Future<dynamic> emitWithAck(String event, Map<String, dynamic> data) async {
     final completer = Completer<dynamic>();
     _socket!.emitWithAck(event, data, (response) {
-      completer.complete(//response);
+      completer.complete(/response);
     });
     return completer.future;
   }

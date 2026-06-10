@@ -25,15 +25,15 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     _initClusterManager();
-    // Initial load
+    / Initial load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<MapBloc>().add(LoadNearbyShopsRequested(_initialPosition));
     });
   }
 
   void _initClusterManager() {
-    // The cluster manager requires a list of items that implement ClusterItem
-    // We'll create a wrapper class for Shop
+    / The cluster manager requires a list of items that implement ClusterItem
+    / We'll create a wrapper class for Shop
   }
 
   @override
@@ -64,7 +64,7 @@ class _MapPageState extends State<MapPage> {
                     );
                   }).toSet(),
                 ),
-                // Professional Search/Filter Bar
+                / Professional Search/Filter Bar
                 Positioned(
                   top: 60,
                   left: 20,
@@ -95,7 +95,7 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ),
                 ),
-                // User Location Button
+                / User Location Button
                 Positioned(
                   bottom: 100,
                   right: 20,

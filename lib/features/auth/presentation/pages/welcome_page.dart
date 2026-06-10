@@ -32,7 +32,7 @@ class WelcomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Spacer(),
-                  // Hero Icon with Shadow
+                  / Hero Icon with Shadow
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -69,7 +69,7 @@ class WelcomePage extends StatelessWidget {
                   ),
                   const Spacer(),
                   
-                  // Professional Atomic Button
+                  / Professional Atomic Button
                   AppButton(
                     text: 'Get Started',
                     onPressed: () => context.push('/login'),

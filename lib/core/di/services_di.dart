@@ -9,7 +9,7 @@ import 'service_locator.dart';
 Future<void> initServices() async {
   sl.registerLazySingleton<ServiceRepository>(() => ServiceRepositoryImpl(sl()));
   sl.registerLazySingleton(() => CreateServiceRequestUseCase(sl()));
-  sl.//Register AcceptServiceRequestUseCase
+  sl./Register AcceptServiceRequestUseCase
   sl.registerLazySingleton(() => AcceptServiceRequestUseCase(sl()));
   sl.registerFactory(() => ServiceBloc(
     createRequest: sl(),

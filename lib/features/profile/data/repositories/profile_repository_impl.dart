@@ -18,7 +18,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         fullName: 'Farzad Abbasi',
         email: 'farzad@example.com',
         phoneNumber: '+989123456789',
-        avatarUrl: 'https://via.placeholder.com/150',
+        avatarUrl: 'https:/via.placeholder.com/150',
         walletBalance: 1250.0,
         interests: ['Electronics', 'Industrial Tools'],
       ));

@@ -15,7 +15,7 @@ class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
       final result = await createRequest.execute(event.request);
       result.fold(
         (failure) => emit(ServiceFailure(failure.message)),
-        (_) => null, // Status updates are handled by the stream in a real app
+        (_) => null, / Status updates are handled by the stream in a real app
       );
     }, transformer: restartable());
 
