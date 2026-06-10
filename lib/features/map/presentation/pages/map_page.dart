@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+import 'package:geolocator/geolocator.dart';
 import '../bloc/map_bloc.dart';
 import '../bloc/map_event.dart';
 import '../bloc/map_state.dart';
@@ -123,6 +124,128 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+  void _setMapStyle(ThemeData theme) {
+    if (theme.brightness == Brightness.dark) {
+      mapController.setMapStyle(_darkMapStyle);
+    } else {
+      mapController.setMapStyle(null);
+    }
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('خدمات لوکیشن غیرفعال است.')),
+      );
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('دسترسی به موقعیت‌یابی رد شد.')),
+        );
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('دسترسی موقعیت‌یابی برای همیشه مسدود شده است.')),
+      );
+      return;
+    }
+
+    try {
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      final latLng = LatLng(position.latitude, position.longitude);
+      mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 14.5));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('موقعیت یابی GPS با موفقیت انجام شد!'),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('خطا در دریافت لوکیشن: $e')),
+      );
+    }
+  }
+
+  static const String _darkMapStyle = '''
+[
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#212121"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#212121"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#2c2c2c"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#000000"
+      }
+    ]
+  }
+]
+''';
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -164,6 +287,7 @@ class _MapPageState extends State<MapPage> {
                   onMapCreated: (controller) {
                     mapController = controller;
                     _clusterManager.setMapId(controller.mapId);
+                    _setMapStyle(theme);
                   },
                   onCameraMove: _clusterManager.onCameraMove,
                   onCameraIdle: _clusterManager.onCameraIdle,
@@ -305,9 +429,7 @@ class _MapPageState extends State<MapPage> {
                   child: FloatingActionButton(
                     heroTag: 'location_fab',
                     mini: true,
-                    onPressed: () {
-                      mapController.animateCamera(CameraUpdate.newLatLng(_initialPosition));
-                    },
+                    onPressed: _getCurrentLocation,
                     child: const Icon(Icons.my_location),
                   ),
                 ),
