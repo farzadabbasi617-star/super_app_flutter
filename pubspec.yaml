@@ -40,6 +40,8 @@ dependencies:
 dev_dependencies:
   mockito: ^5.4.4
   build_runner: ^2.4.8
+  mockito: ^5.4.4
+  build_runner: ^2.4.8
   dartz: ^0.10.1
   dartz: ^0.10.1
   google_maps_cluster_manager: ^3.0.0

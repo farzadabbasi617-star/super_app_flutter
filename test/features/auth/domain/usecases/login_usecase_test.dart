@@ -18,8 +18,26 @@ void main() {
   });
 
   test('should return User when login is successful', () async {
+    // Arrange
     final tUser = User(id: '1', email: 'test@test.com', fullName: 'Test', phoneNumber: '123', role: UserRole.customer);
-    // In a real test, we'd use when(mockRepository.login(...)).thenAnswer(...)
-    // For this demo, we're showing the structure.
+    when(mockRepository.login(any, any)).thenAnswer((_) async => Right(tUser));
+
+    // Act
+    final result = await usecase.execute('test@test.com', 'password123');
+
+    // Assert
+    expect(result, Right(tUser));
+    verify(mockRepository.login('test@test.com', 'password123')).called(1);
+  });
+
+  test('should return Failure when login fails', () async {
+    // Arrange
+    when(mockRepository.login(any, any)).thenAnswer((_) async => Left(ServerFailure('Invalid credentials')));
+
+    // Act
+    final result = await usecase.execute('wrong@test.com', 'wrongpass');
+
+    // Assert
+    expect(result, Left(ServerFailure('Invalid credentials')));
   });
 }
