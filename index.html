@@ -1495,6 +1495,98 @@
       text-align: right;
     }
 
+    /* ========================================= */
+    /* NEW: CLINIC APPOINTMENT BOOKING BOX       */
+    /* ========================================= */
+    .appointment-sheet-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1210;
+      display: none;
+      align-items: flex-end;
+    }
+
+    .appointment-sheet-overlay.open {
+      display: flex;
+    }
+
+    .appointment-sheet-card {
+      background: var(--surface-color);
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 -8px 24px rgba(0,0,0,0.15);
+      animation: sheetUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+      text-align: right;
+    }
+
+    /* Appointment Digital Ticket Card styling */
+    .ticket-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 1220;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .ticket-overlay.open {
+      display: flex;
+    }
+
+    .ticket-card {
+      background: var(--surface-color);
+      border-radius: 24px;
+      padding: 24px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      text-align: center;
+    }
+
+    .ticket-badge {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #e6f4ea;
+      color: #137333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 16px;
+    }
+
+    .ticket-box {
+      background: #f0f2f5;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 20px 0;
+      text-align: right;
+      font-size: 12px;
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+
+    .ticket-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      flex-direction: row-reverse;
+    }
+
+    .ticket-row:last-child {
+      margin-bottom: 0;
+    }
+
     /* Notification Banner */
     .custom-snackbar {
       position: absolute;
@@ -1532,14 +1624,14 @@
     <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
     
     <ul class="features-list">
-      <li><span>۱</span> <strong>فرم جدید و پیشرفته عیب‌یابی:</strong> قبل از فراخوانی، جزئیات مشکل، برند و بودجه پیشنهادی را مشخص کنید!</li>
-      <li><span>۲</span> <strong>شناخت هوشمند برند دستگاه:</strong> کادر برند به صورت خودکار فقط برای لوازم برقی و کولر فعال می‌شود.</li>
-      <li><span>۳</span> <strong>هماهنگی هوشمند چت و فرم:</strong> متخصص پیام خوش‌آمدگویی را بر اساس برند و عیب ارسالی شما تغییر می‌دهد!</li>
-      <li><span>۴</span> <strong>بخش کامنت‌ها و اشتراک تصاویر:</strong> کاربران می‌توانند عکس خرید خود را به اشتراک بگذارند و امتیاز دهند!</li>
-      <li><span>۵</span> <strong>تغییر استایل نقشه ماهواره‌ای و رادار زنده:</strong> سوییچ زنده تم مپ و فیلتر شعاع جستجو.</li>
+      <li><span>۱</span> <strong>بال دوم خدمات (نوبت‌دهی آنلاین):</strong> رزرو نوبت حضوری برای مراکز درمانی، زیبایی و آزمایشگاه‌ها!</li>
+      <li><span>۲</span> <strong>کارت نوبت دیجیتال (Appointment Ticket):</strong> صدور خودکار رسید نوبت، کد رهگیری و دکمه مسیریابی.</li>
+      <li><span>۳</span> <strong>پین‌های پزشکی روی نقشه:</strong> آیکون‌های جدید `🩺` و `🧪` برای مراکز درمانی با لوکیشن ثابت.</li>
+      <li><span>۴</span> <strong>فرم جدید و پیشرفته عیب‌یابی:</strong> قبل از فراخوانی، جزئیات مشکل، برند و بودجه را مشخص کنید!</li>
+      <li><span>۵</span> <strong>بخش کامنت‌ها و اشتراک تصاویر:</strong> کاربران می‌توانند عکس خرید خود را به اشتراک بگذارند و امتیاز دهند!</li>
     </ul>
 
-    <p style="font-size: 13px; font-style: italic; color: #888;">💡 دکمه بزرگ <strong>«درخواست متخصص»</strong> پایین نقشه را بزنید. دسته‌بندی را انتخاب کنید تا فرم عیب‌یابی باز شود، آن را پر کنید و با زدن ثبت، تماشاگر معجزه هماهنگی چت و فرم باشید!</p>
+    <p style="font-size: 13px; font-style: italic; color: #888;">💡 روی پین <strong>کلیک درمانی آریا (🩺)</strong> نقشه کلیک کنید، دکمه رزرو نوبت را بزنید و فلو فوق‌العاده شیک انتخاب روز، ساعت و صدور کارت نوبت دیجیتال را لایو تجربه کنید!</p>
   </div>
 
   <!-- RIGHT: Mobile Emulator Wrapper -->
@@ -1585,7 +1677,7 @@
             </svg>
 
             <!-- Map pins -->
-            <!-- Shops -->
+            <!-- Shops (At-home / purchase) -->
             <div class="map-pin" id="pin-s1" style="top: 48%; left: 45%; border-color: #00934b;" onclick="openQuickView('s1')" data-category="Electronics" data-name="Tech Hub" data-type="shop" data-distance="1.5" data-rating="4.8" data-open="true">
               <div class="map-pin-pulse" style="border-color: #00934b;"></div>
               <span style="font-size: 18px;">📱</span>
@@ -1605,6 +1697,20 @@
             <div class="map-pin" id="pin-s5" style="top: 32%; left: 55%; border-color: #3b76af;" onclick="openQuickView('s5')" data-category="Plants" data-name="Flower Power" data-type="shop" data-distance="6.0" data-rating="4.7" data-open="true">
               <div class="map-pin-pulse" style="border-color: #3b76af;"></div>
               <span style="font-size: 18px;">🌱</span>
+            </div>
+
+            <!-- Fixed Clinics & Labs (New!) -->
+            <div class="map-pin" id="pin-s6" style="top: 38%; left: 35%; border-color: #10b981;" onclick="openQuickView('s6')" data-category="Medical" data-name="کلینیک درمانی آریا" data-type="clinic" data-distance="1.5" data-rating="4.8" data-open="true">
+              <div class="map-pin-pulse" style="border-color: #10b981;"></div>
+              <span style="font-size: 18px;">🩺</span>
+            </div>
+            <div class="map-pin" id="pin-s7" style="top: 46%; left: 75%; border-color: #2563eb;" onclick="openQuickView('s7')" data-category="Lab" data-name="آزمایشگاه پایتخت" data-type="clinic" data-distance="3.8" data-rating="4.7" data-open="true">
+              <div class="map-pin-pulse" style="border-color: #2563eb;"></div>
+              <span style="font-size: 18px;">🧪</span>
+            </div>
+            <div class="map-pin" id="pin-s8" style="top: 28%; left: 62%; border-color: #ec4899;" onclick="openQuickView('s8')" data-category="Beauty" data-name="کلینیک زیبایی بهار" data-type="clinic" data-distance="2.1" data-rating="4.6" data-open="true">
+              <div class="map-pin-pulse" style="border-color: #ec4899;"></div>
+              <span style="font-size: 18px;">💇‍♀️</span>
             </div>
 
             <!-- Experts (Amber Glowing borders!) -->
@@ -1643,6 +1749,7 @@
               <div class="filter-chip" id="chip-plant" onclick="filterMapCategory('Plants')">🌱 گل و گیاه</div>
               <div class="filter-chip" id="chip-cafe" onclick="filterMapCategory('Cafe')">☕ کافه</div>
               <div class="filter-chip" id="chip-expert" onclick="filterMapCategory('Expert')">👨‍🔧 متخصصین</div>
+              <div class="filter-chip" id="chip-clinic" onclick="filterMapCategory('Clinic')">🩺 مراکز حضوری</div>
             </div>
           </div>
 
@@ -1891,7 +1998,7 @@
           </div>
         </div>
 
-        <!-- SPECIALIST DISPATCH FORM OVERLAY (جدید!) -->
+        <!-- SPECIALIST DISPATCH FORM OVERLAY -->
         <div class="dispatch-form-overlay" id="dispatch-form-box">
           <div class="booking-header">
             <span class="booking-back-btn" onclick="backToServiceSelection()">⬅</span>
@@ -2090,7 +2197,7 @@
 
           <div class="booth-desc" id="booth-about">بزرگترین مرکز تخصصی فروش گجت و تعمیرات سخت‌افزاری انواع موبایل و تبلت با قطعات اورجینال در تهران.</div>
 
-          <div class="booth-grid-title">ویترین و گالری محصولات غرفه</div>
+          <div class="booth-grid-title" id="booth-grid-title-label">ویترین و گالری محصولات غرفه</div>
           <div class="product-grid" id="booth-products-container" style="padding:0; margin-bottom:16px;">
             <!-- Booth items -->
           </div>
@@ -2130,8 +2237,69 @@
           <div style="height:40px;"></div>
         </div>
 
-        <div class="chat-footer">
-          <button class="chat-action-btn" onclick="alert('در حال اتصال به گفتگوی زنده با غرفه‌دار...')">شروع گفتگوی زنده با غرفه‌دار</button>
+        <div class="chat-footer" id="booth-footer">
+          <button class="chat-action-btn" id="booth-footer-btn" onclick="alert('در حال اتصال به گفتگوی زنده با غرفه‌دار...')">شروع گفتگوی زنده با غرفه‌دار</button>
+        </div>
+      </div>
+
+      <!-- H. NEW: IN-CLINIC APPOINTMENT BOOKING SHEET (بال دوم!) -->
+      <div class="appointment-sheet-overlay" id="appointment-sheet" onclick="closeAppointmentSheet()">
+        <div class="appointment-sheet-card" onclick="event.stopPropagation()">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-direction:row-reverse;">
+            <span style="font-weight:bold; font-size:16px; color:var(--primary-color);">رزرو نوبت حضوری کلینیک</span>
+            <span style="cursor:pointer; font-weight:bold; font-size:16px; color:#888;" onclick="closeAppointmentSheet()">✕</span>
+          </div>
+          <div style="font-size:11px; color:#666; margin-bottom:16px;" id="as-service-name">خدمت انتخابی: ویزیت پزشک عمومی (۱۵۰,۰۰۰ تومان)</div>
+
+          <div style="height:1px; background:#eee; margin:12px 0;"></div>
+
+          <!-- Date picker inside appointment -->
+          <div style="font-weight:bold; font-size:13px; margin-bottom:10px;">انتخاب تاریخ حضور</div>
+          <div class="chips-row">
+            <div class="filter-chip active" id="chip-date-0" onclick="setAppointmentDate(0)">امروز <span style="font-size:9px; font-weight:normal;" id="df-date-0"></span></div>
+            <div class="filter-chip" id="chip-date-1" onclick="setAppointmentDate(1)">فردا <span style="font-size:9px; font-weight:normal;" id="df-date-1"></span></div>
+            <div class="filter-chip" id="chip-date-2" onclick="setAppointmentDate(2)">پس‌فردا <span style="font-size:9px; font-weight:normal;" id="df-date-2"></span></div>
+          </div>
+
+          <div style="height:1px; background:#eee; margin:16px 0;"></div>
+
+          <!-- Time picker inside appointment -->
+          <div style="font-weight:bold; font-size:13px; margin-bottom:10px;">ساعت‌های خالی موجود</div>
+          <div class="rating-row" style="flex-wrap:wrap; margin-bottom:24px;">
+            <div class="filter-chip active" id="chip-slot-0" onclick="setAppointmentSlot('۰۹:۰۰ صبح', 0)">۰۹:۰۰ صبح</div>
+            <div class="filter-chip" id="chip-slot-1" onclick="setAppointmentSlot('۱۰:۳۰ صبح', 1)">۱۰:۳۰ صبح</div>
+            <div class="filter-chip" id="chip-slot-2" onclick="setAppointmentSlot('۱۲:۰۰ ظهر', 2)">۱۲:۰۰ ظهر</div>
+            <div class="filter-chip" id="chip-slot-3" onclick="setAppointmentSlot('۱۴:۳۰ عصر', 3)">۱۴:۳۰ عصر</div>
+            <div class="filter-chip" id="chip-slot-4" onclick="setAppointmentSlot('۱۶:۰۰ عصر', 4)">۱۶:۰۰ عصر</div>
+          </div>
+
+          <button class="chat-action-btn" onclick="submitClinicAppointment()">تایید و رزرو نهایی نوبت حضوری 🩺</button>
+        </div>
+      </div>
+
+      <!-- I. NEW: CLINIC APPOINTMENT DIGITAL TICKET OVERLAY -->
+      <div class="ticket-overlay" id="ticket-overlay">
+        <div class="ticket-card">
+          <div class="ticket-badge">🩺</div>
+          <div style="font-weight:bold; font-size:16px; color:#137333; margin-bottom:4px;">نوبت شما با موفقیت رزرو شد! 🎉</div>
+          <div style="font-size:11px; color:#666; margin-bottom:20px;">رسید دیجیتالی شما جهت مراجعه حضوری به مرکز صادر شد.</div>
+
+          <div class="ticket-box">
+            <div class="ticket-row"><span>نام مرکز:</span><strong id="t-center-name">کلینیک درمانی آریا</strong></div>
+            <div style="height:1px; background:rgba(0,0,0,0.05); margin:8px 0;"></div>
+            <div class="ticket-row"><span>خدمت رزرو شده:</span><strong id="t-service-name">ویزیت پزشک عمومی</strong></div>
+            <div style="height:1px; background:rgba(0,0,0,0.05); margin:8px 0;"></div>
+            <div class="ticket-row"><span>تاریخ حضور:</span><strong id="t-date">امروز</strong></div>
+            <div style="height:1px; background:rgba(0,0,0,0.05); margin:8px 0;"></div>
+            <div class="ticket-row"><span>ساعت نوبت:</span><strong id="t-slot">۱۰:۳۰ صبح</strong></div>
+            <div style="height:1px; background:rgba(0,0,0,0.05); margin:8px 0;"></div>
+            <div class="ticket-row"><span>کد رهگیری نوبت:</span><strong style="color:var(--primary-color);" id="t-code">APT-5621</strong></div>
+          </div>
+
+          <div class="dialog-actions">
+            <button class="btn-cancel" onclick="closeAppointmentTicket()">انصراف و بستن</button>
+            <button class="btn-confirm" onclick="navigateMapToClinic()">مسیریابی به کلینیک 🧭</button>
+          </div>
         </div>
       </div>
 
@@ -2161,7 +2329,7 @@
 </div>
 
 <script>
-  // Mock Database Shops, Experts & Reviews
+  // Mock Database Shops & Experts & Fixed Clinics (🩺 & 🧪)
   const shops = {
     s1: { 
       id: 's1', 
@@ -2277,6 +2445,72 @@
         { user: 'نسیم ناصری', rating: 5, comment: 'عالی بود دسته‌گلی که فرستادن دقیقا مثل عکس بود و گل‌ها کاملا تازه و با طراوت بودن.', img: null }
       ]
     },
+    s6: { // Fixed Center 1: Aria Clinic
+      id: 's6', 
+      name: 'کلینیک درمانی آریا', 
+      category: 'Clinic', 
+      rating: 4.8, 
+      reviews: 154, 
+      address: 'تهران، میدان ونک، بن‌بست آریا، پلاک ۱۲', 
+      phone: '+۹۸ ۲۱ ۸۸۹۹ ۹۹۰۰',
+      hours: '۰۸:۰۰ الی ۲۱:۰۰', 
+      isOpen: true, 
+      icon: '🩺', 
+      distance: 1.5, 
+      type: 'clinic',
+      about: 'کلینیک تخصصی و شبانه‌روزی آریا ارائه دهنده خدمات معاینه حضوری پزشک عمومی و متخصص، پانسمان، نوار قلب و مشاوره‌های سلامت خانواده.',
+      products: [
+        { name: 'ویزیت پزشک عمومی حضوری', desc: 'معاینه کامل پزشک عمومی به همراه تایید نسخه', price: '۱۵۰,۰۰۰ تومان', icon: '👨‍⚕️' },
+        { name: 'نوار قلب به همراه تفسیر', desc: 'ثبت لایو نوار قلب با تفسیر رسمی پزشک', price: '۲۵۰,۰۰۰ تومان', icon: '📈' }
+      ],
+      reviewsList: [
+        { user: 'رضا امینی', rating: 5, comment: 'کلینیک بسیار مجهز و تمیزی بود. نوبت‌دهی آنلاین عالی کار کرد و سر وقت ویزیت شدم.', img: null }
+      ]
+    },
+    s7: { // Fixed Center 2: Paytakht Lab
+      id: 's7', 
+      name: 'آزمایشگاه تخصصی پایتخت', 
+      category: 'Clinic', 
+      rating: 4.7, 
+      reviews: 92, 
+      address: 'تهران، خیابان ولیعصر، تقاطع فاطمی، پلاک ۱۱۰', 
+      phone: '+۹۸ ۲۱ ۸۸۹۰ ۸۸۹۹',
+      hours: '۰۷:۰۰ الی ۱۹:۰۰', 
+      isOpen: true, 
+      icon: '🧪', 
+      distance: 3.8, 
+      type: 'clinic',
+      about: 'آزمایشگاه پاتولوژی پایتخت مجهز به مدرن‌ترین دستگاه‌های اتوماتیک خون‌شناسی، هورمونی و پاتولوژی با ارسال سریع نتایج به صورت آنلاین.',
+      products: [
+        { name: 'تست چک‌آپ کامل سالیانه خون', desc: 'شامل فاکتورهای قند، کبد، تیروئید و اوره', price: '۴۵۰,۰۰۰ تومان', icon: '🧪' },
+        { name: 'آزمایش تیروئید کامل TSH, T3, T4', desc: 'بررسی کامل هورمون‌های تیروئید', price: '۱۸۰,۰۰۰ تومان', icon: '🦋' }
+      ],
+      reviewsList: [
+        { user: 'لیلا یوسفی', rating: 5, comment: 'آزمایش خون دادم، نمونه‌گیری بسیار ملایم و خوب بود. جواب را شب برایم آنلاین فرستادند.', img: null }
+      ]
+    },
+    s8: { // Fixed Center 3: Bahar Beauty
+      id: 's8', 
+      name: 'کلینیک زیبایی بهار', 
+      category: 'Clinic', 
+      rating: 4.6, 
+      reviews: 110, 
+      address: 'تهران، خیابان نیاوران، پلاک ۱۲، همکف غربی', 
+      phone: '+۹۸ ۲۱ ۲۲۸۰ ۲۲۳۳',
+      hours: '۱۰:۰۰ الی ۲۰:۰۰', 
+      isOpen: true, 
+      icon: '💇‍♀️', 
+      distance: 2.1, 
+      type: 'clinic',
+      about: 'کلینیک مراقبت پوست بهار با مجهزترین دستگاه‌های جوانسازی، هایفو، لیزر موهای زائد کل بدن و پاکسازی عمقی فیشیال تحت نظارت کادر پزشکی.',
+      products: [
+        { name: 'پاکسازی تخصصی پوست (فیشیال)', desc: 'آبرسانی عمیق، لایه‌برداری و ماسک جوانسازی پوست', price: '۳۵۰,۰۰۰ تومان', icon: '🧼' },
+        { name: 'لیزر موهای زائد کل بدن', desc: 'یک جلسه کامل لیزر دکا الکساندریت ایتالیایی', price: '۸۰۰,۰۰۰ تومان', icon: '⚡' }
+      ],
+      reviewsList: [
+        { user: 'زهرا راد', rating: 5, comment: 'من فیشیال پوست انجام دادم، پوستم خیلی شفاف شد و جوش‌های سرسیاه کاملا رفت. ممنونم از بهار.', img: null }
+      ]
+    },
     e1: { id: 'e1', name: 'علی رضایی', category: 'Expert', rating: 4.9, reviews: 142, address: 'موقعیت زنده • ۱.۱ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۵۰,۰۰۰ تومان', isOpen: true, icon: '👨‍🔧', distance: 1.1, type: 'expert', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', avatar: '👨‍🔧', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی اقدام کنم.' },
     e2: { id: 'e2', name: 'سینا محمدی', category: 'Expert', rating: 4.8, reviews: 98, address: 'موقعیت زنده • ۲.۵ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۲۰,۰۰۰ تومان', isOpen: true, icon: '⚡', distance: 2.5, type: 'expert', specialty: 'تکنسین برق ساختمان و عیب‌یابی', avatar: '⚡', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارها کاملاً آماده است.' },
     e3: { id: 'e3', name: 'میلاد کریمی', category: 'Expert', rating: 4.7, reviews: 215, address: 'موقعیت زنده • ۸.۰ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۴۰,۰۰۰ تومان', isOpen: true, icon: '❄️', distance: 8.0, type: 'expert', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', avatar: '❄️', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم?' }
@@ -2319,6 +2553,8 @@
       document.getElementById('chip-cafe').classList.add('active');
     } else if (cat === 'Expert') {
       document.getElementById('chip-expert').classList.add('active');
+    } else if (cat === 'Clinic') {
+      document.getElementById('chip-clinic').classList.add('active');
     }
 
     applyTuningFilters();
@@ -2343,7 +2579,7 @@
       const pin = document.getElementById('pin-' + id);
       if (!pin) return;
 
-      const matchesCategory = mapCategory === null || shop.category === mapCategory || (mapCategory === 'Expert' && shop.type === 'expert');
+      const matchesCategory = mapCategory === null || shop.category === mapCategory || (mapCategory === 'Expert' && shop.type === 'expert') || (mapCategory === 'Clinic' && shop.type === 'clinic');
       const matchesSearch = searchVal === '' || shop.name.toLowerCase().includes(searchVal) || shop.category.toLowerCase().includes(searchVal);
       const matchesOpen = !showOpenOnly || shop.isOpen;
       const matchesRating = shop.rating >= minRating;
@@ -2403,6 +2639,29 @@
     closeFilters();
   }
 
+  function setRatingFilter(rating) {
+    minRating = rating;
+    document.querySelectorAll('.rating-row .filter-chip').forEach(el => el.classList.remove('active'));
+    
+    if (rating === 0) {
+      document.getElementById('chip-rating-0').classList.add('active');
+    } else if (rating === 4) {
+      document.getElementById('chip-rating-4').classList.add('active');
+    } else if (rating === 4.5) {
+      document.getElementById('chip-rating-45').classList.add('active');
+    } else if (rating === 4.8) {
+      document.getElementById('chip-rating-48').classList.add('active');
+    }
+    applyTuningFilters();
+  }
+
+  function resetFilters() {
+    document.getElementById('filter-open-only').checked = false;
+    document.getElementById('filter-radius').value = 5;
+    onRadiusSliderChange(5);
+    setRatingFilter(0);
+  }
+
   // Search input focus Suggestion Overlay
   function onSearchFocus() {
     updateSearchSuggestions();
@@ -2448,13 +2707,15 @@
         let displayCategory = '';
         if (shop.type === 'expert') {
           displayCategory = 'متخصص آماده به کار';
+        } else if (shop.type === 'clinic') {
+          displayCategory = shop.id === 's6' ? 'مطب پزشکی حضوری' : (shop.id === 's7' ? 'آزمایشگاه طبی حضوری' : 'کلینیک زیبایی حضوری');
         } else {
           displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
         }
 
         itemsHtml += `
           <div class="suggestion-item" onclick="selectSuggestedShop('${id}')">
-            <span>${shop.type === 'expert' ? '👷' : '🏪'}</span>
+            <span>${shop.type === 'expert' ? '👷' : (shop.type === 'clinic' ? '🩺' : '🏪')}</span>
             <div style="flex:1; text-align:right;">
               <div style="font-weight:bold;">${shop.name}</div>
               <div style="font-size:11px; color:#666;">${displayCategory} • ⭐ ${shop.rating} (${shop.distance}km)</div>
@@ -2478,7 +2739,7 @@
     openQuickView(shopId);
   }
 
-  // Polymorphic Sheet Opener
+  // Polymorphic Sheet Opener (Supports Shops, Experts and Fixed Clinics!)
   function openQuickView(shopId) {
     const shop = shops[shopId];
     dismissOnboarding();
@@ -2502,6 +2763,27 @@
       qvBtn.innerHTML = `<span>💬</span> شروع مشاوره و چت مستقیم`;
       qvBtn.style.background = '#f2994a'; 
       qvBtn.onclick = () => openDirectExpertConsultation(shopId);
+
+    } else if (shop.type === 'clinic') {
+      const displayCategory = shop.id === 's6' ? 'پزشکی حضوری' : (shop.id === 's7' ? 'آزمایشگاه حضوری' : 'زیبایی حضوری');
+      document.getElementById('qv-category').innerText = displayCategory;
+      document.getElementById('qv-category').style.background = '#fee2e2'; // Light rose for medical/clinics
+      document.getElementById('qv-category').style.color = '#dc2626';
+
+      document.getElementById('qv-name').innerText = shop.name;
+      document.getElementById('qv-rating').innerText = shop.rating;
+      document.getElementById('qv-reviews').innerText = `(${shop.reviews} نظر)`;
+      document.getElementById('qv-address').innerText = shop.address;
+      document.getElementById('qv-hours').innerText = `ساعت کاری: ${shop.hours}`;
+      document.getElementById('qv-icon').innerText = shop.icon;
+
+      document.getElementById('qv-status').innerText = 'مطب حضوری زنده';
+      document.getElementById('qv-status').className = 'badge-open';
+
+      // Fixed Clinic Action: Book Appointment!
+      qvBtn.innerHTML = `<span>🩺</span> رزرو نوبت حضوری و مشاهده کلینیک`;
+      qvBtn.style.background = '#dc2626'; 
+      qvBtn.onclick = openShopBooth; // Opens virtual booth with booking services
 
     } else {
       const displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
@@ -2585,18 +2867,43 @@
     closeQuickView();
     const shop = shops[activeShopId];
     
-    const displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
+    // Header Style
+    let displayCategory = '';
+    const banner = document.getElementById('booth-banner');
+    const titleLabel = document.getElementById('booth-grid-title-label');
+    const footerBtn = document.getElementById('booth-footer-btn');
+
+    if (shop.type === 'clinic') {
+      displayCategory = shop.id === 's6' ? 'مطب پزشکی حضوری' : (shop.id === 's7' ? 'آزمایشگاه حضوری' : 'زیبایی حضوری');
+      document.getElementById('booth-category').style.background = '#fee2e2';
+      document.getElementById('booth-category').style.color = '#dc2626';
+      
+      banner.style.background = 'linear-gradient(135deg, #dc2626, #2563eb)';
+      titleLabel.innerText = 'لیست خدمات درمانی و زیبایی کلینیک (رزرو حضوری)';
+      
+      footerBtn.innerHTML = `<span>📞</span> تماس تلفنی جهت پذیرش`;
+      footerBtn.style.background = '#dc2626';
+      footerBtn.onclick = () => alert(`در حال تماس تلفنی با پذیرش ${shop.name}...`);
+    } else {
+      displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
+      document.getElementById('booth-category').style.background = 'var(--primary-light)';
+      document.getElementById('booth-category').style.color = 'var(--primary-color)';
+
+      if (shop.category === 'Electronics') {
+        banner.style.background = 'linear-gradient(135deg, #00934b, #212121)';
+      } else if (shop.category === 'Plants') {
+        banner.style.background = 'linear-gradient(135deg, #3b76af, #00934b)';
+      } else {
+        banner.style.background = 'linear-gradient(135deg, #e28743, #212121)';
+      }
+      titleLabel.innerText = 'ویترین و گالری محصولات غرفه';
+      footerBtn.innerHTML = `<span>💬</span> شروع گفتگوی زنده با غرفه‌دار`;
+      footerBtn.style.background = 'var(--primary-color)';
+      footerBtn.onclick = () => alert(`در حال اتصال به چت زنده غرفه‌دار (${shop.name})...`);
+    }
+
     document.getElementById('booth-category').innerText = displayCategory;
     document.getElementById('booth-large-icon').innerText = shop.icon;
-    
-    const banner = document.getElementById('booth-banner');
-    if (shop.category === 'Electronics') {
-      banner.style.background = 'linear-gradient(135deg, #00934b, #212121)';
-    } else if (shop.category === 'Plants') {
-      banner.style.background = 'linear-gradient(135deg, #3b76af, #00934b)';
-    } else {
-      banner.style.background = 'linear-gradient(135deg, #e28743, #212121)';
-    }
 
     document.getElementById('booth-status-badge').innerText = shop.isOpen ? 'باز است' : 'بسته است';
     document.getElementById('booth-status-badge').className = shop.isOpen ? 'badge-open' : 'badge-closed';
@@ -2609,12 +2916,17 @@
     document.getElementById('booth-hours').innerText = `🕒 ساعت کاری: ${shop.hours}`;
     document.getElementById('booth-about').innerText = shop.about;
 
-    // Load products
+    // Load products/services
     const container = document.getElementById('booth-products-container');
     let productsHtml = '';
     shop.products.forEach(p => {
+      // If it is a fixed clinic, clicking opens the Date/Time booking overlay instead of purchase dialog!
+      const clickAction = shop.type === 'clinic' 
+          ? `openAppointmentBooking('${p.name}', '${p.price}', '${p.icon}')`
+          : `openPurchaseDialog('${p.name}', '${p.desc}', '${p.price}')`;
+
       productsHtml += `
-        <div class="product-card" onclick="openPurchaseDialog('${p.name}', '${p.desc}', '${p.price}')">
+        <div class="product-card" onclick="${clickAction}">
           <div class="product-img" style="height: 80px;">${p.icon}</div>
           <div class="product-name" style="font-size:11.5px;">${p.name}</div>
           <div class="product-price" style="font-size:11.5px;">${p.price}</div>
@@ -2624,7 +2936,6 @@
     });
     container.innerHTML = productsHtml;
 
-    // Load reviews
     renderBoothReviews();
 
     document.getElementById('booth-overlay').classList.add('open');
@@ -2688,12 +2999,10 @@
       img: imgPath
     });
 
-    // Reset Form
     textInput.value = '';
     document.getElementById('attach-photo-toggle').checked = false;
     setFeedbackStars(5);
 
-    // Re-render and notify
     renderBoothReviews();
     showNotification("تجربه خرید و نظر شما با موفقیت ثبت شد! ⭐");
   }
@@ -2703,104 +3012,77 @@
   }
 
   // =========================================
-  // SPECIALIST DISPATCH FORM LOGIC
+  // CLINIC APPOINTMENT BOOKING LOGIC (بال دوم!)
   // =========================================
-  let selectedServiceCategory = '';
-  let selectedTechLevel = 'senior';
+  let selectedServiceForAppointment = {};
+  let selectedAppointmentDateOffset = 0;
+  let selectedAppointmentTimeSlot = '۱۰:۳۰ صبح';
 
-  function openServicesFlowSelection() {
-    document.getElementById('services-flow').classList.add('open');
-    document.getElementById('service-category-panel').style.display = 'flex';
-    document.getElementById('dispatch-form-box').classList.remove('open');
-    document.getElementById('radar-view').style.display = 'none';
-    document.getElementById('offers-view').style.display = 'none';
-  }
+  function openAppointmentBooking(name, price, icon) {
+    selectedServiceForAppointment = { name, price, icon };
+    document.getElementById('as-service-name').innerText = `خدمت انتخابی: ${name} (${price})`;
+    document.getElementById('appointment-sheet').classList.add('open');
 
-  function openDispatchForm(categoryName) {
-    selectedServiceCategory = categoryName;
-    document.getElementById('service-category-panel').style.display = 'none';
-    document.getElementById('dispatch-form-box').classList.add('open');
-    document.getElementById('df-title').innerText = `جزئیات درخواست ${categoryName}`;
-    document.getElementById('df-problem-text').value = '';
-    document.getElementById('df-budget-slider').value = 300000;
-    onBudgetSliderChange(300000);
-    setTechLevel('senior');
-
-    // Show brand selection only for electronic devices and air conditioning!
-    const brandGroup = document.getElementById('df-brand-group');
-    if (categoryName.includes('برق') || categoryName.includes('کولر')) {
-      brandGroup.style.display = 'block';
-    } else {
-      brandGroup.style.display = 'none';
+    // Populate actual date strings dynamically in modal choices
+    for (let offset = 0; day = 0, offset <= 2; offset++) {
+      finalDate = new Date();
+      finalDate.setDate(finalDate.getDate() + offset);
+      document.getElementById('df-date-' + offset).innerText = `${finalDate.getMonth() + 1}/${finalDate.getDate()}`;
     }
+
+    setAppointmentDate(0);
+    setAppointmentSlot('۱۰:۳۰ صبح', 1);
   }
 
-  function backToServiceSelection() {
-    document.getElementById('dispatch-form-box').classList.remove('open');
-    document.getElementById('service-category-panel').style.display = 'flex';
+  function setAppointmentDate(dayOffset) {
+    selectedAppointmentDateOffset = dayOffset;
+    document.querySelectorAll('.appointment-sheet-card .filter-chip').forEach(el => {
+      if (el.id && el.id.includes('chip-date')) el.classList.remove('active');
+    });
+    document.getElementById('chip-date-' + dayOffset).classList.add('active');
   }
 
-  function onBudgetSliderChange(val) {
-    const formatted = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    document.getElementById('df-budget-label').innerText = `حدود بودجه / قیمت پیشنهادی: ${formatted} تومان`;
+  function setAppointmentSlot(slotText, elementIndex) {
+    selectedAppointmentTimeSlot = slotText;
+    document.querySelectorAll('.appointment-sheet-card .filter-chip').forEach(el => {
+      if (el.id && el.id.includes('chip-slot')) el.classList.remove('active');
+    });
+    document.getElementById('chip-slot-' + elementIndex).classList.add('active');
   }
 
-  function setTechLevel(level) {
-    selectedTechLevel = level;
-    document.getElementById('chip-level-senior').classList.remove('active');
-    document.getElementById('chip-level-junior').classList.remove('active');
+  function closeAppointmentSheet() {
+    document.getElementById('appointment-sheet').classList.remove('open');
+  }
+
+  function submitClinicAppointment() {
+    closeAppointmentSheet();
     
-    if (level === 'senior') {
-      document.getElementById('chip-level-senior').classList.add('active');
-    } else {
-      document.getElementById('chip-level-junior').classList.add('active');
-    }
+    // Populate Digital Ticket variables
+    const shop = shops[activeShopId];
+    document.getElementById('t-center-name').innerText = shop.name;
+    document.getElementById('t-service-name').innerText = selectedServiceForAppointment.name;
+
+    const finalDate = new Date();
+    finalDate.setDate(finalDate.getDate() + selectedAppointmentDateOffset);
+    document.getElementById('t-date').innerText = `${finalDate.getFullYear()}/${finalDate.getMonth() + 1}/${finalDate.getDate()}`;
+    document.getElementById('t-slot').innerText = selectedAppointmentTimeSlot;
+    
+    const randomCode = Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('t-code').innerText = `APT-${randomCode}`;
+
+    // Open digital ticket
+    document.getElementById('ticket-overlay').classList.add('open');
   }
 
-  function submitSpecialistRequestForm() {
-    const problem = document.getElementById('df-problem-text').value.trim();
-    if (problem === '') {
-      alert("لطفاً توضیح خلاصه مشکل را بنویسید!");
-      return;
-    }
+  function closeAppointmentTicket() {
+    document.getElementById('ticket-overlay').classList.remove('open');
+  }
 
-    const budgetVal = document.getElementById('df-budget-slider').value;
-    const formattedBudget = budgetVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' تومان';
-
-    const brandName = document.getElementById('df-brand-select').value;
-    const hasBrand = selectedServiceCategory.includes('برق') || selectedServiceCategory.includes('کولر');
-
-    // Prepare personalized bot greets according to what user typed in the form! (Highly Cognitive simulation!)
-    mockBids[0].text = `سلام وقت بخیر! من درخواست شما را برای تعمیر ${hasBrand ? brandName + ' ' : ''}${selectedServiceCategory} با عیبِ "${problem}" دیدم. ابزارهام توی ماشین آماده‌ست و می‌تونم سریعاً به سمت لوکیشن شما حرکت کنم.`;
-    mockBids[1].text = `درود بر شما. درخواست شما را جهت عیب‌یابی "${problem}" خواندم. با ابزار کامل و گارانتی کار می‌توانم تا چند دقیقه دیگر حرکت کنم.`;
-    mockBids[2].text = `سلام مخلصم. درخواست استادکار ${selectedTechLevel === 'senior' ? 'ارشد' : 'معمولی'} برای برطرف کردن "${problem}" را قبول کردم. با قیمت توافقی حدود ${formattedBudget} کار رو انجام می‌دهم.`;
-
-    // Start Radar simulation
-    document.getElementById('dispatch-form-box').classList.remove('open');
-    document.getElementById('radar-view').style.display = 'flex';
-
-    activeOffers = [];
-    document.getElementById('offers-container').innerHTML = '';
-
-    offerTimer1 = setTimeout(() => {
-      addBidCard(mockBids[0]);
-      showNotification("پیشنهاد جدید از علی رضایی دریافت شد!");
-    }, 2000);
-
-    offerTimer2 = setTimeout(() => {
-      addBidCard(mockBids[1]);
-      showNotification("پیشنهاد جدید از سینا محمدی دریافت شد!");
-    }, 4500);
-
-    offerTimer3 = setTimeout(() => {
-      addBidCard(mockBids[2]);
-      showNotification("پیشنهاد جدید از میلاد کریمی دریافت شد!");
-    }, 6500);
-
-    setTimeout(() => {
-      document.getElementById('radar-view').style.display = 'none';
-      document.getElementById('offers-view').style.display = 'flex';
-    }, 2200);
+  function navigateMapToClinic() {
+    closeAppointmentTicket();
+    closeShopBooth();
+    switchTab('map');
+    alert(`نقشه لوکیشن مطب "${shops[activeShopId].name}" را نشانه گرفته و مسیر حرکت را ترسیم کرد 🧭`);
   }
 
   // =========================================
@@ -2866,13 +3148,13 @@
   // =========================================
   // PROFILE LOGIC
   // =========================================
-  let walletVal = 10000000; // 10 million Tomans
+  let walletVal = 10000000; 
   function topUpWallet() {
-    walletVal += 5000000; // +5 million Tomans
+    walletVal += 5000000; 
     const formatted = walletVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     document.getElementById('wallet-val').innerText = `${formatted} تومان`;
     document.getElementById('rb-wallet-bal').innerText = `${formatted} تومان`;
-    showNotification("کیف پول الکترونیکی شما با موفقیت +۵,۰۰۰,۰۰0 تومان شارژ شد!");
+    showNotification("کیف پول الکترونیکی شما با موفقیت +۵,۰۰۰,۰۰۰ تومان شارژ شد!");
   }
 
   // Set initial wallet Toman string
@@ -2995,6 +3277,104 @@
     document.getElementById('tracking-view').classList.remove('open');
     closeChat();
     closeServicesFlow();
+  }
+
+  // =========================================
+  // SPECIALIST DISPATCH FORM LOGIC
+  // =========================================
+  let selectedServiceCategory = '';
+  let selectedTechLevel = 'senior';
+
+  function openServicesFlowSelection() {
+    document.getElementById('services-flow').classList.add('open');
+    document.getElementById('service-category-panel').style.display = 'flex';
+    document.getElementById('dispatch-form-box').classList.remove('open');
+    document.getElementById('radar-view').style.display = 'none';
+    document.getElementById('offers-view').style.display = 'none';
+  }
+
+  function openDispatchForm(categoryName) {
+    selectedServiceCategory = categoryName;
+    document.getElementById('service-category-panel').style.display = 'none';
+    document.getElementById('dispatch-form-box').classList.add('open');
+    document.getElementById('df-title').innerText = `جزئیات درخواست ${categoryName}`;
+    document.getElementById('df-problem-text').value = '';
+    document.getElementById('df-budget-slider').value = 300000;
+    onBudgetSliderChange(300000);
+    setTechLevel('senior');
+
+    const brandGroup = document.getElementById('df-brand-group');
+    if (categoryName.includes('برق') || categoryName.includes('کولر')) {
+      brandGroup.style.display = 'block';
+    } else {
+      brandGroup.style.display = 'none';
+    }
+  }
+
+  function backToServiceSelection() {
+    document.getElementById('dispatch-form-box').classList.remove('open');
+    document.getElementById('service-category-panel').style.display = 'flex';
+  }
+
+  function onBudgetSliderChange(val) {
+    const formatted = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById('df-budget-label').innerText = `حدود بودجه / قیمت پیشنهادی: ${formatted} تومان`;
+  }
+
+  function setTechLevel(level) {
+    selectedTechLevel = level;
+    document.getElementById('chip-level-senior').classList.remove('active');
+    document.getElementById('chip-level-junior').classList.remove('active');
+    
+    if (level === 'senior') {
+      document.getElementById('chip-level-senior').classList.add('active');
+    } else {
+      document.getElementById('chip-level-junior').classList.add('active');
+    }
+  }
+
+  function submitSpecialistRequestForm() {
+    const problem = document.getElementById('df-problem-text').value.trim();
+    if (problem === '') {
+      alert("لطفاً توضیح خلاصه مشکل را بنویسید!");
+      return;
+    }
+
+    const budgetVal = document.getElementById('df-budget-slider').value;
+    const formattedBudget = budgetVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' تومان';
+
+    const brandName = document.getElementById('df-brand-select').value;
+    const hasBrand = selectedServiceCategory.includes('برق') || selectedServiceCategory.includes('کولر');
+
+    mockBids[0].text = `سلام وقت بخیر! من درخواست شما را برای تعمیر ${hasBrand ? brandName + ' ' : ''}${selectedServiceCategory} با عیبِ "${problem}" دیدم. ابزارهام توی ماشین آماده‌ست و می‌تونم سریعاً به سمت لوکیشن شما حرکت کنم.`;
+    mockBids[1].text = `درود بر شما. درخواست شما را جهت عیب‌یابی "${problem}" خواندم. با ابزار کامل و گارانتی کار می‌توانم تا چند دقیقه دیگر حرکت کنم.`;
+    mockBids[2].text = `سلام مخلصم. درخواست استادکار ${selectedTechLevel === 'senior' ? 'ارشد' : 'معمولی'} برای برطرف کردن "${problem}" را قبول کردم. با قیمت توافقی حدود ${formattedBudget} کار رو انجام می‌دهم.`;
+
+    document.getElementById('dispatch-form-box').classList.remove('open');
+    document.getElementById('radar-view').style.display = 'flex';
+
+    activeOffers = [];
+    document.getElementById('offers-container').innerHTML = '';
+
+    offerTimer1 = setTimeout(() => {
+      addBidCard(mockBids[0]);
+      showNotification("پیشنهاد جدید از علی رضایی دریافت شد!");
+    }, 2000);
+
+    offerTimer2 = setTimeout(() => {
+      addBidCard(mockBids[1]);
+      showNotification("پیشنهاد جدید از سینا محمدی دریافت شد!");
+    }, 4500);
+
+    offerTimer3 = setTimeout(() => {
+      addBidCard(mockBids[2]);
+      showNotification("پیشنهاد جدید از میلاد کریمی دریافت شد!");
+    }, 6500);
+
+    setTimeout(() => {
+      document.getElementById('radar-view').style.display = 'none';
+      document.getElementById('offers-view').style.display = 'flex';
+    }, 2200);
   }
 
   // =========================================
