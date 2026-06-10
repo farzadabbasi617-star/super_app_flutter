@@ -15,6 +15,51 @@
       --accent-color: #f2994a;
     }
 
+    .dark-mode {
+      --bg-color: #0f172a !important;
+      --surface-color: #1e293b !important;
+      --on-surface: #f1f5f9 !important;
+      --outline: #334155 !important;
+      --primary-light: #14532d !important;
+    }
+    .dark-mode .screen-content {
+      background: var(--bg-color) !important;
+      color: var(--on-surface) !important;
+    }
+    .dark-mode .profile-card,
+    .dark-mode .product-card-hor,
+    .dark-mode .product-card,
+    .dark-mode .menu-item,
+    .dark-mode .map-legend-card,
+    .dark-mode .quick-view-sheet,
+    .dark-mode .booth-scroll-content,
+    .dark-mode .booking-card,
+    .dark-mode .confirm-card,
+    .dark-mode .filter-sheet-card,
+    .dark-mode .market-header,
+    .dark-mode .services-flow-overlay,
+    .dark-mode .booking-total-box,
+    .dark-mode .booth-overlay {
+      background: var(--surface-color) !important;
+      color: var(--on-surface) !important;
+      border-color: var(--outline) !important;
+    }
+    .dark-mode .profile-name,
+    .dark-mode .profile-email,
+    .dark-mode .wallet-title,
+    .dark-mode .product-name,
+    .dark-mode .product-desc,
+    .dark-mode .booking-title,
+    .dark-mode .confirm-title,
+    .dark-mode .confirm-body,
+    .dark-mode .form-label,
+    .dark-mode .sheet-title,
+    .dark-mode .sheet-address,
+    .dark-mode .offer-name,
+    .dark-mode .market-title {
+      color: var(--on-surface) !important;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -1665,7 +1710,7 @@
       <div class="device-camera"></div>
     </div>
     
-    <div class="screen">
+    <div class="screen" id="phone-screen">
 
       <!-- SYSTEM PUSH NOTIFICATION ALARM BANNER (جدید!) -->
       <div class="system-push-banner" id="system-alarm-banner" onclick="clickSystemAlarmBanner()">
@@ -2051,7 +2096,16 @@
         <!-- ========================================= -->
         <div class="screen-content" id="view-profile" style="background:#f6f8f9; padding-bottom: 80px; overflow-y: auto;">
           <!-- Profile Card -->
-          <div class="profile-card" style="background: white; margin: 16px; border-radius: 20px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+          <div class="profile-card" style="background: white; margin: 16px; border-radius: 20px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: relative;">
+            <!-- Dark Mode Switcher -->
+            <div style="position: absolute; top: 12px; left: 16px; display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 11px; font-weight: bold; color: var(--on-surface);">تم تاریک 🌓</span>
+              <label class="toggle-switch" style="width: 36px; height: 18px;">
+                <input type="checkbox" id="dark-mode-toggle" onchange="toggleGlobalDarkMode()">
+                <span class="switch-slider" style="border-radius: 18px; before: {width: 14px; height: 14px;}"></span>
+              </label>
+            </div>
+            
             <div class="profile-avatar" style="font-size: 40px; margin-bottom: 8px;">👤</div>
             <div class="profile-name" style="font-weight: bold; font-size: 15px;">فرزاد عباسی (غرفه‌دار و متخصص)</div>
             <div class="profile-email" style="font-size: 11px; color: #777;">farzadabbasi@superapp.ir</div>
@@ -4198,6 +4252,27 @@
 
   // Initial call
   updateProfileUI();
+
+  function toggleGlobalDarkMode() {
+    const isChecked = document.getElementById('dark-mode-toggle').checked;
+    const phone = document.getElementById('phone-screen');
+    if (phone) {
+      if (isChecked) {
+        phone.classList.add('dark-mode');
+        // Toggle map style as well!
+        if (mapStyle === 'normal') {
+          toggleMapStyle();
+        }
+        showNotification("🌓 شبیه‌ساز سوپراپ به حالت تاریک (Dark Mode) تغییر یافت.");
+      } else {
+        phone.classList.remove('dark-mode');
+        if (mapStyle === 'satellite') {
+          toggleMapStyle();
+        }
+        showNotification("🌓 شبیه‌ساز سوپراپ به حالت روشن (Light Mode) بازگشت.");
+      }
+    }
+  }
 
   // =========================================
   // SERVICES HUB (RADAR & REALTIME OFFERS) LOGIC

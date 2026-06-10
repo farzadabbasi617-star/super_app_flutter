@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  / Primary Colors
-  static const Color primary = Color(0xFF6366F1); / Indigo
-  static const Color primaryDark = Color(0xFF4F46E5);
-  static const Color primaryLight = Color(0xFFE0E7FF);
+  // Primary Colors (Persian Emerald Green - Matching Snapp & Digikala elite style)
+  static const Color primary = Color(0xFF00934B);
+  static const Color primaryDark = Color(0xFF00753C);
+  static const Color primaryLight = Color(0xFFE6F4EA);
 
-  / Secondary Colors
-  static const Color secondary = Color(0xFFEC4899); / Pink/Rose
-  static const Color secondaryDark = Color(0xFFBE185D);
-  static const Color secondaryLight = Color(0xFFFCE7F3);
+  // Secondary Colors (Amber Orange - used for Experts and Premium features)
+  static const Color secondary = Color(0xFFF2994A);
+  static const Color secondaryDark = Color(0xFFD97706);
+  static const Color secondaryLight = Color(0xFFFEF3C7);
 
-  / Neutral Colors
+  // Neutral Colors (Modern Soft Slate/Grey)
   static const Color background = Color(0xFFF8FAFC);
   static const Color surface = Colors.white;
   static const Color error = Color(0xFFEF4444);
@@ -23,7 +23,7 @@ class AppColors {
   static const Color textDisabled = Color(0xFF94A3B8);
   static const Color border = Color(0xFFE2E8F0);
 
-  / Dark Theme Colors
+  // Dark Theme Colors
   static const Color darkBackground = Color(0xFF0F172A);
   static const Color darkSurface = Color(0xFF1E293B);
   static const Color darkTextPrimary = Color(0xFFF1F5F9);
