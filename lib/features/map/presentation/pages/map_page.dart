@@ -74,6 +74,10 @@ class _MapPageState extends State<MapPage> {
   double _searchRadius = 5.0; // Default search radius in km
   bool _isSearchFocused = false;
 
+  // Onboarding & Map Type States
+  bool _showOnboarding = true;
+  MapType _currentMapType = MapType.normal;
+
   final List<Map<String, String>> _categories = [
     {'name': 'Electronics', 'icon': '📱', 'fa': 'الکترونیک'},
     {'name': 'Plants', 'icon': '🌱', 'fa': 'گل و گیاه'},
@@ -163,6 +167,7 @@ class _MapPageState extends State<MapPage> {
         } else {
           setState(() {
             _selectedItem = item;
+            _showOnboarding = false; // Hide onboarding if they interact
           });
           mapController.animateCamera(
             CameraUpdate.newLatLngZoom(cluster.location, 14.5),
@@ -205,11 +210,21 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _setMapStyle(ThemeData theme) {
-    if (theme.brightness == Brightness.dark) {
+    if (_currentMapType == MapType.satellite) {
+      mapController.setMapStyle(null);
+    } else if (theme.brightness == Brightness.dark) {
       mapController.setMapStyle(_darkMapStyle);
     } else {
       mapController.setMapStyle(null);
     }
+  }
+
+  // Toggle Map Style normal <-> satellite
+  void _toggleMapType() {
+    setState(() {
+      _currentMapType = _currentMapType == MapType.normal ? MapType.satellite : MapType.normal;
+    });
+    _setMapStyle(Theme.of(context));
   }
 
   Future<void> _getCurrentLocation() async {
@@ -316,6 +331,7 @@ class _MapPageState extends State<MapPage> {
                 // 1. Google Map View
                 GoogleMap(
                   initialCameraPosition: CameraPosition(target: _initialPosition, zoom: 13),
+                  mapType: _currentMapType,
                   onMapCreated: (controller) {
                     mapController = controller;
                     _clusterManager.setMapId(controller.mapId);
@@ -370,6 +386,7 @@ class _MapPageState extends State<MapPage> {
                                       setState(() {
                                         _searchQuery = val;
                                         _selectedItem = null;
+                                        _showOnboarding = false;
                                       });
                                     },
                                   ),
@@ -386,7 +403,7 @@ class _MapPageState extends State<MapPage> {
                                 ),
                               const VerticalDivider(width: 16, thickness: 1),
                               IconButton(
-                                icon: Icon(Icons.tune, color: (_showOnlyOpen || _minRating > 0 || _searchRadius < 10.0) ? Colors.orange : theme.colorScheme.primary),
+                                icon: Icon(Icons.tune, color: (_showOnlyOpen || _minRating > 0 || _searchRadius < 15.0) ? Colors.orange : theme.colorScheme.primary),
                                 onPressed: () => _showFilterBottomSheet(context, theme),
                               ),
                             ],
@@ -439,6 +456,7 @@ class _MapPageState extends State<MapPage> {
                                   setState(() {
                                     _selectedCategory = isSelected ? null : catName;
                                     _selectedItem = null;
+                                    _showOnboarding = false;
                                   });
                                 },
                                 avatar: Text(cat['icon']!, style: const TextStyle(fontSize: 14)),
@@ -452,7 +470,68 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
 
-                // 3. User Location Button
+                // 3. Floating Onboarding Instruction Card (Fades out when closed)
+                if (_showOnboarding)
+                  Positioned(
+                    top: 170,
+                    left: 20,
+                    right: 20,
+                    child: Card(
+                      color: theme.colorScheme.primaryContainer.withOpacity(0.95),
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(Icons.tips_and_updates, color: theme.colorScheme.primary, size: 28),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'راهنمای نقشه سوپراپلیکیشن 🌟',
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'در این صفحه می‌توانید مراکز خدماتی اطراف را بیابید، یا با لمس دکمه «درخواست متخصص»، فوراً سرویس‌کار لوله‌کشی، برق، یا AC به خانه خود دعوت کنید!',
+                                    style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurfaceVariant),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.close, size: 18),
+                              onPressed: () {
+                                setState(() {
+                                  _showOnboarding = false;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                // 4. Map Style Toggle Button (Standard vs Satellite)
+                Positioned(
+                  bottom: _selectedItem != null ? 335 : 155,
+                  right: 16,
+                  child: FloatingActionButton(
+                    heroTag: 'style_fab',
+                    mini: true,
+                    backgroundColor: theme.colorScheme.surface,
+                    foregroundColor: theme.colorScheme.primary,
+                    onPressed: _toggleMapType,
+                    child: Icon(_currentMapType == MapType.normal ? Icons.satellite_outlined : Icons.map_outlined),
+                  ),
+                ),
+
+                // 5. User Location Button
                 Positioned(
                   bottom: _selectedItem != null ? 280 : 100,
                   right: 16,
@@ -464,7 +543,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
 
-                // 4. Request Expert FAB
+                // 6. Request Expert FAB
                 Positioned(
                   bottom: _selectedItem != null ? 280 : 100,
                   left: 16,
@@ -480,7 +559,32 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
 
-                // 5. Polymorphic Quick View Sliding Panel
+                // 7. Map Legend Guide (Floating on the map)
+                if (_selectedItem == null && !_isSearchFocused)
+                  Positioned(
+                    bottom: 24,
+                    left: 20,
+                    right: 20,
+                    child: Card(
+                      color: theme.colorScheme.surface.withOpacity(0.9),
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(children: [Text('📱', style: TextStyle(fontSize: 12)), SizedBox(width: 4), Text('الکترونیک', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))]),
+                            Row(children: [Text('🌱', style: TextStyle(fontSize: 12)), SizedBox(width: 4), Text('گیاهان', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))]),
+                            Row(children: [Text('☕', style: TextStyle(fontSize: 12)), SizedBox(width: 4), Text('کافه', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))]),
+                            Row(children: [Text('👷', style: TextStyle(fontSize: 12)), SizedBox(width: 4), Text('متخصصین', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.orange))]),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                // 8. Polymorphic Quick View Sliding Panel
                 if (_selectedItem != null)
                   _buildPolymorphicQuickView(theme, _selectedItem),
               ],
@@ -726,7 +830,7 @@ class _MapPageState extends State<MapPage> {
               ],
             ),
             const SizedBox(height: 16),
-            _buildHoursRow(shop.operatingHours, shop.isOpen ? 'باز است' : 'بسته است', shop.isOpen),
+            _buildHoursRow('ساعت کاری:', shop.isOpen ? 'باز است' : 'بسته است', shop.isOpen),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,

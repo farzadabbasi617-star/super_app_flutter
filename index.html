@@ -109,37 +109,6 @@
       direction: ltr;
     }
 
-    /* Notch & Camera */
-    .device-notch {
-      position: absolute;
-      top: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 110px;
-      height: 24px;
-      background: #000;
-      border-radius: 20px;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      padding: 0 10px;
-    }
-
-    .device-camera {
-      width: 8px;
-      height: 8px;
-      background: #1a1a1a;
-      border-radius: 50%;
-    }
-
-    .device-speaker {
-      width: 40px;
-      height: 4px;
-      background: #222;
-      border-radius: 2px;
-    }
-
     /* Screen Frame */
     .screen {
       position: relative;
@@ -282,6 +251,15 @@
       color: var(--primary-color);
     }
 
+    .fab-style {
+      bottom: 74px;
+      left: 16px;
+      width: 44px;
+      height: 44px;
+      background: var(--surface-color);
+      color: var(--secondary-color);
+    }
+
     .fab-request {
       bottom: 20px;
       right: 16px;
@@ -300,6 +278,11 @@
     /* ========================================= */
     #screen-map {
       background: #e3ece6;
+      transition: background 0.5s ease;
+    }
+
+    #screen-map.satellite {
+      background: #111b24; /* Satellite simulation color */
     }
 
     .map-canvas {
@@ -318,6 +301,10 @@
       stroke: rgba(255,255,255,0.4);
       stroke-width: 1;
       fill: none;
+    }
+
+    .vector-grid.satellite-grid {
+      stroke: rgba(255,255,255,0.15);
     }
 
     .map-pin {
@@ -454,6 +441,47 @@
       background: var(--primary-color);
       color: #fff;
       border-color: var(--primary-color);
+    }
+
+    /* Welcome Onboarding Tip */
+    .onboarding-card {
+      position: absolute;
+      top: 130px;
+      left: 16px;
+      right: 16px;
+      background: rgba(230, 244, 234, 0.96);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      z-index: 505;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border: 1px solid rgba(0, 147, 75, 0.15);
+      animation: onboardingFade 0.4s ease forwards;
+    }
+
+    @keyframes onboardingFade {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Map Legend bar */
+    .map-legend-card {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 30px;
+      padding: 6px 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      z-index: 490;
+      display: flex;
+      justify-content: space-around;
+      font-size: 11px;
+      font-weight: bold;
+      color: #111;
     }
 
     /* Quick View Sheet on Map */
@@ -1329,14 +1357,14 @@
     <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
     
     <ul class="features-list">
-      <li><span>۱</span> <strong>نمایش زنده موقعیت متخصصین:</strong> متخصصان با نشانگرهای پالس‌زن نارنجی رنگ به مپ اضافه شدند!</li>
-      <li><span>۲</span> <strong>فیلتر شعاع جغرافیایی (Radius):</strong> با جابجایی اسلایدر شعاع، مغازه‌ها و متخصصان خارج از محدوده محو می‌شوند!</li>
-      <li><span>۳</span> <strong>درخواست و مشاوره مستقیم:</strong> با کلیک روی متخصص، مشخصاتش باز شده و می‌توانید چت را مستقیماً باز کنید.</li>
-      <li><span>۴</span> <strong>سرچ و ساجستشن هوشمند مپ:</strong> در کادر جستجو کلمه "علی" یا "کافه" را بزنید تا فورا باز شود.</li>
-      <li><span>۵</span> <strong>ردیابی زنده و پیگیری:</strong> پس از ثبت، متخصص انتخابی و قیمت با فاکتور دقیق ردیابی می‌شود.</li>
+      <li><span>۱</span> <strong>راهنمای شروع سریع نقشه:</strong> اضافه شدن کارت زیبا و متحرک راهنمای مپ در لود اولیه نقشه.</li>
+      <li><span>۲</span> <strong>تغییر نوع نقشه (Satellite/Standard):</strong> اضافه شدن دکمه تغییر استایل نقشه به حالت ماهواره‌ای.</li>
+      <li><span>۳</span> <strong>هاب پین‌های متخصصان:</strong> پین متخصصین با افکت پالس‌زن و آیکون اختصاصی.</li>
+      <li><span>۴</span> <strong>راهنمای پین‌ها (Map Legend):</strong> نوار شکیل راهنمای آیکون‌های صنف در پایین نقشه.</li>
+      <li><span>۵</span> <strong>فیلتر شعاع و سرچ زنده:</strong> فیلترینگ و اسلایدر شعاع کاملاً زنده و تعاملی.</li>
     </ul>
 
-    <p style="font-size: 13px; font-style: italic; color: #888;">💡 روی آیکون متخصصین روی نقشه کلیک کنید و دکمه چت مستقیم با او را لمس کنید.</p>
+    <p style="font-size: 13px; font-style: italic; color: #888;">💡 دکمه کره ماهواره‌ای را در پایین سمت راست نقشه لمس کنید تا استایل مپ فورا تغییر کند!</p>
   </div>
 
   <!-- RIGHT: Mobile Emulator Wrapper -->
@@ -1371,14 +1399,14 @@
         <!-- VIEW 1: MAP PAGE                          -->
         <!-- ========================================= -->
         <div class="screen-content active" id="view-map">
-          <div class="map-canvas">
+          <div class="map-canvas" id="map-area">
             <!-- Simulated Tehran Vector Grid Map background -->
-            <svg class="vector-grid" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <path d="M 0,40 Q 30,50 60,35 T 100,50" stroke="#a5c9e2" stroke-width="6" fill="none" opacity="0.6"/>
-              <line x1="20" y1="0" x2="40" y2="100" stroke="#fdfdfd" stroke-width="4" opacity="0.8"/>
-              <line x1="0" y1="30" x2="100" y2="25" stroke="#fdfdfd" stroke-width="4" opacity="0.8"/>
-              <line x1="0" y1="75" x2="100" y2="80" stroke="#fdfdfd" stroke-width="3" opacity="0.8"/>
-              <circle cx="50" cy="50" r="40" stroke="#88b598" stroke-dasharray="3,3" stroke-width="1.5" />
+            <svg class="vector-grid" id="vector-map" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d="M 0,40 Q 30,50 60,35 T 100,50" id="map-river" stroke="#a5c9e2" stroke-width="6" fill="none" opacity="0.6"/>
+              <line x1="20" y1="0" x2="40" y2="100" class="map-street" stroke="#fdfdfd" stroke-width="4" opacity="0.8"/>
+              <line x1="0" y1="30" x2="100" y2="25" class="map-street" stroke="#fdfdfd" stroke-width="4" opacity="0.8"/>
+              <line x1="0" y1="75" x2="100" y2="80" class="map-street" stroke="#fdfdfd" stroke-width="3" opacity="0.8"/>
+              <circle cx="50" cy="50" r="40" id="map-circle" stroke="#88b598" stroke-dasharray="3,3" stroke-width="1.5" />
             </svg>
 
             <!-- Map pins -->
@@ -1443,6 +1471,21 @@
             </div>
           </div>
 
+          <!-- Welcome Onboarding Card -->
+          <div class="onboarding-card" id="map-onboarding">
+            <span style="font-size:24px;">💡</span>
+            <div style="flex:1;">
+              <div style="font-weight:bold; font-size:12px; color:#137333; margin-bottom:2px;">راهنمای نقشه سوپراپلیکیشن 🌟</div>
+              <div style="font-size:10px; color:#333; line-height:1.4;">در این صفحه می‌توانید مراکز خدماتی اطراف را بیابید، یا با لمس دکمه «درخواست متخصص»، فوراً سرویس‌کار لوله‌کشی، برق، یا AC به خانه خود دعوت کنید!</div>
+            </div>
+            <span style="cursor:pointer; font-weight:bold; font-size:14px; color:#777;" onclick="dismissOnboarding()">✕</span>
+          </div>
+
+          <!-- Map style selector normal <-> satellite -->
+          <div class="fab-btn fab-style" id="style-fab" onclick="toggleMapStyle()">
+            <span>🌐</span>
+          </div>
+
           <!-- Interactive Action Buttons -->
           <div class="fab-btn fab-location" id="loc-fab" onclick="resetMapCamera()">
             <span>🎯</span>
@@ -1450,6 +1493,14 @@
 
           <div class="fab-btn fab-request" id="req-fab" onclick="openServicesFlow()">
             <span>🛠️</span> درخواست متخصص
+          </div>
+
+          <!-- Map Legend bar guide -->
+          <div class="map-legend-card" id="map-legend">
+            <span>📱 الکترونیک</span>
+            <span>🌱 گیاهان</span>
+            <span>☕ کافه</span>
+            <span style="color:var(--accent-color);">👷 متخصصین</span>
           </div>
 
           <!-- Quick View sliding panel (Polymorphic Shop/Expert view) -->
@@ -1799,7 +1850,7 @@
     s5: { id: 's5', name: 'گل‌فروشی فلاور پاور', category: 'Plants', rating: 4.7, reviews: 30, address: 'تهران، خیابان پاسداران، نبش کوچه ۵', hours: '۰۸:۰۰ الی ۲۰:۰۰', isOpen: true, icon: '🌱', distance: 6.0, type: 'shop' },
     e1: { id: 'e1', name: 'علی رضایی', category: 'Expert', rating: 4.9, reviews: 142, address: 'موقعیت زنده • ۱.۱ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۵۰,۰۰۰ تومان', isOpen: true, icon: '👨‍🔧', distance: 1.1, type: 'expert', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', avatar: '👨‍🔧', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی اقدام کنم.' },
     e2: { id: 'e2', name: 'سینا محمدی', category: 'Expert', rating: 4.8, reviews: 98, address: 'موقعیت زنده • ۲.۵ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۲۰,۰۰۰ تومان', isOpen: true, icon: '⚡', distance: 2.5, type: 'expert', specialty: 'تکنسین برق ساختمان و عیب‌یابی', avatar: '⚡', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارها کاملاً آماده است.' },
-    e3: { id: 'e3', name: 'میلاد کریمی', category: 'Expert', rating: 4.7, reviews: 215, address: 'موقعیت زنده • ۸.۰ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۴۰,۰۰۰ تومان', isOpen: true, icon: '❄️', distance: 8.0, type: 'expert', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', avatar: '❄️', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم؟' }
+    e3: { id: 'e3', name: 'میلاد کریمی', category: 'Expert', rating: 4.7, reviews: 215, address: 'موقعیت زنده • ۸.۰ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۴۰,۰۰۰ تومان', isOpen: true, icon: '❄️', distance: 8.0, type: 'expert', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', avatar: '❄️', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم?' }
   };
 
   // Tab switching
@@ -1821,6 +1872,7 @@
   let showOpenOnly = false;
   let minRating = 0;
   let searchRadius = 5.0; // Default radius
+  let mapStyle = 'normal'; // Map style normal vs satellite
 
   function filterMapCategory(cat) {
     mapCategory = cat;
@@ -1840,6 +1892,7 @@
 
     applyTuningFilters();
     closeQuickView();
+    dismissOnboarding(); // Auto-dismiss tutorial on filter
   }
 
   // Real-time Radius change in bottom sheet
@@ -1871,6 +1924,39 @@
         pin.style.display = 'none';
       }
     });
+  }
+
+  // Map style normal <-> satellite
+  function toggleMapStyle() {
+    const mapArea = document.getElementById('screen-map');
+    const vMap = document.getElementById('vector-map');
+    const river = document.getElementById('map-river');
+    const circle = document.getElementById('map-circle');
+    
+    if (mapStyle === 'normal') {
+      mapStyle = 'satellite';
+      mapArea.classList.add('satellite');
+      vMap.classList.add('satellite-grid');
+      river.style.stroke = '#1b3240';
+      circle.style.stroke = '#ffc107'; // yellow dashed ring
+      document.querySelectorAll('.map-street').forEach(st => st.style.stroke = '#333');
+      document.getElementById('phone-status-bar').className = 'status-bar light-text';
+      showNotification("نقشه به حالت عکس ماهواره‌ای تیره تغییر یافت 🛰️");
+    } else {
+      mapStyle = 'normal';
+      mapArea.classList.remove('satellite');
+      vMap.classList.remove('satellite-grid');
+      river.style.stroke = '#a5c9e2';
+      circle.style.stroke = '#88b598'; // green dashed ring
+      document.querySelectorAll('.map-street').forEach(st => st.style.stroke = '#fdfdfd');
+      document.getElementById('phone-status-bar').className = 'status-bar dark-text';
+      showNotification("نقشه به حالت طرح ساده شهری بازگشت 🗺️");
+    }
+  }
+
+  function dismissOnboarding() {
+    const onboarding = document.getElementById('map-onboarding');
+    if (onboarding) onboarding.style.display = 'none';
   }
 
   // Advanced Tune Bottom Sheet Filter opening
@@ -1932,6 +2018,7 @@
     document.getElementById('map-search-clear').style.display = val.length > 0 ? 'inline' : 'none';
     applyTuningFilters();
     updateSearchSuggestions();
+    dismissOnboarding();
   });
 
   function updateSearchSuggestions() {
@@ -1986,8 +2073,8 @@
   // Polymorphic Sheet Opener
   function openQuickView(shopId) {
     const shop = shops[shopId];
+    dismissOnboarding();
     
-    // Distinguish UI card styling for Shop vs Expert
     const qvBtn = document.getElementById('qv-action-btn');
     if (shop.type === 'expert') {
       document.getElementById('qv-category').innerText = 'متخصص تایید شده';
@@ -2003,9 +2090,8 @@
       document.getElementById('qv-status').innerText = 'آماده به کار';
       document.getElementById('qv-status').className = 'badge-open';
 
-      // Set button to launch consultation chat directly!
       qvBtn.innerHTML = `<span>💬</span> شروع مشاوره و چت مستقیم`;
-      qvBtn.style.background = '#f2994a'; // Accent orange for experts
+      qvBtn.style.background = '#f2994a'; 
       qvBtn.onclick = () => openDirectExpertConsultation(shopId);
 
     } else {
@@ -2030,7 +2116,6 @@
         statusBadge.className = 'badge-closed';
       }
 
-      // Set default shop behavior
       qvBtn.innerHTML = `<span>🏪</span> مشاهده پروفایل فروشگاه`;
       qvBtn.style.background = 'var(--primary-color)';
       qvBtn.onclick = viewStoreProfile;
@@ -2043,9 +2128,11 @@
       targetPin.style.display = 'flex'; 
     }
 
-    // Move FABs out of way
+    // Move FABs and Legend out of way
     document.getElementById('loc-fab').style.bottom = '280px';
+    document.getElementById('style-fab').style.bottom = '334px';
     document.getElementById('req-fab').style.bottom = '280px';
+    document.getElementById('map-legend').style.display = 'none';
 
     document.getElementById('quick-view').classList.add('open');
   }
@@ -2054,9 +2141,11 @@
     document.getElementById('quick-view').classList.remove('open');
     document.querySelectorAll('.map-pin').forEach(pin => pin.classList.remove('selected'));
 
-    // Move FABs back down
+    // Move FABs and Legend back down
     document.getElementById('loc-fab').style.bottom = '100px';
+    document.getElementById('style-fab').style.bottom = '154px';
     document.getElementById('req-fab').style.bottom = '100px';
+    document.getElementById('map-legend').style.display = 'flex';
   }
 
   function resetMapCamera() {
@@ -2069,7 +2158,6 @@
     alert(`در حال انتقال به صفحه فروشگاه ${name}...`);
   }
 
-  // Direct launcher from Map pins to live Chat (Superb UX!)
   function openDirectExpertConsultation(expertId) {
     closeQuickView();
     const bid = shops[expertId];
@@ -2151,7 +2239,7 @@
   const mockBids = [
     { id: 'b1', name: 'علی رضایی', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', rating: 4.9, jobs: 142, price: '۳۵۰,۰۰۰ تومان', eta: '۱۵ دقیقه', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی اقدام کنم.' },
     { id: 'b2', name: 'سینا محمدی', specialty: 'تکنسین برق ساختمان و عیب‌یابی', rating: 4.8, jobs: 98, price: '۲۹۰,۰۰۰ تومان', eta: '۲۲ دقیقه', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150', text: 'درود! در زمینه برق و سیم‌کشی ساختمان و رفع اتصالی تخصص دارم. ابزارها کاملاً آماده است.' },
-    { id: 'b3', name: 'میلاد کریمی', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', rating: 4.7, jobs: 215, price: '۳۲۰,۰۰۰ تومان', eta: '۱۸ دقیقه', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم؟' }
+    { id: 'b3', name: 'میلاد کریمی', specialty: 'تکنسین سیستم‌های سرمایشی و کولر', rating: 4.7, jobs: 215, price: '۳۲۰,۰۰۰ تومان', eta: '۱۸ دقیقه', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150', text: 'سلام! سرویس کولر گازی و شارژ گاز به صورت حرفه‌ای انجام می‌شود. مایل هستید فورا هماهنگ کنم?' }
   ];
 
   let activeOffers = [];
@@ -2210,13 +2298,6 @@
       </div>
     `;
     container.appendChild(card);
-  }
-
-  function closeServicesFlow() {
-    clearTimeout(offerTimer1);
-    clearTimeout(offerTimer2);
-    clearTimeout(offerTimer3);
-    document.getElementById('services-flow').classList.remove('open');
   }
 
   // =========================================
