@@ -1408,6 +1408,49 @@
       padding-right: 8px;
     }
 
+    /* Custom Review styling */
+    .booth-review-card {
+      background: var(--surface-color);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+
+    .review-user-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .review-img {
+      max-height: 140px;
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+      margin-top: 10px;
+      border: 1px solid #eee;
+    }
+
+    /* Submit feedback box */
+    .submit-feedback-card {
+      background: rgba(240, 242, 245, 0.4);
+      border: 1px dashed var(--outline);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stars-row {
+      display: flex;
+      gap: 4px;
+      margin: 8px 0 12px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
     /* Notification Banner */
     .custom-snackbar {
       position: absolute;
@@ -1445,14 +1488,14 @@
     <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
     
     <ul class="features-list">
-      <li><span>۱</span> <strong>غرفه و مینی‌سایت اختصاصی کسب‌وکار:</strong> باز شدن غرفه مجازی و گالری محصولات با دکمه "مشاهده پروفایل غرفه"!</li>
-      <li><span>۲</span> <strong>خرید لایو از غرفه‌داران:</strong> کلیک روی هر کالا در ویترین غرفه فورا دیالوگ خرید را باز می‌کند.</li>
-      <li><span>۳</span> <strong>تغییر استایل نقشه به حالت ماهواره‌ای:</strong> دکمه کره زمین برای سوییچ زنده تم نقشه.</li>
-      <li><span>۴</span> <strong>راهنمای شروع سریع و پالس پین‌ها:</strong> کارت راهنمای روی مپ و افکت موجی زیبا برای علائم.</li>
-      <li><span>۵</span> <strong>فیلترهای پیشرفته و اسلایدر شعاع:</strong> فیلتر باز بودن و ریتینگ به همراه شعاع جستجوی کاملاً پویا.</li>
+      <li><span>۱</span> <strong>بخش کامنت‌ها و اشتراک تصاویر:</strong> کاربران می‌توانند عکس خرید خود را به اشتراک بگذارند و امتیاز دهند!</li>
+      <li><span>۲</span> <strong>ثبت زنده کامنت به همراه عکس:</strong> تجربه خرید خود را بنویسید، عکس آیفون را اتچ کنید و فورا ثبت کنید!</li>
+      <li><span>۳</span> <strong>تبدیل همه‌جانبه قیمت‌ها به تومان:</strong> تمام مبالغ در سراسر بخش‌ها (خرید، اجاره و خدمات) ریالی شدند.</li>
+      <li><span>۴</span> <strong>مینی‌سایت و غرفه اختصاصی:</strong> باز شدن غرفه مجازی و گالری محصولات با دکمه "مشاهده پروفایل غرفه"!</li>
+      <li><span>۵</span> <strong>تغییر استایل نقشه ماهواره‌ای و رادار زنده:</strong> سوییچ زنده تم مپ و فیلتر شعاع جستجو.</li>
     </ul>
 
-    <p style="font-size: 13px; font-style: italic; color: #888;">💡 روی یک پین نقشه کلیک کرده و سپس دکمه سبز رنگ <strong>«مشاهده پروفایل غرفه»</strong> را بزنید تا وارد مینی‌سایت تعاملی فروشگاه شوید.</p>
+    <p style="font-size: 13px; font-style: italic; color: #888;">💡 وارد غرفه <strong>تک هاب (📱)</strong> شوید. بخش نظرات را در پایین اسکرول کنید، متن دلخواه بنویسید، تیک افزودن تصویر خرید را بزنید و دکمه ثبت را لمس کنید تا معجزه شبیه‌ساز را ببینید!</p>
   </div>
 
   <!-- RIGHT: Mobile Emulator Wrapper -->
@@ -1631,16 +1674,16 @@
           </div>
           
           <div class="product-grid">
-            <div class="product-card" onclick="openPurchaseDialog('iPhone 15 Pro', 'آخرین پرچمدار اپل با ظرفیت بالا', '۹۹۹ دلار')">
+            <div class="product-card" onclick="openPurchaseDialog('iPhone 15 Pro', 'آخرین پرچمدار اپل با ظرفیت بالا', '۶۰,۰۰۰,۰۰۰ تومان')">
               <div class="product-img">📱</div>
               <div class="product-name">iPhone 15 Pro</div>
-              <div class="product-price">۹۹۹ دلار</div>
+              <div class="product-price">۶۰,۰۰۰,۰۰۰ تومان</div>
               <div class="product-desc">آخرین پرچمدار اپل</div>
             </div>
-            <div class="product-card" onclick="openPurchaseDialog('سرخ‌کن بدون روغن Air Fryer', 'غذای سالم و بدون روغن با کارکرد آسان', '۱۲۰ دلار')">
+            <div class="product-card" onclick="openPurchaseDialog('سرخ‌کن بدون روغن Air Fryer', 'غذای سالم و بدون روغن با کارکرد آسان', '۷,۰۰۰,۰۰۰ تومان')">
               <div class="product-img">🏠</div>
               <div class="product-name">سرخ‌کن بدون روغن</div>
-              <div class="product-price">۱۲۰ دلار</div>
+              <div class="product-price">۷,۰۰۰,۰۰۰ تومان</div>
               <div class="product-desc">غذای سالم با کارکرد آسان</div>
             </div>
           </div>
@@ -1660,25 +1703,25 @@
           </div>
 
           <div class="product-grid">
-            <div class="product-card" onclick="openRentalBooking('میکسر بتن بتونیر', 'میکسر بتن سنگین صنعتی جهت پروژه‌های ساختمانی.', ۵۰, '⚙️ صنعتی')">
+            <div class="product-card" onclick="openRentalBooking('میکسر بتن بتونیر', 'میکسر بتن سنگین صنعتی جهت پروژه‌های ساختمانی.', 3000000, '⚙️ صنعتی')">
               <div class="badge-rental">اجاره‌ای</div>
               <div class="product-img">⚙️</div>
               <div class="product-name">میکسر بتن بتونیر</div>
-              <div class="product-price">۵۰ دلار/روز</div>
+              <div class="product-price">۳,۰۰۰,۰۰۰ تومان/روز</div>
               <div class="product-desc">میکسر بتن صنعتی سنگین</div>
             </div>
-            <div class="product-card" onclick="openRentalBooking('تراکتور سنگین X-200', 'تراکتور قدرتمند چند منظوره کشاورزی با بهره‌وری بالا.', ۱۲۰, '🌱 کشاورزی')">
+            <div class="product-card" onclick="openRentalBooking('تراکتور سنگین X-200', 'تراکتور قدرتمند چند منظوره کشاورزی با بهره‌وری بالا.', 7500000, '🌱 کشاورزی')">
               <div class="badge-rental">اجاره‌ای</div>
               <div class="product-img">🚜</div>
               <div class="product-name">تراکتور سنگین X-200</div>
-              <div class="product-price">۱۲۰ دلار/روز</div>
+              <div class="product-price">۷,۵۰۰,۰۰۰ تومان/روز</div>
               <div class="product-desc">تراکتور پرقدرت کشاورزی</div>
             </div>
-            <div class="product-card" onclick="openRentalBooking('ژنراتور برق 5kW', 'ژنراتور برق اضطراری مطمئن صنعتی.', ۳۰, '⚙️ صنعتی')">
+            <div class="product-card" onclick="openRentalBooking('ژنراتور برق 5kW', 'ژنراتور برق اضطراری مطمئن صنعتی.', 1800000, '⚙️ صنعتی')">
               <div class="badge-rental">اجاره‌ای</div>
               <div class="product-img">⚡</div>
               <div class="product-name">ژنراتور برق 5kW</div>
-              <div class="product-price">۳۰ دلار/روز</div>
+              <div class="product-price">۱,۸۰۰,۰۰۰ تومان/روز</div>
               <div class="product-desc">ژنراتور برق پشتیبان مطمئن</div>
             </div>
           </div>
@@ -1696,8 +1739,8 @@
 
           <div class="wallet-card">
             <div class="wallet-title">اعتبار کیف پول الکترونیکی</div>
-            <div class="wallet-balance" id="wallet-val">۱۵۰.۰۰ دلار</div>
-            <button class="wallet-btn" onclick="topUpWallet()">شارژ سریع کیف پول (+۱۰۰ دلار)</button>
+            <div class="wallet-balance" id="wallet-val">۱۰,۰۰۰,۰۰۰ تومان</div>
+            <button class="wallet-btn" onclick="topUpWallet()">شارژ سریع کیف پول (+۵,۰۰۰,۰۰۰ تومان)</button>
           </div>
 
           <div class="menu-item">
@@ -1727,7 +1770,7 @@
           <div class="confirm-body" id="purchase-body">آیا تمایل به خرید گوشی iPhone 15 Pro دارید؟</div>
           <div class="confirm-price-row">
             <span>قیمت نهایی:</span>
-            <span id="purchase-price" style="color:var(--primary-color);">۹۹۹ دلار</span>
+            <span id="purchase-price" style="color:var(--primary-color);">۶۰,۰۰۰,۰۰۰ تومان</span>
           </div>
           <div class="dialog-actions">
             <button class="btn-cancel" onclick="closePurchaseDialog()">انصراف</button>
@@ -1758,13 +1801,13 @@
         </div>
 
         <div class="booking-total-box">
-          <span id="rb-calc-days">۲ روز × ۱۲۰ دلار/روز</span>
-          <span id="rb-total-price">۲۴۰ دلار</span>
+          <span id="rb-calc-days">۲ روز × ۷,۵۰۰,۰۰۰ تومان</span>
+          <span id="rb-total-price">۱۵,۰۰۰,۰۰۰ تومان</span>
         </div>
 
         <div class="booking-total-box" style="background:#fff; border:1px solid #eee; margin-top:-16px; margin-bottom:24px;">
           <span style="font-size:11px; color:#555;">موجودی کیف پول شما:</span>
-          <span style="font-size:11.5px; color:var(--primary-color);" id="rb-wallet-bal">۱۵۰.۰۰ $</span>
+          <span style="font-size:11.5px; color:var(--primary-color);" id="rb-wallet-bal">۱۰,۰۰۰,۰۰۰ تومان</span>
         </div>
 
         <button class="chat-action-btn" onclick="confirmRentalBooking()">تایید و ثبت نهایی اجاره</button>
@@ -1908,7 +1951,7 @@
         </div>
       </div>
 
-      <!-- G. NEW: MERCHANT VIRTUAL BOOTH / MINI-SITE OVERLAY -->
+      <!-- G. MERCHANT VIRTUAL BOOTH / MINI-SITE OVERLAY -->
       <div class="booth-overlay" id="booth-overlay">
         <div class="booth-banner" id="booth-banner">
           <div class="booth-back-btn" onclick="closeShopBooth()">✕</div>
@@ -1930,10 +1973,44 @@
           <div class="booth-desc" id="booth-about">بزرگترین مرکز تخصصی فروش گجت و تعمیرات سخت‌افزاری انواع موبایل و تبلت با قطعات اورجینال در تهران.</div>
 
           <div class="booth-grid-title">ویترین و گالری محصولات غرفه</div>
-          <!-- Products will be dynamically generated based on shop selection -->
-          <div class="product-grid" id="booth-products-container" style="padding:0;">
+          <div class="product-grid" id="booth-products-container" style="padding:0; margin-bottom:16px;">
             <!-- Booth items -->
           </div>
+
+          <!-- CUSTOMER REVIEWS & PHOTO SHARING SECTION (جدید!) -->
+          <div class="booth-grid-title" style="margin-top:12px;">تجربیات خریداران و نظرات غرفه</div>
+          
+          <!-- Submit Review Form inside simulator -->
+          <div class="submit-feedback-card">
+            <div style="font-weight:bold; font-size:12px; margin-bottom:8px;">ثبت تجربه خرید و نظر جدید</div>
+            
+            <!-- Dynamic Star Picker -->
+            <div style="font-size:11px; color:#555;">امتیاز شما:</div>
+            <div class="stars-row" id="feedback-stars">
+              <span onclick="setFeedbackStars(1)">★</span>
+              <span onclick="setFeedbackStars(2)">★</span>
+              <span onclick="setFeedbackStars(3)">★</span>
+              <span onclick="setFeedbackStars(4)">★</span>
+              <span onclick="setFeedbackStars(5)" style="color:Colors.amber;">★</span>
+            </div>
+
+            <textarea id="feedback-text" rows="2" style="width:100%; border:1px solid #ccc; border-radius:10px; padding:10px; font-size:12px; resize:none;" placeholder="تجربه خرید خود یا برخورد غرفه‌دار را بنویسید..."></textarea>
+            
+            <div style="margin:12px 0; display:flex; justify-content:space-between; align-items:center;">
+              <!-- Toggle to simulate photo attach! -->
+              <label style="display:flex; align-items:center; gap:6px; font-size:11px; color:#555; cursor:pointer;">
+                <input type="checkbox" id="attach-photo-toggle" style="accent-color:var(--primary-color);"> افزودن عکس کالای خریداری‌شده
+              </label>
+              
+              <button class="chat-action-btn" style="width:auto; padding:6px 14px; font-size:11.5px;" onclick="submitUserFeedback()">ثبت نظر</button>
+            </div>
+          </div>
+
+          <!-- Reviews list -->
+          <div id="booth-reviews-list">
+            <!-- Dynamically populated comments -->
+          </div>
+
           <div style="height:40px;"></div>
         </div>
 
@@ -1968,7 +2045,7 @@
 </div>
 
 <script>
-  // Mock Database Shops & Experts
+  // Mock Database Shops, Experts & Reviews
   const shops = {
     s1: { 
       id: 's1', 
@@ -1985,9 +2062,13 @@
       type: 'shop',
       about: 'بزرگترین مرکز تخصصی فروش گجت و تعمیرات سخت‌افزاری انواع موبایل و تبلت با قطعات اورجینال و تحویل فوری در تهران.',
       products: [
-        { name: 'iPhone 15 Pro', desc: 'آخرین پرچمدار اپل با بدنه تیتانیوم', price: '۹۹۹$', icon: '📱' },
-        { name: 'شارژر بی‌سیم Fast', desc: 'شارژر سریع مغناطیسی ۱۵ وات', price: '۴۵$', icon: '🔌' },
-        { name: 'پایه نگهدارنده تلسکوپی', desc: 'نگهدارنده تمام فلزی رومیزی گوشی', price: '۲۵$', icon: '📐' }
+        { name: 'iPhone 15 Pro', desc: 'آخرین پرچمدار اپل با بدنه تیتانیوم', price: '۶۰,۰۰۰,۰۰۰ تومان', icon: '📱' },
+        { name: 'شارژر بی‌سیم Fast', desc: 'شارژر سریع مغناطیسی ۱۵ وات مغناطیسی', price: '۲,۵۰۰,۰۰۰ تومان', icon: '🔌' },
+        { name: 'پایه نگهدارنده تلسکوپی', desc: 'نگهدارنده تمام فلزی رومیزی گوشی', price: '۱,۲۰۰,۰۰۰ تومان', icon: '📐' }
+      ],
+      reviewsList: [
+        { user: 'امیرعلی رضایی', rating: 5, comment: 'عالی بود! گوشی آیفونی که خریدم را با گارانتی رسمی اصلی و بهترین قیمت تحویل دادند. عکس جعبه رو براتون می‌ذارم.', img: 'uploads/Screenshot_2026-06-09-20-57-38-358_com.android.chrome.jpg' },
+        { user: 'سارا کریمی', rating: 4, comment: 'پایه تلسکوپی را سفارش دادم، کیفیت ساختش عالیه و فلز سنگینی داره. برخورد پرسنل هم خیلی خوب بود.', img: null }
       ]
     },
     s2: { 
@@ -2005,9 +2086,12 @@
       type: 'shop',
       about: 'پرورش و عرضه انواع گل و گیاهان آپارتمانی شاداب، بن‌سای‌های مینیاتوری متمایز و خاک ارگانیک غنی‌شده با ورمی‌کمپوست.',
       products: [
-        { name: 'بن‌سای جینسینگ', desc: 'درختچه بن‌سای مینیاتوری شکیل', price: '۸۵$', icon: '🌳' },
-        { name: 'فیلودندرون برگ انجیری', desc: 'گیاه آپارتمانی پهن‌برگ بسیار جذاب', price: '۳۵$', icon: '🌿' },
-        { name: 'کود مایع رشد سریع نیتروژن', desc: 'کود مایع جهت شادابی و برگ‌دهی گیاه', price: '۱۵$', icon: '🧪' }
+        { name: 'بن‌سای جینسینگ', desc: 'درختچه بن‌سای مینیاتوری شکیل سرامیکی', price: '۵,۰۰۰,۰۰۰ تومان', icon: '🌳' },
+        { name: 'فیلودندرون برگ انجیری', desc: 'گیاه آپارتمانی پهن‌برگ بسیار جذاب', price: '۲,۰۰۰,۰۰۰ تومان', icon: '🌿' },
+        { name: 'کود مایع رشد سریع نیتروژن', desc: 'کود مایع جهت شادابی و برگ‌دهی گیاه', price: '۸۰۰,۰۰۰ تومان', icon: '🧪' }
+      ],
+      reviewsList: [
+        { user: 'مهدی حسینی', rating: 5, comment: 'بن‌سای جینسینگی که ازشون گرفتم واقعا شادابه و به موقع فرستادند. خاکشون هم خیلی باکیفیته.', img: null }
       ]
     },
     s3: { 
@@ -2025,9 +2109,12 @@
       type: 'shop',
       about: 'کافه دنج و آرام با غنی‌ترین اسپرسو بار عربیکا اسپشیالتی و کرواسان‌های تازه و داغ پخت روز با فیلینگ شکلات بلژیکی.',
       products: [
-        { name: 'آرتیسان لاته داغ', desc: 'اسپرسو دوبل با فوم شیر ابریشمی', price: '۴.۵$', icon: '☕' },
-        { name: 'کرواسان شکلات داغ', desc: 'کرواسان پخت روز با فیلینگ شکلات بلژیکی', price: '۳.۵$', icon: '🥐' },
-        { name: 'قهوه کلمبیا (۲۵۰ گرم)', desc: 'دانه‌های تازه برشته شده قهوه عربیکا کلمبیا', price: '۱۸$', icon: '🫘' }
+        { name: 'آرتیسان لاته داغ', desc: 'اسپرسو دوبل با فوم شیر ابریشمی', price: '۲۵۰,۰۰۰ تومان', icon: '☕' },
+        { name: 'کرواسان شکلات داغ', desc: 'کرواسان پخت روز با فیلینگ شکلات بلژیکی', price: '۱۸۰,۰۰۰ تومان', icon: '🥐' },
+        { name: 'قهوه کلمبیا (۲۵۰ گرم)', desc: 'دانه‌های تازه برشته شده قهوه عربیکا کلمبیا', price: '۱,۰۰۰,۰۰۰ تومان', icon: '🫘' }
+      ],
+      reviewsList: [
+        { user: 'مریم قربانی', rating: 5, comment: 'طعم لاته عالی بود و کرواسانشون فوق‌العاده ترد و تازه بود. فضا هم بسیار دنج و آرامه.', img: null }
       ]
     },
     s4: { 
@@ -2045,8 +2132,11 @@
       type: 'shop',
       about: 'مرکز معتبر عرضه انواع لوازم جانبی دیجیتال، پاوربانک، قاب گوشی، گلس و تجهیزات گیمینگ موبایل.',
       products: [
-        { name: 'پاوربانک ۲۰,۰۰۰ میلی‌آمپر', desc: 'پاوربانک فست شارژ با دو پورت خروجی', price: '۶۰$', icon: '🔋' },
-        { name: 'قاب مگنتی گوشی', desc: 'قاب محافظ فیبر کربنی مگ‌سیف', price: '۱۵$', icon: '🛡️' }
+        { name: 'پاوربانک ۲۰,۰۰0 میلی‌آمپر', desc: 'پاوربانک فست شارژ با دو پورت خروجی سریع', price: '۳,۵۰۰,۰۰۰ تومان', icon: '🔋' },
+        { name: 'قاب مگنتی گوشی', desc: 'قاب محافظ فیبر کربنی مگ‌سیف', price: '۹۰۰,۰۰۰ تومان', icon: '🛡' }
+      ],
+      reviewsList: [
+        { user: 'میلاد فرجی', rating: 4, comment: 'پاوربانکش خوبه، سرعت شارژش عالیه و قیمت مناسبی نسبت به جاهای دیگه داره.', img: null }
       ]
     },
     s5: { 
@@ -2064,8 +2154,11 @@
       type: 'shop',
       about: 'گالری تخصصی گل‌آرایی، سبد گل هدیه، دسته‌گل‌های مدرن عروسی و مناسبت‌ها با تازه‌ترین گل‌های شاخه‌بریده هلندی.',
       products: [
-        { name: 'دسته‌گل داوودی صورتی', desc: 'پک شکیل دسته‌گل داوودی و ارکیده تازه', price: '۴۰$', icon: '💐' },
-        { name: 'گلدان سرامیکی پتوس', desc: 'پتوس رونده با رشد عالی و تصفیه‌کننده هوا', price: '۱۸$', icon: '🍀' }
+        { name: 'دسته‌گل داوودی صورتی', desc: 'پک شکیل دسته‌گل داوودی و ارکیده تازه', price: '۲,۲۰۰,۰۰۰ تومان', icon: '💐' },
+        { name: 'گلدان سرامیکی پتوس', desc: 'پتوس رونده با رشد عالی و تصفیه‌کننده هوا', price: '۱,۰۰۰,۰۰۰ تومان', icon: '🍀' }
+      ],
+      reviewsList: [
+        { user: 'نسیم ناصری', rating: 5, comment: 'عالی بود دسته‌گلی که فرستادن دقیقا مثل عکس بود و گل‌ها کاملا تازه و با طراوت بودن.', img: null }
       ]
     },
     e1: { id: 'e1', name: 'علی رضایی', category: 'Expert', rating: 4.9, reviews: 142, address: 'موقعیت زنده • ۱.۱ کیلومتری شما', hours: 'اجرت ایاب و ذهاب: ۱۵۰,۰۰۰ تومان', isOpen: true, icon: '👨‍🔧', distance: 1.1, type: 'expert', specialty: 'متخصص ارشد تاسیسات و لوله‌کشی', avatar: '👨‍🔧', text: 'سلام وقت بخیر! من متخصص لوله‌کشی ساختمان و ابزارهای لازم هستم. می‌توانم فورا جهت رفع نشتی اقدام کنم.' },
@@ -2222,6 +2315,7 @@
     updateSearchSuggestions();
   }
 
+  // Autocomplete suger suggestions close
   function onSearchBlur() {
     setTimeout(() => {
       document.getElementById('suggestions-box').classList.remove('open');
@@ -2376,11 +2470,6 @@
     closeQuickView();
   }
 
-  function viewStoreProfile() {
-    const name = document.getElementById('qv-name').innerText;
-    alert(`در حال انتقال به صفحه فروشگاه ${name}...`);
-  }
-
   function openDirectExpertConsultation(expertId) {
     closeQuickView();
     const bid = shops[expertId];
@@ -2391,13 +2480,14 @@
   }
 
   // =========================================
-  // VIRTUAL MERCHANT BOOTH LOGIC
+  // VIRTUAL MERCHANT BOOTH & REVIEWS LOGIC
   // =========================================
+  let currentStarsFeedback = 5;
+
   function openShopBooth() {
     closeQuickView();
     const shop = shops[activeShopId];
     
-    // Header Style
     const displayCategory = shop.category === 'Electronics' ? 'الکترونیک' : (shop.category === 'Plants' ? 'گل و گیاه' : 'کافه');
     document.getElementById('booth-category').innerText = displayCategory;
     document.getElementById('booth-large-icon').innerText = shop.icon;
@@ -2422,7 +2512,7 @@
     document.getElementById('booth-hours').innerText = `🕒 ساعت کاری: ${shop.hours}`;
     document.getElementById('booth-about').innerText = shop.about;
 
-    // Load booth products in the booth grid
+    // Load products
     const container = document.getElementById('booth-products-container');
     let productsHtml = '';
     shop.products.forEach(p => {
@@ -2437,7 +2527,78 @@
     });
     container.innerHTML = productsHtml;
 
+    // Load reviews
+    renderBoothReviews();
+
     document.getElementById('booth-overlay').classList.add('open');
+  }
+
+  function renderBoothReviews() {
+    const shop = shops[activeShopId];
+    const rBox = document.getElementById('booth-reviews-list');
+    let rHtml = '';
+
+    shop.reviewsList.forEach(rev => {
+      let starsHtml = '';
+      for (let s = 1; s <= 5; s++) {
+        starsHtml += `<span style="color: ${s <= rev.rating ? 'orange' : '#ccc'};">★</span>`;
+      }
+
+      let imgHtml = '';
+      if (rev.img) {
+        imgHtml = `<img src="${rev.img}" class="review-img" alt="shared photo">`;
+      }
+
+      rHtml += `
+        <div class="booth-review-card">
+          <div class="review-user-row">
+            <span style="font-weight:bold; font-size:12px;">${rev.user}</span>
+            <div style="font-size:14px;">${starsHtml}</div>
+          </div>
+          <div style="font-size:11.5px; color:#333; line-height:1.5;">${rev.comment}</div>
+          ${imgHtml}
+        </div>
+      `;
+    });
+
+    rBox.innerHTML = rHtml;
+  }
+
+  function setFeedbackStars(count) {
+    currentStarsFeedback = count;
+    const stars = document.getElementById('feedback-stars').querySelectorAll('span');
+    stars.forEach((s, idx) => {
+      s.style.color = idx < count ? 'orange' : '#ccc';
+    });
+  }
+
+  function submitUserFeedback() {
+    const textInput = document.getElementById('feedback-text');
+    const comment = textInput.value.trim();
+    if (comment === '') {
+      alert("لطفا نظر خود را بنویسید!");
+      return;
+    }
+
+    const attachPhoto = document.getElementById('attach-photo-toggle').checked;
+    const imgPath = attachPhoto ? 'uploads/Screenshot_2026-06-09-20-57-38-358_com.android.chrome.jpg' : null;
+
+    const shop = shops[activeShopId];
+    shop.reviewsList.unshift({
+      user: 'شما (کاربر مهمان)',
+      rating: currentStarsFeedback,
+      comment: comment,
+      img: imgPath
+    });
+
+    // Reset Form
+    textInput.value = '';
+    document.getElementById('attach-photo-toggle').checked = false;
+    setFeedbackStars(5);
+
+    // Re-render and notify
+    renderBoothReviews();
+    showNotification("تجربه خرید و نظر شما با موفقیت ثبت شد! ⭐");
   }
 
   function closeShopBooth() {
@@ -2487,8 +2648,13 @@
   function updateRentalCost() {
     const endStr = rentalDays === 2 ? 'فردا (+۱ روز)' : `در ${rentalDays - 1} روز آینده (+${rentalDays - 1} روز)`;
     document.getElementById('rb-end').innerText = endStr;
-    document.getElementById('rb-calc-days').innerText = `${rentalDays} روز × ${selectedRental.pricePerDay} دلار/روز`;
-    document.getElementById('rb-total-price').innerText = `${rentalDays * selectedRental.pricePerDay} دلار`;
+    
+    // format Toman prices cleanly
+    const dailyPriceFormatted = selectedRental.pricePerDay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const totalPriceFormatted = (rentalDays * selectedRental.pricePerDay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    document.getElementById('rb-calc-days').innerText = `${rentalDays} روز × ${dailyPriceFormatted} تومان/روز`;
+    document.getElementById('rb-total-price').innerText = `${totalPriceFormatted} تومان`;
   }
 
   function closeRentalBooking() {
@@ -2503,13 +2669,18 @@
   // =========================================
   // PROFILE LOGIC
   // =========================================
-  let walletVal = 150.00;
+  let walletVal = 10000000; // 10 million Tomans
   function topUpWallet() {
-    walletVal += 100.00;
-    document.getElementById('wallet-val').innerText = `${walletVal.toFixed(2)} دلار`;
-    document.getElementById('rb-wallet-bal').innerText = `${walletVal.toFixed(2)} $`;
-    showNotification("کیف پول الکترونیکی شما با موفقیت +۱۰۰ دلار شارژ شد!");
+    walletVal += 5000000; // +5 million Tomans
+    const formatted = walletVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById('wallet-val').innerText = `${formatted} تومان`;
+    document.getElementById('rb-wallet-bal').innerText = `${formatted} تومان`;
+    showNotification("کیف پول الکترونیکی شما با موفقیت +۵,۰۰۰,۰۰۰ تومان شارژ شد!");
   }
+
+  // Set initial wallet Toman string
+  document.getElementById('wallet-val').innerText = walletVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' تومان';
+  document.getElementById('rb-wallet-bal').innerText = walletVal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' تومان';
 
   // =========================================
   // SERVICES HUB (RADAR & REALTIME OFFERS) LOGIC
