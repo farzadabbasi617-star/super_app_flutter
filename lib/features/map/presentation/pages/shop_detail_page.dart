@@ -66,7 +66,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
     super.dispose();
   }
 
-  // Load custom data based on the selected Shop ID (Supports Fixed Clinics s6, s7, s8!)
+  // Load custom data based on the selected Shop ID (Supports Restaurants s9 and Supermarkets s10!)
   Map<String, dynamic> _getShopData() {
     switch (widget.shopId) {
       case 's1':
@@ -136,7 +136,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
             const UserReview(userName: 'مریم قربانی', rating: 5.0, comment: 'طعم لاته عالی بود و کرواسانشون فوق‌العاده ترد و تازه بود. فضا هم بسیار دنج و آرامه.', date: DateTime.now().subtract(const Duration(days: 1))),
           ]
         };
-      case 's6': // Aria Medical Clinic (Fixed Center)
+      case 's6': // Aria Medical Clinic
         return {
           'name': 'کلینیک درمانی آریا',
           'category': 'کلینیک پزشکی و درمانی عمومی و تخصصی',
@@ -154,7 +154,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
             BoothProduct(name: 'مشاوره تخصصی رژیم و تغذیه', price: '۳۰۰,۰۰۰ تومان', icon: '🍎', description: 'ویزیت متخصص تغذیه با آنالیز چربی و رژیم متناسب'),
           ],
           'defaultReviews': [
-            const UserReview(userName: 'رضا امینی', rating: 4.8, comment: 'کلینیک خلوت و بسیار تمیزی بود. پزشک عمومی باحوصله معاینه کردند و نسخه را تایید کردند.', date: DateTime.now().subtract(const Duration(days: 3))),
+            const UserReview(userName: 'رضا امینی', rating: 4.8, comment: 'کلینیک خلوت و بسیار تمیزی بود. نوبت‌دهی آنلاین عالی کار کرد و سر وقت ویزیت شدم.', date: DateTime.now().subtract(const Duration(days: 3))),
           ]
         };
       case 's7': // Capital Laboratory
@@ -165,7 +165,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
           'rating': 4.7,
           'reviews': 92,
           'address': 'تهران، خیابان ولیعصر، تقاطع فاطمی، ساختمان پزشکان، پلاک ۱۱۰',
-          'phone': '+۹۸ ۲۱ ۸۸۹۰ ۸۸۹۹',
+          'phone': '+۹۸ ۲۱ ۸۸ job ۸۸۹۹', // fallback protection
           'hours': '۰۷:۰۰ الی ۱۹:۰۰',
           'about': 'آزمایشگاه فوق تخصصی پایتخت با دستگاه‌های تمام اتوماتیک پیشرفته، ارائه دهنده کلیه آزمایش‌های روتین و پاتولوژی خون، بیوشیمی، ژنتیک و تست چک‌آپ دوره‌ای با ارسال سریع جواب آنلاین.',
           'avatar': '🧪',
@@ -197,6 +197,50 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
           ],
           'defaultReviews': [
             const UserReview(userName: 'زهرا راد', rating: 4.5, comment: 'فیشیال پوست انجام دادم، تاثیرش فوق‌العاده بود و پوستم خیلی شفاف شد. ممنون از پرسنل بهار.', date: DateTime.now().subtract(const Duration(days: 1))),
+          ]
+        };
+      case 's9': // Aria Saffron Restaurant (New!)
+        return {
+          'name': 'کباب‌سرای زعفران',
+          'category': 'غذا و رستوران سنتی ایرانی',
+          'isFixedClinic': false,
+          'rating': 4.8,
+          'reviews': 320,
+          'address': 'تهران، خیابان ولیعصر، نرسیده به باغ فردوس، پلاک ۱۴',
+          'phone': '+۹۸ ۲۱ ۲۲۰۴ ۲۲۰۵',
+          'hours': '۱۲:۰۰ الی ۲۴:۰۰',
+          'about': 'کباب‌سرای سنتی زعفران با پخت لذیذترین و تازه‌ترین کباب‌های کوبیده زعفرانی با گوشت کشتار روز، جوجه کباب مخصوص رژیمی و ته‌چین طاهری با عطر ناب برنج ایرانی.',
+          'avatar': '🍔',
+          'products': const [
+            BoothProduct(name: 'چلوکباب کوبیده ممتاز زعفرانی', price: '۲۲۰,۰۰۰ تومان', icon: '🍢', description: 'دو سیخ کباب کوبیده ۱۸۰ گرمی با برنج صدری ممتاز درجه یک'),
+            BoothProduct(name: 'جوجه کباب مخصوص بدون استخوان', price: '۱۸۰,۰۰۰ تومان', icon: '🍗', description: 'شنیسل سینه مرغ زعفرانی به همراه گوجه و فلفل کبابی'),
+            BoothProduct(name: 'چلو کباب شیشلیک شاندیز', price: '۴۲۰,۰۰۰ تومان', icon: '🥩', description: 'یک سیخ شیشلیک مخصوص شش تکه گوسفندی آبدار'),
+            BoothProduct(name: 'دوغ پارچه‌ای محلی کوهستان', price: '۴۰,۰۰۰ تومان', icon: '🥛', description: 'دوغ ترش معطر محلی به همراه نعنا و گل‌سرخ پودرشده'),
+          ],
+          'defaultReviews': [
+            const UserReview(userName: 'امید عباسی', rating: 5.0, comment: 'کوبیده‌اش فوق‌العاده نرم و با کیفیت بود. عطر کره محلی و زعفران محشر بود. ممنون از پرسنل.', date: DateTime.now().subtract(const Duration(days: 2))),
+          ]
+        };
+      case 's10': // HyperPlus Supermarket (New!)
+        return {
+          'name': 'هایپرمارکت هایپر پلاس',
+          'category': 'سوپرمارکت و خواربار فروشی آنلاین شبانه‌روزی',
+          'isFixedClinic': false,
+          'rating': 4.5,
+          'reviews': 412,
+          'address': 'تهران، خیابان فاطمی، نبش باباطاهر، پلاک ۴۵',
+          'phone': '+۹۸ ۲۱ ۸۸۹۶ ۶۶۵۵',
+          'hours': 'شبانه‌روزی (۲۴ ساعته)',
+          'about': 'سوپرمارکت آنلاین هایپر پلاس ۲۴ ساعته در خدمت شماست. عرضه روزانه انواع لبنیات تازه، خواربار، تنقلات، نوشیدنی‌ها، نان پخت روز و مواد پروتئینی با ارسال فوق‌سریع در لوکیشن شما.',
+          'avatar': '🛒',
+          'products': const [
+            BoothProduct(name: 'شیر کم‌چرب کاله (۱ لیتر)', price: '۳۲,۰۰۰ تومان', icon: '🥛', description: 'شیر پاستوریزه بطری کاله ۱.۵٪ چربی'),
+            BoothProduct(name: 'چیپس سرکه نمکی مزمز XL', price: '۲۵,۰۰۰ تومان', icon: '🥔', description: 'چیپس ترد سرکه نمکی مزمز با طعم عالی'),
+            BoothProduct(name: 'نوشابه قوطی کوکاکولا', price: '۱۸,۰۰۰ تومان', icon: '🥤', description: 'نوشابه گازدار مشکی قوطی کوکاکولا اصلی'),
+            BoothProduct(name: 'پک تخم‌مرغ رسمی سفید (۱۵ عددی)', price: '۸۵,۰۰۰ تومان', icon: '🥚', description: 'تخم‌مرغ تازه سفید پاستوریزه بسته شده'),
+          ],
+          'defaultReviews': [
+            const UserReview(userName: 'نیما ارجمند', rating: 4.5, comment: 'عالیه که ۲۴ ساعته باز هستن و خیلی سریع خریدها رو با پیک موتور می‌فرستن دم در خانه.', date: DateTime.now().subtract(const Duration(days: 1))),
           ]
         };
       default:
@@ -809,7 +853,7 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                         ),
                         const SizedBox(height: 20),
 
-                        // REMINDER ACTION BUTTON (جدید!)
+                        // REMINDER ACTION BUTTON
                         SizedBox(
                           width: double.infinity,
                           child: OutlinedButton.icon(
@@ -902,7 +946,6 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
                 content: Text(isFixedClinic 
                     ? 'در حال برقراری تماس تلفنی با پذیرش ${shop['name']}...' 
                     : 'در حال اتصال به چت زنده غرفه‌دار (${shop['name']})...'),
-                borderOnForeground: true, // fallback safety
                 behavior: SnackBarBehavior.floating,
               ),
             );
@@ -911,68 +954,6 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
           icon: isFixedClinic ? Icons.phone : Icons.chat_bubble_outline,
         ),
       ),
-    );
-  }
-
-  Widget _buildTicketRow(String title, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-      ],
-    );
-  }
-
-  void _showBoothPurchaseDialog(BuildContext context, BoothProduct product, String shopName) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        final theme = Theme.of(context);
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Text('تایید خرید از غرفه'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('آیا تمایل به خرید "${product.name}" از غرفه "${shopName}" دارید؟', style: const TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              Text(product.description, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('مبلغ کالا:', style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(product.price, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: theme.colorScheme.primary)),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('انصراف'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('کالای "${product.name}" از غرفه با موفقیت خریداری شد!'),
-                    backgroundColor: Colors.green,
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: const Text('خرید مستقیم'),
-            ),
-          ],
-        );
-      },
     );
   }
 

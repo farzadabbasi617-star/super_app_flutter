@@ -83,6 +83,8 @@ class _MapPageState extends State<MapPage> {
     {'name': 'Plants', 'icon': '🌱', 'fa': 'گل و گیاه'},
     {'name': 'Cafe', 'icon': '☕', 'fa': 'کافه'},
     {'name': 'Expert', 'icon': '👨‍🔧', 'fa': 'متخصصین'},
+    {'name': 'Restaurant', 'icon': '🍔', 'fa': 'غذا و رستوران'},
+    {'name': 'Supermarket', 'icon': '🛒', 'fa': 'سوپرمارکت'},
   ];
 
   // Mock Database of Real-time Experts nearby
@@ -192,6 +194,10 @@ class _MapPageState extends State<MapPage> {
         return BitmapDescriptor.hueBlue;
       case 'cafe':
         return BitmapDescriptor.hueOrange;
+      case 'restaurant':
+        return BitmapDescriptor.hueMagenta;
+      case 'supermarket':
+        return BitmapDescriptor.hueCyan;
       default:
         return BitmapDescriptor.hueRed;
     }
