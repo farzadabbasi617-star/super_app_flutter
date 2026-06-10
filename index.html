@@ -1866,28 +1866,49 @@
         <!-- ========================================= -->
         <!-- VIEW 2: MARKETPLACE PAGE                  -->
         <!-- ========================================= -->
-        <div class="screen-content" id="view-market" style="background:#fff;">
+        <div class="screen-content" id="view-market" style="background:#fff; overflow-y: auto;">
           <div class="market-header">
-            <div class="market-title">مارکت‌پلیس (خرید کالا)</div>
-            <div class="chips-row" style="justify-content: center;">
-              <div class="filter-chip active">🌐 همه محصولات</div>
+            <div class="market-title">مارکت‌پلیس خرید و فروش کالا</div>
+            <div class="chips-row" style="justify-content: center; flex-wrap: wrap; gap: 4px;">
+              <div class="filter-chip active">🌐 همه کالاها</div>
               <div class="filter-chip">📱 الکترونیک</div>
-              <div class="filter-chip">🏠 وسایل خانه</div>
+              <div class="filter-chip">🏠 خانه</div>
+              <div class="filter-chip">👗 پوشاک</div>
+              <div class="filter-chip">📚 کتاب</div>
+              <div class="filter-chip">🛠️ ابزار</div>
             </div>
           </div>
           
-          <div class="product-grid">
-            <div class="product-card" onclick="openPurchaseDialog('iPhone 15 Pro', 'آخرین پرچمدار اپل با ظرفیت بالا', '۶۰,۰۰۰,۰۰۰ تومان')">
+          <div class="product-grid" style="padding-bottom: 80px;">
+            <div class="product-card" onclick="openPurchaseDialog('گوشی آیفون ۱۵ پرو تیتانیوم', 'آخرین پرچمدار اپل با بدنه تیتانیومی و دوربین ۴۸ مگاپیکسلی', '۶۰,۰۰۰,۰۰۰ تومان')">
               <div class="product-img">📱</div>
-              <div class="product-name">iPhone 15 Pro</div>
-              <div class="product-price">۶۰,۰۰۰,۰۰۰ تومان</div>
-              <div class="product-desc">آخرین پرچمدار اپل</div>
+              <div class="product-name" style="font-size:11.5px;">آیفون ۱۵ پرو</div>
+              <div class="product-price" style="font-size:11px;">۶۰,۰۰۰,۰۰۰ تومان</div>
+              <div class="product-desc" style="font-size:9.5px;">آخرین پرچمدار اپل تیتانیوم</div>
             </div>
-            <div class="product-card" onclick="openPurchaseDialog('سرخ‌کن بدون روغن Air Fryer', 'غذای سالم و بدون روغن با کارکرد آسان', '۷,۰۰۰,۰۰۰ تومان')">
-              <div class="product-img">🏠</div>
-              <div class="product-name">سرخ‌کن بدون روغن</div>
-              <div class="product-price">۷,۰۰۰,۰۰۰ تومان</div>
-              <div class="product-desc">غذای سالم با کارکرد آسان</div>
+            <div class="product-card" onclick="openPurchaseDialog('سرخ‌کن بدون روغن فیلیپس', 'سرخ‌کن سایز بزرگ فیلیپس برای آشپزی رژیمی و سالم', '۴,۵۰۰,۰۰۰ تومان')">
+              <div class="product-img">🍳</div>
+              <div class="product-name" style="font-size:11.5px;">سرخ‌کن فیلیپس</div>
+              <div class="product-price" style="font-size:11px;">۴,۵۰۰,۰۰۰ تومان</div>
+              <div class="product-desc" style="font-size:9.5px;">آشپزی رژیمی و سالم آسان</div>
+            </div>
+            <div class="product-card" onclick="openPurchaseDialog('کفش چرم مردانه تبریز', 'کفش چرم طبیعی صد در صد دست‌دوز تبریز با کفی طبی و نرم', '۱,۸۰۰,۰۰۰ تومان')">
+              <div class="product-img">👟</div>
+              <div class="product-name" style="font-size:11.5px;">کفش چرم تبریز</div>
+              <div class="product-price" style="font-size:11px;">۱,۸۰۰,۰۰۰ تومان</div>
+              <div class="product-desc" style="font-size:9.5px;">چرم طبیعی صد در صد دست‌دوز</div>
+            </div>
+            <div class="product-card" onclick="openPurchaseDialog('کتاب آموزش برنامه نویسی پایتون', 'کتاب مرجع یادگیری پایتون از صفر تا صد همراه با پروژه‌های کاربردی', '۲۵۰,۰۰۰ تومان')">
+              <div class="product-img">📚</div>
+              <div class="product-name" style="font-size:11.5px;">کتاب آموزش پایتون</div>
+              <div class="product-price" style="font-size:11px;">۲۵۰,۰۰۰ تومان</div>
+              <div class="product-desc" style="font-size:9.5px;">یادگیری پایتون از صفر تا صد</div>
+            </div>
+            <div class="product-card" onclick="openPurchaseDialog('جعبه ابزار ۸۵ پارچه رونیکس', 'کامل‌ترین جعبه ابزار چمدانی شامل آچارهای کروم وانادیوم رونیکس', '۲,۴۰۰,۰۰۰ تومان')">
+              <div class="product-img">🧰</div>
+              <div class="product-name" style="font-size:11.5px;">جعبه ابزار رونیکس</div>
+              <div class="product-price" style="font-size:11px;">۲,۴۰۰,۰۰۰ تومان</div>
+              <div class="product-desc" style="font-size:9.5px;">آچارهای کروم وانادیوم رونیکس</div>
             </div>
           </div>
         </div>
@@ -3598,6 +3619,23 @@
   // MARKETPLACE LOGIC
   // =========================================
   let selectedProduct = null;
+  
+  function parsePriceString(priceStr) {
+    let englishDigits = priceStr
+      .replace(/۰/g, '0')
+      .replace(/۱/g, '1')
+      .replace(/۲/g, '2')
+      .replace(/۳/g, '3')
+      .replace(/۴/g, '4')
+      .replace(/۵/g, '5')
+      .replace(/۶/g, '6')
+      .replace(/۷/g, '7')
+      .replace(/۸/g, '8')
+      .replace(/۹/g, '9');
+    let cleaned = englishDigits.replace(/[^0-9]/g, '');
+    return parseFloat(cleaned) || 0;
+  }
+
   function openPurchaseDialog(name, desc, price) {
     selectedProduct = { name, desc, price };
     document.getElementById('purchase-body').innerText = `آیا تمایل به خرید محصول ${name} دارید؟ \n(${desc})`;
@@ -3610,8 +3648,16 @@
   }
 
   function confirmPurchase() {
-    closePurchaseDialog();
-    showNotification(`خرید محصول ${selectedProduct.name} با موفقیت انجام شد!`);
+    const numericPrice = parsePriceString(selectedProduct.price);
+    if (walletVal >= numericPrice) {
+      walletVal -= numericPrice;
+      closePurchaseDialog();
+      addTransaction(`خرید کالا: ${selectedProduct.name}`, numericPrice, false, '🛍️');
+      updateProfileUI();
+      showNotification(`🎉 خرید محصول «${selectedProduct.name}» با موفقیت انجام شد و از کیف پول شما کسر گردید!`);
+    } else {
+      alert("❌ موجودی کیف پول شما کافی نیست! ابتدا حساب خود را در تب کیف پول شارژ کنید.");
+    }
   }
 
   // =========================================
