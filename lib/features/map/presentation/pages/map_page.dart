@@ -1,4 +1,4 @@
-import 'dart:math' show pi, sin, cos, sqrt, atan2;
+import 'dart:math' show pi, sin, cos, sqrt, atan2, Random;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,6 +8,7 @@ import '../bloc/map_bloc.dart';
 import '../bloc/map_event.dart';
 import '../bloc/map_state.dart';
 import '../../domain/entities/shop.dart';
+import 'shop_detail_page.dart';
 import 'package:go_router/go_router.dart';
 import '../../../shared/widgets/app_button.dart';
 
@@ -73,8 +74,17 @@ class _MapPageState extends State<MapPage> {
     'Clinic',
     'Restaurant',
     'Supermarket',
+    'Fashion',
+    'Automotive',
+    'Home',
+    'Beauty',
+    'Tools',
+    'Books',
   };
   dynamic _selectedItem; // Holds either a Shop or a MapExpert
+
+  // Custom Created Shops (added live!)
+  final List<Shop> _customShops = [];
 
   // Advanced Tune Filters
   bool _showOnlyOpen = false;
@@ -94,6 +104,12 @@ class _MapPageState extends State<MapPage> {
     {'name': 'Clinic', 'icon': '🩺', 'fa': 'کلینیک و مراکز حضوری'},
     {'name': 'Restaurant', 'icon': '🍔', 'fa': 'غذا و رستوران'},
     {'name': 'Supermarket', 'icon': '🛒', 'fa': 'سوپرمارکت'},
+    {'name': 'Fashion', 'icon': '👗', 'fa': 'پوشاک و مد'},
+    {'name': 'Automotive', 'icon': '🚗', 'fa': 'خدمات خودرو'},
+    {'name': 'Home', 'icon': '🏠', 'fa': 'لوازم خانگی'},
+    {'name': 'Beauty', 'icon': '💄', 'fa': 'آرایشی و زیبایی'},
+    {'name': 'Tools', 'icon': '🛠️', 'fa': 'ابزارآلات و صنعتی'},
+    {'name': 'Books', 'icon': '📚', 'fa': 'کتاب و تحریر'},
   ];
 
   // Mock Database of Real-time Experts nearby
@@ -309,7 +325,8 @@ class _MapPageState extends State<MapPage> {
             return const Center(child: CircularProgressIndicator());
           } else if (state is MapLoaded) {
             // Filter both Shops and Experts dynamically
-            final List<Shop> filteredShops = state.shops.where((shop) {
+            final allShopsCombined = [...state.shops, ..._customShops];
+            final List<Shop> filteredShops = allShopsCombined.where((shop) {
               final matchesCategory = _selectedCategories.contains(shop.category);
               final matchesQuery = _searchQuery.isEmpty || 
                   shop.name.toLowerCase().contains(_searchQuery.toLowerCase());
@@ -572,6 +589,22 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ),
 
+                // 6.5 Create Booth FAB (ثبت غرفه جدید)
+                Positioned(
+                  bottom: _selectedItem != null ? 335 : 155,
+                  left: 16,
+                  child: FloatingActionButton.extended(
+                    heroTag: 'create_booth_fab',
+                    onPressed: () {
+                      _showCreateBoothDialog(context);
+                    },
+                    icon: const Icon(Icons.add_business_outlined),
+                    label: const Text('ثبت غرفه جدید'),
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+
                 // 7. Map Legend Guide (Floating on the map)
                 if (_selectedItem == null && !_isSearchFocused)
                   Positioned(
@@ -614,6 +647,7 @@ class _MapPageState extends State<MapPage> {
   void _syncClusterItems(List<Shop> shops) {
     final combined = <MapClusterItem>[];
     combined.addAll(shops.map((s) => MapClusterItem(item: s)));
+    combined.addAll(_customShops.map((s) => MapClusterItem(item: s)));
     combined.addAll(_allExperts.map((e) => MapClusterItem(item: e)));
     _clusterManager.setItems(combined);
   }
@@ -1040,6 +1074,339 @@ class _MapPageState extends State<MapPage> {
       ),
     ],
   );
+
+  Color HighlightColor(bool h) => h ? Colors.green : Colors.red;
+
+  void _showCreateBoothDialog(BuildContext context) {
+    final theme = Theme.of(context);
+    
+    final nameController = TextEditingController();
+    final addressController = TextEditingController();
+    final phoneController = TextEditingController();
+    final hoursController = TextEditingController(text: '۰۹:۰۰ الی ۲۲:۰۰');
+    final aboutController = TextEditingController();
+    
+    String selectedCatName = 'Electronics'; // Default selected category name
+    String selectedCatFa = 'الکترونیک و دیجیتال';
+    String selectedIcon = '📱';
+
+    final categoriesList = [
+      {'name': 'Electronics', 'icon': '📱', 'fa': 'الکترونیک و دیجیتال'},
+      {'name': 'Plants', 'icon': '🌱', 'fa': 'گل و گیاه آپارتمانی'},
+      {'name': 'Cafe', 'icon': '☕', 'fa': 'کافه و دسر'},
+      {'name': 'Clinic', 'icon': '🩺', 'fa': 'کلینیک و سلامت'},
+      {'name': 'Restaurant', 'icon': '🍔', 'fa': 'رستوران و فست‌فود'},
+      {'name': 'Supermarket', 'icon': '🛒', 'fa': 'سوپرمارکت و خواربار'},
+      {'name': 'Fashion', 'icon': '👗', 'fa': 'پوشاک و مد'},
+      {'name': 'Automotive', 'icon': '🚗', 'fa': 'خدمات خودرو'},
+      {'name': 'Home', 'icon': '🏠', 'fa': 'لوازم خانگی'},
+      {'name': 'Beauty', 'icon': '💄', 'fa': 'آرایشی و زیبایی'},
+      {'name': 'Tools', 'icon': '🛠️', 'fa': 'ابزارآلات و صنعتی'},
+      {'name': 'Books', 'icon': '📚', 'fa': 'کتاب و تحریر'},
+    ];
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return AlertDialog(
+              scrollable: true,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  const Text(
+                    'ثبت و ایجاد غرفه جدید 🏪',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ],
+              ),
+              content: Directionality(
+                textDirection: TextDirection.rtl,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'اطلاعات کسب‌وکار خود را وارد کنید تا غرفه شما فوراً روی نقشه سوپراپلیکیشن فعال شود:',
+                        style: TextStyle(fontSize: 11.5, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // 1. Name
+                      const Text('نام غرفه / کسب‌وکار', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: nameController,
+                        decoration: InputDecoration(
+                          hintText: 'مثال: گالری پوشاک شیک‌پوش',
+                          prefixIcon: const Icon(Icons.storefront, size: 20),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // 2. Category Dropdown
+                      const Text('صنف و دسته‌بندی اصلی غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: selectedCatName,
+                            isExpanded: true,
+                            items: categoriesList.map((cat) {
+                              return DropdownMenuItem<String>(
+                                value: cat['name']!,
+                                child: Text('${cat['icon']!} ${cat['fa']!}'),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) {
+                                final matched = categoriesList.firstWhere((element) => element['name'] == val);
+                                setModalState(() {
+                                  selectedCatName = val;
+                                  selectedCatFa = matched['fa']!;
+                                  selectedIcon = matched['icon']!;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // 3. Address
+                      const Text('آدرس دقیق فیزیکی', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: addressController,
+                        decoration: InputDecoration(
+                          hintText: 'مثال: تهران، میدان ونک، پلاک ۱۵',
+                          prefixIcon: const Icon(Icons.location_on_outlined, size: 20),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // 4. Phone
+                      const Text('شماره تماس غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          hintText: 'مثال: ۰۲۱۸۸۷۷۶۶۵۵',
+                          prefixIcon: const Icon(Icons.phone_outlined, size: 20),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // 5. Operating Hours
+                      const Text('ساعت کاری غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: hoursController,
+                        decoration: InputDecoration(
+                          hintText: 'مثال: ۰۹:۰۰ الی ۲۲:۰۰',
+                          prefixIcon: const Icon(Icons.access_time, size: 20),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // 6. About Description
+                      const Text('توضیحات و درباره غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: aboutController,
+                        maxLines: 2,
+                        decoration: InputDecoration(
+                          hintText: 'درباره خدمات غرفه، کیفیت محصولات و شعار غرفه بنویسید...',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('انصراف'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    final name = nameController.text.trim();
+                    final address = addressController.text.trim();
+                    final phone = phoneController.text.trim();
+                    final hours = hoursController.text.trim();
+                    final about = aboutController.text.trim();
+
+                    if (name.isEmpty || address.isEmpty || phone.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('لطفاً فیلدهای نام، آدرس و تلفن را پر کنید!'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
+
+                    // Create dynamic products for the new booth based on category
+                    List<BoothProduct> customProducts = [];
+                    if (selectedCatName == 'Electronics') {
+                      customProducts = const [
+                        BoothProduct(name: 'کابل شارژر Fast تایپ سی', price: '۱۵۰,۰۰۰ تومان', icon: '🔌', description: 'کابل فست شارژ بادوام و کنفی'),
+                        BoothProduct(name: 'پاوربانک مسافرتی ۲۰هزار', price: '۲,۵۰۰,۰۰۰ تومان', icon: '🔋', description: 'شارژ همزمان سه دستگاه با ظرفیت واقعی'),
+                      ];
+                    } else if (selectedCatName == 'Plants') {
+                      customProducts = const [
+                        BoothProduct(name: 'گلدان پوتوس رونده سبز', price: '۱۸۰,۰۰۰ تومان', icon: '🍀', description: 'پوتوس شاداب با نگهداری آسان آپارتمانی'),
+                        BoothProduct(name: 'کود غنی مایع نیتروژن', price: '۹۰,۰۰۰ تومان', icon: '🧪', description: 'محلول رشد سریع و شادابی و قطره پاشی'),
+                      ];
+                    } else if (selectedCatName == 'Cafe') {
+                      customProducts = const [
+                        BoothProduct(name: 'اسپرسو دوبل اسپشیالتی', price: '۸۰,۰۰۰ تومان', icon: '☕', description: 'دانه‌های ممتاز اسپشیالتی عربیکا'),
+                        BoothProduct(name: 'کرواسان داغ پخت روز', price: '۱۲۰,۰۰۰ تومان', icon: '🥐', description: 'کرواسان فرانسوی ترد با فیلینگ شکلات فندقی'),
+                      ];
+                    } else if (selectedCatName == 'Clinic') {
+                      customProducts = const [
+                        BoothProduct(name: 'ویزیت پزشک عمومی حضوری', price: '۱۵۰,۰۰۰ تومان', icon: '🩺', description: 'ویزیت حضوری و معاینه بالینی کامل'),
+                        BoothProduct(name: 'خدمت سرم‌تراپی و تزریقات', price: '۱۲۰,۰۰۰ تومان', icon: '💉', description: 'تزریق سرم و آمپول توسط کادر مجرب پرستاری'),
+                      ];
+                    } else if (selectedCatName == 'Restaurant') {
+                      customProducts = const [
+                        BoothProduct(name: 'چلوکباب کوبیده نگین‌دار', price: '۲۸۰,۰۰۰ تومان', icon: '🍢', description: 'دو سیخ کباب گوسفندی زعفرانی با برنج ممتاز'),
+                        BoothProduct(name: 'جوجه کباب زعفرانی مخصوص', price: '۲۱۰,۰۰۰ تومان', icon: '🍗', description: 'جوجه کباب سینه بدون استخوان نرم و لذیذ'),
+                      ];
+                    } else if (selectedCatName == 'Supermarket') {
+                      customProducts = const [
+                        BoothProduct(name: 'پک تنقلات عصرانه خانواده', price: '۱۳۵,۰۰۰ تومان', icon: '🍿', description: 'شامل چیپس، پفک، پاپ‌کورن و نوشابه قوطی'),
+                        BoothProduct(name: 'روغن پخت و پز آفتابگردان', price: '۱۹۰,۰۰۰ تومان', icon: '🧴', description: 'بطری ۱.۵ لیتری روغن خالص تصفیه شده'),
+                      ];
+                    } else if (selectedCatName == 'Fashion') {
+                      customProducts = const [
+                        BoothProduct(name: 'تی‌شرت نخی آستین کوتاه', price: '۳۵۰,۰۰۰ تومان', icon: '👕', description: 'تی‌شرت نخی ۱۰۰٪ خالص ضد حساسیت'),
+                        BoothProduct(name: 'شلوار جین تیره کلاسیک', price: '۶۸۰,۰۰۰ تومان', icon: '👖', description: 'جین اصل ترک با پاخور شکیل و عالی'),
+                      ];
+                    } else if (selectedCatName == 'Automotive') {
+                      customProducts = const [
+                        BoothProduct(name: 'تعویض روغن موتور و فیلترها', price: '۸۵۰,۰۰۰ تومان', icon: '🔧', description: 'روغن ۱۰W40 مرغوب با تعویض فیلتر روغن و هوا'),
+                        BoothProduct(name: 'تنظیم باد تخصصی و آپارات', price: '۹۰,۰۰۰ تومان', icon: '🚗', description: 'بررسی باد و بالانس چهار چرخ خودرو'),
+                      ];
+                    } else if (selectedCatName == 'Home') {
+                      customProducts = const [
+                        BoothProduct(name: 'ساعت دیواری طرح مدرن فانتزی', price: '۴۸۰,۰۰۰ تومان', icon: '🕰️', description: 'ساعت دیواری موتور تایوانی بی‌صدا'),
+                        BoothProduct(name: 'آباژور رومیزی پایه چوبی دنج', price: '۶۲۰,۰۰۰ تومان', icon: '💡', description: 'نورپردازی گرم و رویایی مخصوص اتاق‌خواب'),
+                      ];
+                    } else if (selectedCatName == 'Beauty') {
+                      customProducts = const [
+                        BoothProduct(name: 'فیشیال و پاکسازی عمیق پوست', price: '۳۸۰,۰۰۰ تومان', icon: '🧼', description: 'لایه‌برداری، آبرسانی و ماسک جوانسازی شاداب‌کننده'),
+                        BoothProduct(name: 'کاشت ناخن پایه و طراحی زیبا', price: '۴۵۰,۰۰۰ تومان', icon: '💅', description: 'کاشت ناخن پودری با طراحی دلخواه شما'),
+                      ];
+                    } else if (selectedCatName == 'Tools') {
+                      customProducts = const [
+                        BoothProduct(name: 'پیچ‌گوشتی برقی و شارژی رونیکس', price: '۱,۹۰۰,۰۰۰ تومان', icon: '🛠️', description: 'رونیکس موتور قوی با دو باتری لیتیومی'),
+                        BoothProduct(name: 'جعبه ابزار فلزی چند طبقه بزرگ', price: '۴۸۰,۰۰۰ تومان', icon: '🧰', description: 'جعبه ابزار تمام فلزی ضد زنگ بادوام'),
+                      ];
+                    } else { // Books
+                      customProducts = const [
+                        BoothProduct(name: 'دفترچه یادداشت طرح چرم نفیس', price: '۹۵,۰۰۰ تومان', icon: '📔', description: 'کاغذ کرم گرم بالا بدون خط خوردگی مناسب هدیه'),
+                        BoothProduct(name: 'روان‌نویس ژلی لاکچری مشکی', price: '۸۵,۰۰۰ تومان', icon: '✒️', description: 'نوک ساچمه‌ای استیل فوق روان روان‌نویس ژل'),
+                      ];
+                    }
+
+                    // Create unique ID for the custom booth
+                    final customId = 'custom_${DateTime.now().millisecondsSinceEpoch}';
+
+                    // Save details in ShopDetailPage's static cache so it opens beautifully!
+                    ShopDetailPage.customCreatedShops.add({
+                      'id': customId,
+                      'name': name,
+                      'category': selectedCatFa,
+                      'isFixedClinic': selectedCatName == 'Clinic',
+                      'rating': 5.0, // Brand new!
+                      'reviews': 0,
+                      'address': address,
+                      'phone': phone,
+                      'hours': hours,
+                      'about': about.isEmpty ? 'یک غرفه بومی و معتبر ثبت شده در موقعیت یابی سوپراپلیکیشن.' : about,
+                      'avatar': selectedIcon,
+                      'products': customProducts,
+                      'defaultReviews': <UserReview>[],
+                    });
+
+                    // Add new shop to the local map shops list!
+                    final newShop = Shop(
+                      id: customId,
+                      name: name,
+                      description: about.isEmpty ? 'غرفه تازه تاسیس در تهران' : about,
+                      location: LatLng(
+                        _initialPosition.latitude + (Random().nextDouble() - 0.5) * 0.015,
+                        _initialPosition.longitude + (Random().nextDouble() - 0.5) * 0.015,
+                      ), // Random offset near map center
+                      imageUrl: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=150', // placeholder
+                      category: selectedCatName,
+                      rating: 5.0,
+                      reviewCount: 0,
+                      address: address,
+                      phoneNumber: phone,
+                      website: '',
+                      isOpen: true,
+                      operatingHours: hours,
+                    );
+
+                    setState(() {
+                      _customShops.add(newShop);
+                    });
+
+                    // Refresh clusters immediately!
+                    _syncClusterItems(context.read<MapBloc>().state is MapLoaded 
+                        ? (context.read<MapBloc>().state as MapLoaded).shops
+                        : []);
+
+                    Navigator.pop(context);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('🎉 تبریک! غرفه «$name» با دسته‌بندی «$selectedCatFa» و آیکون $selectedIcon روی نقشه ایجاد شد!'),
+                        backgroundColor: Colors.green,
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('ایجاد غرفه غرفه‌دار 🚀', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 
   Color HighlightColor(bool h) => h ? Colors.green : Colors.red;
 

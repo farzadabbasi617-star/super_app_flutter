@@ -1822,6 +1822,10 @@
             <span>🛠️</span> درخواست متخصص
           </div>
 
+          <div class="fab-btn" id="create-booth-fab" onclick="openCreateBoothForm()" style="bottom: 154px; left: 16px; background: #f2994a; color: white;">
+            <span>🏪</span> ثبت غرفه جدید
+          </div>
+
           <!-- Map Legend bar guide -->
           <div class="map-legend-card" id="map-legend" style="flex-wrap: wrap; gap: 4px; padding: 10px; height: auto; border-radius: 16px;">
             <span>📱 الکترونیک</span>
@@ -2256,6 +2260,70 @@
             <button class="btn-cancel" onclick="resetFilters()">حذف فیلترها</button>
             <button class="btn-confirm" onclick="closeFilters()">اعمال فیلترها</button>
           </div>
+        </div>
+      </div>
+
+      <!-- H. Create Booth Overlay -->
+      <div class="filter-sheet-overlay" id="create-booth-sheet" onclick="closeCreateBoothForm()" style="z-index: 1200;">
+        <div class="filter-sheet-card" onclick="event.stopPropagation()" style="text-align: right; max-height: 85%; overflow-y: auto;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-direction:row-reverse;">
+            <span style="font-weight:bold; font-size:16px; color:var(--on-surface);">ثبت و ایجاد غرفه جدید 🏪</span>
+            <span style="cursor:pointer; font-weight:bold; font-size:16px; color:#888;" onclick="closeCreateBoothForm()">✕</span>
+          </div>
+          
+          <div style="font-size:11px; color:#666; margin-bottom:16px;">اطلاعات کسب‌وکار خود را وارد کنید تا غرفه شما فوراً روی نقشه سوپراپلیکیشن فعال شود:</div>
+
+          <!-- Name -->
+          <div style="margin-bottom:12px;">
+            <label style="font-weight:bold; font-size:12px; display:block; margin-bottom:6px;">نام غرفه / کسب‌وکار</label>
+            <input type="text" id="new-booth-name" placeholder="مثال: گالری پوشاک شیک‌پوش" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; font-size:12px; direction:rtl;">
+          </div>
+
+          <!-- Category Selection -->
+          <div style="margin-bottom:12px;">
+            <label style="font-weight:bold; font-size:12px; display:block; margin-bottom:6px;">صنف غرفه</label>
+            <select id="new-booth-category" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; font-size:12px; direction:rtl;">
+              <option value="Electronics">📱 الکترونیک و دیجیتال</option>
+              <option value="Plants">🌱 گل و گیاه آپارتمانی</option>
+              <option value="Cafe">☕ کافه و دسر</option>
+              <option value="Expert">👨‍🔧 متخصصین آماده به کار</option>
+              <option value="Clinic">🩺 کلینیک و سلامت حضوری</option>
+              <option value="Restaurant">🍔 رستوران و فست‌فود</option>
+              <option value="Supermarket">🛒 سوپرمارکت و خواربار</option>
+              <option value="Fashion">👗 پوشاک و مد</option>
+              <option value="Automotive">🚗 خدمات خودرو</option>
+              <option value="Home">🏠 لوازم خانگی</option>
+              <option value="Beauty">💄 آرایشی و زیبایی</option>
+              <option value="Tools">🛠️ ابزارآلات و صنعتی</option>
+              <option value="Books">📚 کتاب و تحریر</option>
+            </select>
+          </div>
+
+          <!-- Address -->
+          <div style="margin-bottom:12px;">
+            <label style="font-weight:bold; font-size:12px; display:block; margin-bottom:6px;">آدرس دقیق فیزیکی</label>
+            <input type="text" id="new-booth-address" placeholder="مثال: تهران، میدان ونک، پلاک ۱۵" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; font-size:12px; direction:rtl;">
+          </div>
+
+          <!-- Phone -->
+          <div style="margin-bottom:12px;">
+            <label style="font-weight:bold; font-size:12px; display:block; margin-bottom:6px;">شماره تماس</label>
+            <input type="text" id="new-booth-phone" placeholder="مثال: ۰۲۱۸۸۷۷۶۶۵۵" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; font-size:12px; direction:rtl;">
+          </div>
+
+          <!-- Hours -->
+          <div style="margin-bottom:12px;">
+            <label style="font-weight:bold; font-size:12px; display:block; margin-bottom:6px;">ساعت کاری</label>
+            <input type="text" id="new-booth-hours" value="۰۹:۰۰ الی ۲۲:۰۰" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; font-size:12px; direction:rtl;">
+          </div>
+
+          <!-- About Description -->
+          <div style="margin-bottom:16px;">
+            <label style="font-weight:bold; font-size:12px; display:block; margin-bottom:6px;">توضیحات و درباره غرفه</label>
+            <textarea id="new-booth-about" placeholder="درباره خدمات غرفه، کیفیت محصولات و شعار غرفه بنویسید..." style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; font-size:12px; direction:rtl; height:60px; resize:none;"></textarea>
+          </div>
+
+          <button class="chat-action-btn" onclick="submitCreateBooth()" style="background:#f2994a;">ثبت و ایجاد غرفه غرفه‌دار 🚀</button>
         </div>
       </div>
 
@@ -2814,6 +2882,177 @@
     closeFilters();
   }
 
+  function openCreateBoothForm() {
+    document.getElementById('create-booth-sheet').classList.add('open');
+  }
+
+  function closeCreateBoothForm() {
+    document.getElementById('create-booth-sheet').classList.remove('open');
+  }
+
+  function submitCreateBooth() {
+    const name = document.getElementById('new-booth-name').value.trim();
+    const cat = document.getElementById('new-booth-category').value;
+    const address = document.getElementById('new-booth-address').value.trim();
+    const phone = document.getElementById('new-booth-phone').value.trim();
+    const hours = document.getElementById('new-booth-hours').value.trim();
+    const about = document.getElementById('new-booth-about').value.trim();
+
+    if (name === '' || address === '' || phone === '') {
+      alert('لطفاً فیلدهای نام، آدرس و تلفن غرفه را تکمیل کنید!');
+      return;
+    }
+
+    // Get matching emoji and farsi name for category
+    const catMapping = {
+      'Electronics': { icon: '📱', fa: 'الکترونیک و دیجیتال' },
+      'Plants': { icon: '🌱', fa: 'گل و گیاه آپارتمانی' },
+      'Cafe': { icon: '☕', fa: 'کافه و دسر' },
+      'Expert': { icon: '👨‍🔧', fa: 'متخصصین آماده به کار' },
+      'Clinic': { icon: '🩺', fa: 'کلینیک و سلامت حضوری' },
+      'Restaurant': { icon: '🍔', fa: 'رستوران و فست‌فود' },
+      'Supermarket': { icon: '🛒', fa: 'سوپرمارکت و خواربار' },
+      'Fashion': { icon: '👗', fa: 'پوشاک و مد' },
+      'Automotive': { icon: '🚗', fa: 'خدمات خودرو' },
+      'Home': { icon: '🏠', fa: 'لوازم خانگی' },
+      'Beauty': { icon: '💄', fa: 'آرایشی و زیبایی' },
+      'Tools': { icon: '🛠️', fa: 'ابزارآلات و صنعتی' },
+      'Books': { icon: '📚', fa: 'کتاب و تحریر' }
+    };
+
+    const chosen = catMapping[cat];
+    const newId = 'custom_' + Date.now();
+
+    // Default products based on category
+    let customProducts = [];
+    if (cat === 'Electronics') {
+      customProducts = [
+        { name: 'کابل شارژر Fast تایپ سی', desc: 'کابل فست شارژ بادوام و کنفی', price: '۱۵۰,۰۰۰ تومان', icon: '🔌' },
+        { name: 'پاوربانک مسافرتی ۲۰هزار', desc: 'شارژ همزمان سه دستگاه با ظرفیت واقعی', price: '۲,۵۰۰,۰۰۰ تومان', icon: '🔋' }
+      ];
+    } else if (cat === 'Plants') {
+      customProducts = [
+        { name: 'گلدان پوتوس رونده سبز', desc: 'پوتوس شاداب با نگهداری آسان آپارتمانی', price: '۱۸۰,۰۰۰ تومان', icon: '🍀' },
+        { name: 'کود غنی مایع نیتروژن', desc: 'محلول رشد سریع و شادابی و قطره پاشی', price: '۹۰,۰۰۰ تومان', icon: '🧪' }
+      ];
+    } else if (cat === 'Cafe') {
+      customProducts = [
+        { name: 'اسپرسو دوبل اسپشیالتی', desc: 'دانه‌های ممتاز اسپشیالتی عربیکا', price: '۸۰,۰۰۰ تومان', icon: '☕' },
+        { name: 'کرواسان داغ پخت روز', desc: 'کرواسان فرانسوی ترد با فیلینگ شکلات فندقی', price: '۱۲۰,۰۰۰ تومان', icon: '🥐' }
+      ];
+    } else if (cat === 'Clinic') {
+      customProducts = [
+        { name: 'ویزیت پزشک عمومی حضوری', desc: 'ویزیت حضوری و معاینه بالینی کامل', price: '۱۵۰,۰۰۰ تومان', icon: '🩺' },
+        { name: 'خدمت سرم‌تراپی و تزریقات', desc: 'تزریق سرم و آمپول توسط کادر مجرب پرستاری', price: '۱۲۰,۰۰۰ تومان', icon: '💉' }
+      ];
+    } else if (cat === 'Restaurant') {
+      customProducts = [
+        { name: 'چلوکباب کوبیده نگین‌دار', desc: 'دو سیخ کباب گوسفندی زعفرانی با برنج ممتاز', price: '۲۸۰,۰۰۰ تومان', icon: '🍢' },
+        { name: 'جوجه کباب زعفرانی مخصوص', desc: 'جوجه کباب سینه بدون استخوان نرم و لذیذ', price: '۲۱۰,۰۰۰ تومان', icon: '🍗' }
+      ];
+    } else if (cat === 'Supermarket') {
+      customProducts = [
+        { name: 'پک تنقلات عصرانه خانواده', desc: 'شامل چیپس، پفک، پاپ‌کورن و نوشابه قوطی', price: '۱۳۵,۰۰۰ تومان', icon: '🍿' },
+        { name: 'روغن پخت و پز آفتابگردان', desc: 'بطری ۱.۵ لیتری روغن خالص تصفیه شده', price: '۱۹۰,۰۰۰ تومان', icon: '🧴' }
+      ];
+    } else if (cat === 'Fashion') {
+      customProducts = [
+        { name: 'تی‌شرت نخی آستین کوتاه', desc: 'تی‌شرت نخی ۱۰۰٪ خالص ضد حساسیت', price: '۳۵۰,۰۰۰ تومان', icon: '👕' },
+        { name: 'شلوار جین تیره کلاسیک', desc: 'جین اصل ترک با پاخور شکیل و عالی', price: '۶۸۰,۰۰۰ تومان', icon: '👖' }
+      ];
+    } else if (cat === 'Automotive') {
+      customProducts = [
+        { name: 'تعویض روغن موتور و فیلترها', desc: 'روغن ۱۰W40 مرغوب با تعویض فیلتر روغن و هوا', price: '۸۵۰,۰۰۰ تومان', icon: '🔧' },
+        { name: 'تنظیم باد تخصصی و آپارات', desc: 'بررسی باد و بالانس چهار چرخ خودرو', price: '۹۰,۰۰۰ تومان', icon: '🚗' }
+      ];
+    } else if (cat === 'Home') {
+      customProducts = [
+        { name: 'ساعت دیواری طرح مدرن فانتزی', desc: 'ساعت دیواری موتور تایوانی بی‌صدا', price: '۴۸۰,۰۰۰ تومان', icon: '🕰️' },
+        { name: 'آباژور رومیزی پایه چوبی دنج', desc: 'نورپردازی گرم و رویایی مخصوص اتاق‌خواب', price: '۶۲۰,۰۰۰ تومان', icon: '💡' }
+      ];
+    } else if (cat === 'Beauty') {
+      customProducts = [
+        { name: 'فیشیال و پاکسازی عمیق پوست', desc: 'لایه‌برداری، آبرسانی و ماسک جوانسازی شاداب‌کننده', price: '۳۸۰,۰۰۰ تومان', icon: '🧼' },
+        { name: 'کاشت ناخن پایه و طراحی زیبا', desc: 'کاشت ناخن پودری با طراحی دلخواه شما', price: '۴۵۰,۰۰۰ تومان', icon: '💅' }
+      ];
+    } else if (cat === 'Tools') {
+      customProducts = [
+        { name: 'پیچ‌گوشتی برقی و شارژی رونیکس', desc: 'رونیکس موتور قوی با دو باتری لیتیومی', price: '۱,۹۰۰,۰۰۰ تومان', icon: '🛠️' },
+        { name: 'جعبه ابزار فلزی چند طبقه بزرگ', desc: 'جعبه ابزار تمام فلزی ضد زنگ بادوام', price: '۴۸۰,۰۰۰ تومان', icon: '🧰' }
+      ];
+    } else { // Books
+      customProducts = [
+        { name: 'دفترچه یادداشت طرح چرم نفیس', desc: 'کاغذ کرم گرم بالا بدون خط خوردگی مناسب هدیه', price: '۹۵,۰۰۰ تومان', icon: '📔' },
+        { name: 'روان‌نویس ژلی لاکچری مشکی', desc: 'نوک ساچمه‌ای استیل فوق روان روان‌نویس ژل', price: '۸۵,۰۰۰ تومان', icon: '✒️' }
+      ];
+    }
+
+    // Add to JavaScript database object 'shops'
+    shops[newId] = {
+      id: newId,
+      name: name,
+      category: chosen.fa,
+      rating: 5.0,
+      reviews: 0,
+      address: address,
+      phone: phone,
+      hours: hours,
+      isOpen: true,
+      icon: chosen.icon,
+      distance: (Math.random() * 4 + 1).toFixed(1),
+      type: cat === 'Expert' ? 'expert' : (cat === 'Clinic' ? 'clinic' : 'shop'),
+      about: about === '' ? 'یک غرفه بومی و معتبر ثبت شده در موقعیت یابی سوپراپلیکیشن.' : about,
+      products: customProducts,
+      reviewsList: []
+    };
+
+    // Create a physical map pin div dynamically and append to map area!
+    const pinArea = document.querySelector('.map-canvas');
+    const newPin = document.createElement('div');
+    newPin.className = 'map-pin';
+    newPin.id = 'pin-' + newId;
+    
+    // Choose coordinate randomly near the center
+    const topOffset = Math.floor(Math.random() * 30 + 35); // between 35% and 65%
+    const leftOffset = Math.floor(Math.random() * 30 + 35); // between 35% and 65%
+    newPin.style.top = topOffset + '%';
+    newPin.style.left = leftOffset + '%';
+    newPin.style.borderColor = cat === 'Expert' ? '#f2994a' : (cat === 'Clinic' ? '#dc2626' : '#10b981');
+    newPin.onclick = () => openQuickView(newId);
+    
+    // Custom data attributes
+    newPin.setAttribute('data-category', chosen.fa);
+    newPin.setAttribute('data-name', name);
+    newPin.setAttribute('data-type', shops[newId].type);
+    newPin.setAttribute('data-distance', shops[newId].distance);
+    newPin.setAttribute('data-rating', '5.0');
+    newPin.setAttribute('data-open', 'true');
+
+    newPin.innerHTML = `
+      <div class="map-pin-pulse" style="border-color: ${newPin.style.borderColor};"></div>
+      <span style="font-size: 18px;">${chosen.icon}</span>
+    `;
+
+    pinArea.appendChild(newPin);
+
+    // Refresh active categories to include this one
+    if (!selectedCategories.includes(shops[newId].category)) {
+      selectedCategories.push(shops[newId].category);
+      updateCategoryChipsUI();
+    }
+
+    closeCreateBoothForm();
+    applyTuningFilters();
+
+    // Clear form inputs
+    document.getElementById('new-booth-name').value = '';
+    document.getElementById('new-booth-address').value = '';
+    document.getElementById('new-booth-phone').value = '';
+    document.getElementById('new-booth-about').value = '';
+
+    showNotification(`🎉 تبریک! غرفه «${name}» با دسته‌بندی «${chosen.fa}» روی نقشه ایجاد شد!`);
+  }
+
   function setRatingFilter(rating) {
     minRating = rating;
     document.querySelectorAll('.rating-row .filter-chip').forEach(el => el.classList.remove('active'));
@@ -3001,6 +3240,7 @@
     document.getElementById('loc-fab').style.bottom = '280px';
     document.getElementById('style-fab').style.bottom = '334px';
     document.getElementById('req-fab').style.bottom = '280px';
+    document.getElementById('create-booth-fab').style.display = 'none';
     document.getElementById('map-legend').style.display = 'none';
 
     document.getElementById('quick-view').classList.add('open');
@@ -3014,6 +3254,7 @@
     document.getElementById('loc-fab').style.bottom = '100px';
     document.getElementById('style-fab').style.bottom = '154px';
     document.getElementById('req-fab').style.bottom = '100px';
+    document.getElementById('create-booth-fab').style.display = 'flex';
     document.getElementById('map-legend').style.display = 'flex';
   }
 

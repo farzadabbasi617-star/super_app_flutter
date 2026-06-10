@@ -31,6 +31,7 @@ class UserReview {
 
 class ShopDetailPage extends StatefulWidget {
   final String shopId;
+  static final List<Map<String, dynamic>> customCreatedShops = [];
 
   const ShopDetailPage({super.key, required this.shopId});
 
@@ -68,6 +69,15 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
 
   // Load custom data based on the selected Shop ID (Supports Restaurants s9 and Supermarkets s10!)
   Map<String, dynamic> _getShopData() {
+    // Check if it is a custom created shop first!
+    final customShop = ShopDetailPage.customCreatedShops.firstWhere(
+      (s) => s['id'] == widget.shopId,
+      orElse: () => <String, dynamic>{},
+    );
+    if (customShop.isNotEmpty) {
+      return customShop;
+    }
+
     switch (widget.shopId) {
       case 's1':
         return {
@@ -259,6 +269,92 @@ class _ShopDetailPageState extends State<ShopDetailPage> {
           'defaultReviews': <UserReview>[]
         };
     }
+  }
+
+  void _showBoothPurchaseDialog(BuildContext context, BoothProduct product, String shopName) {
+    final theme = Theme.of(context);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(
+            'تایید خرید محصول 🛒',
+            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.right,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'آیا از خرید محصول زیر از غرفه «$shopName» مطمئن هستید؟',
+                style: const TextStyle(fontSize: 13),
+                textAlign: TextAlign.right,
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primaryContainer.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: theme.colorScheme.primary.withOpacity(0.2)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            product.name,
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                            textAlign: TextAlign.right,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            product.price,
+                            style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 13),
+                            textAlign: TextAlign.right,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(product.icon, style: const TextStyle(fontSize: 32)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('انصراف'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('🎉 خرید محصول «${product.name}» با موفقیت انجام شد و فاکتور لایو صادر گردید!'),
+                    backgroundColor: Colors.green,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+              child: const Text('تایید و پرداخت نهایی', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _addComment() {
