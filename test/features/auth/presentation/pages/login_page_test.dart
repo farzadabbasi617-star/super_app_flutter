@@ -8,6 +8,7 @@ import 'package:super_app_flutter/features/auth/domain/entities/user.dart';
 import 'package:super_app_flutter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:super_app_flutter/features/auth/domain/usecases/login_usecase.dart';
 import 'package:super_app_flutter/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:super_app_flutter/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:super_app_flutter/features/auth/domain/usecases/register_usecase.dart';
 import 'package:super_app_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:super_app_flutter/features/auth/presentation/pages/login_page.dart';
@@ -24,8 +25,7 @@ class FakeAuthRepository implements AuthRepository {
     String fullName,
     String phoneNumber,
     UserRole role,
-  ) async =>
-      const Left(ServerFailure('not used'));
+  ) async => const Left(ServerFailure('not used'));
 
   @override
   Future<Either<Failure, void>> logout() async => const Right(null);
@@ -41,6 +41,7 @@ void main() {
       loginUseCase: LoginUseCase(repository),
       registerUseCase: RegisterUseCase(repository),
       logoutUseCase: LogoutUseCase(repository),
+      getCurrentUserUseCase: GetCurrentUserUseCase(repository),
     );
 
     await tester.pumpWidget(

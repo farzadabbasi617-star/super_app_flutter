@@ -3,6 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/register_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
+import '../../domain/usecases/get_current_user_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -10,12 +11,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
   final RegisterUseCase registerUseCase;
   final LogoutUseCase logoutUseCase;
+  final GetCurrentUserUseCase getCurrentUserUseCase;
 
   AuthBloc({
     required this.loginUseCase,
     required this.registerUseCase,
     required this.logoutUseCase,
+    required this.getCurrentUserUseCase,
   }) : super(AuthInitial()) {
+    on<AuthStatusChecked>((event, emit) async {
+      emit(AuthLoading());
+      final result = await getCurrentUserUseCase.execute();
+      result.fold(
+        (failure) => emit(AuthUnauthenticated()),
+        (user) => user == null
+            ? emit(AuthUnauthenticated())
+            : emit(AuthAuthenticated(user)),
+      );
+    }, transformer: restartable());
     on<AuthLoginRequested>((event, emit) async {
       emit(AuthLoading());
       final result = await loginUseCase.execute(event.email, event.password);
