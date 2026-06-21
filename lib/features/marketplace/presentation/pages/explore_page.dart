@@ -4,7 +4,7 @@ import '../bloc/product_bloc.dart';
 import '../bloc/product_event.dart';
 import '../bloc/product_state.dart';
 import '../../domain/entities/product.dart';
-import '../../../../core/utils/monetization_manager.dart';
+import 'package:super_app_flutter/core/utils/monetization_manager.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -15,11 +15,11 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   final TextEditingController _searchController = TextEditingController();
-  
+
   // Local state for shopping cart and favorites
   final Map<Product, int> _cart = {};
   final Set<String> _favoritedIds = {};
-  
+
   // Active category filter (null means show homapage with horizontal scrollable lists)
   String? _activeCategoryFilter;
   bool _showOnlyFavorites = false;
@@ -95,16 +95,22 @@ class _ExplorePageState extends State<ExplorePage> {
 
   // Calculate cart total price
   double get _cartTotalPrice {
-    return _cart.entries.fold(0.0, (sum, entry) => sum + (entry.key.price * entry.value));
+    return _cart.entries.fold(
+      0.0,
+      (sum, entry) => sum + (entry.key.price * entry.value),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('بازارچه هوشمند کالا 🛍️', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        title: const Text(
+          'بازارچه هوشمند کالا 🛍️',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(
@@ -114,11 +120,16 @@ class _ExplorePageState extends State<ExplorePage> {
           onPressed: () {
             setState(() {
               _showOnlyFavorites = !_showOnlyFavorites;
-              _activeCategoryFilter = null; // Reset category filter if toggling favorites
+              _activeCategoryFilter =
+                  null; // Reset category filter if toggling favorites
             });
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(_showOnlyFavorites ? 'فیلتر: فقط علاقه‌مندی‌ها ❤️' : 'نمایش همه کالاها'),
+                content: Text(
+                  _showOnlyFavorites
+                      ? 'فیلتر: فقط علاقه‌مندی‌ها ❤️'
+                      : 'نمایش همه کالاها',
+                ),
                 duration: const Duration(seconds: 1),
                 behavior: SnackBarBehavior.floating,
               ),
@@ -168,28 +179,42 @@ class _ExplorePageState extends State<ExplorePage> {
           if (state is ProductLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ProductLoaded) {
-            final List<Product> purchaseProducts = state.products.where((p) => !p.isRental).toList();
+            final List<Product> purchaseProducts =
+                state.products.where((p) => !p.isRental).toList();
             final purchaseCategories = state.categories;
 
             // Handle Search Query filtering
             List<Product> searchedProducts = purchaseProducts;
             if (_searchQuery.isNotEmpty) {
               searchedProducts = purchaseProducts.where((p) {
-                return p.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                    p.description.toLowerCase().contains(_searchQuery.toLowerCase());
+                return p.name.toLowerCase().contains(
+                          _searchQuery.toLowerCase(),
+                        ) ||
+                    p.description.toLowerCase().contains(
+                          _searchQuery.toLowerCase(),
+                        );
               }).toList();
             }
 
             // Handle Show Favorites Only
             if (_showOnlyFavorites) {
-              searchedProducts = searchedProducts.where((p) => _favoritedIds.contains(p.id)).toList();
+              searchedProducts = searchedProducts
+                  .where((p) => _favoritedIds.contains(p.id))
+                  .toList();
             }
 
             // Mode 1: Detailed Category Grid (when category is selected OR searching is active)
-            if (_activeCategoryFilter != null || _searchQuery.isNotEmpty || _showOnlyFavorites) {
+            if (_activeCategoryFilter != null ||
+                _searchQuery.isNotEmpty ||
+                _showOnlyFavorites) {
               final activeCat = _activeCategoryFilter;
-              final filteredGridProducts = activeCat != null 
-                  ? searchedProducts.where((p) => p.category.toLowerCase() == activeCat.toLowerCase()).toList()
+              final filteredGridProducts = activeCat != null
+                  ? searchedProducts
+                      .where(
+                        (p) =>
+                            p.category.toLowerCase() == activeCat.toLowerCase(),
+                      )
+                      .toList()
                   : searchedProducts;
 
               return Column(
@@ -201,7 +226,8 @@ class _ExplorePageState extends State<ExplorePage> {
                         ? _buildEmptyState(theme)
                         : GridView.builder(
                             padding: const EdgeInsets.all(16),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               childAspectRatio: 0.72,
                               crossAxisSpacing: 16,
@@ -209,7 +235,10 @@ class _ExplorePageState extends State<ExplorePage> {
                             ),
                             itemCount: filteredGridProducts.length,
                             itemBuilder: (context, index) {
-                              return _buildProductCard(theme, filteredGridProducts[index]);
+                              return _buildProductCard(
+                                theme,
+                                filteredGridProducts[index],
+                              );
                             },
                           ),
                   ),
@@ -221,13 +250,16 @@ class _ExplorePageState extends State<ExplorePage> {
             return Column(
               children: [
                 _buildSearchField(theme),
-                
+
                 // Active Categories quick chips row at top of main view
                 SizedBox(
                   height: 48,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
+                    ),
                     itemCount: purchaseCategories.length,
                     itemBuilder: (context, index) {
                       final category = purchaseCategories[index];
@@ -236,36 +268,50 @@ class _ExplorePageState extends State<ExplorePage> {
                         padding: const EdgeInsets.only(right: 8),
                         child: FilterChip(
                           avatar: Text(category.icon),
-                          label: Text(catFa, style: const TextStyle(fontSize: 11)),
+                          label: Text(
+                            catFa,
+                            style: const TextStyle(fontSize: 11),
+                          ),
                           selected: false,
-                          onPressed: () {
+                          onSelected: (_) {
                             setState(() {
                               _activeCategoryFilter = category.name;
                             });
                           },
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
                       );
                     },
                   ),
                 ),
-                
+
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     children: [
                       // Interactive Promo Banner
                       _buildPromoBanner(theme),
-                      
+
                       // Render horizontal list section for each category dynamically!
                       ...purchaseCategories.map((category) {
                         final categoryProducts = searchedProducts
-                            .where((p) => p.category.toLowerCase() == category.name.toLowerCase())
+                            .where(
+                              (p) =>
+                                  p.category.toLowerCase() ==
+                                  category.name.toLowerCase(),
+                            )
                             .toList();
-                        
-                        if (categoryProducts.isEmpty) return const SizedBox.shrink();
-                        
-                        return _buildCategoryHorizontalSection(theme, category, categoryProducts);
+
+                        if (categoryProducts.isEmpty)
+                          return const SizedBox.shrink();
+
+                        return _buildCategoryHorizontalSection(
+                          theme,
+                          category,
+                          categoryProducts,
+                        );
                       }),
                     ],
                   ),
@@ -293,9 +339,9 @@ class _ExplorePageState extends State<ExplorePage> {
           decoration: InputDecoration(
             hintText: 'جستجوی نام کالا یا صنف...',
             prefixIcon: const Icon(Icons.search),
-            suffixIcon: _searchQuery.isNotEmpty 
+            suffixIcon: _searchQuery.isNotEmpty
                 ? IconButton(
-                    icon: const Icon(Icons.clear), 
+                    icon: const Icon(Icons.clear),
                     onPressed: () {
                       _searchController.clear();
                       setState(() {
@@ -307,7 +353,10 @@ class _ExplorePageState extends State<ExplorePage> {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
             filled: true,
             fillColor: theme.colorScheme.surfaceVariant.withOpacity(0.35),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
           ),
           onChanged: (val) {
             setState(() {
@@ -336,7 +385,10 @@ class _ExplorePageState extends State<ExplorePage> {
         children: [
           TextButton.icon(
             icon: const Icon(Icons.arrow_back, size: 16),
-            label: const Text('بازگشت به دسته‌ها', style: TextStyle(fontSize: 11)),
+            label: const Text(
+              'بازگشت به دسته‌ها',
+              style: TextStyle(fontSize: 11),
+            ),
             onPressed: () {
               setState(() {
                 _activeCategoryFilter = null;
@@ -348,7 +400,10 @@ class _ExplorePageState extends State<ExplorePage> {
           ),
           Text(
             label,
-            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, fontSize: 13),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+            ),
           ),
         ],
       ),
@@ -385,12 +440,19 @@ class _ExplorePageState extends State<ExplorePage> {
               children: [
                 const Text(
                   'جشنواره شگفت‌انگیز سوپراپلیکیشن! 🎉',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'تخفیف‌های استثنایی بر روی کلیه صنف‌ها فقط امروز',
-                  style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 10),
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.85),
+                    fontSize: 10,
+                  ),
                 ),
               ],
             ),
@@ -402,7 +464,11 @@ class _ExplorePageState extends State<ExplorePage> {
   }
 
   // Horizontal Scrollable Category Row Widget
-  Widget _buildCategoryHorizontalSection(ThemeData theme, dynamic category, List<Product> categoryProducts) {
+  Widget _buildCategoryHorizontalSection(
+    ThemeData theme,
+    dynamic category,
+    List<Product> categoryProducts,
+  ) {
     final catFaName = _getCategoryFa(category.name);
     final catEmoji = _getCategoryEmoji(category.name);
 
@@ -423,11 +489,19 @@ class _ExplorePageState extends State<ExplorePage> {
                 },
                 child: Row(
                   children: [
-                    const Icon(Icons.arrow_back_ios, size: 12, color: Colors.blue),
+                    const Icon(
+                      Icons.arrow_back_ios,
+                      size: 12,
+                      color: Colors.blue,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       'دیدن بیشتر',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blue.shade700),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade700,
+                      ),
                     ),
                   ],
                 ),
@@ -436,7 +510,10 @@ class _ExplorePageState extends State<ExplorePage> {
                 children: [
                   Text(
                     '$catFaName $catEmoji',
-                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, fontSize: 14),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
@@ -469,7 +546,11 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  Widget _buildSeeMoreCard(ThemeData theme, String categoryName, String categoryFa) {
+  Widget _buildSeeMoreCard(
+    ThemeData theme,
+    String categoryName,
+    String categoryFa,
+  ) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -488,7 +569,10 @@ class _ExplorePageState extends State<ExplorePage> {
             children: [
               CircleAvatar(
                 backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
-                child: Icon(Icons.arrow_forward, color: theme.colorScheme.primary),
+                child: Icon(
+                  Icons.arrow_forward,
+                  color: theme.colorScheme.primary,
+                ),
               ),
               const SizedBox(height: 12),
               const Text(
@@ -511,9 +595,10 @@ class _ExplorePageState extends State<ExplorePage> {
 
   // Individual Product Card Widget (Grid or Horizontal scroll)
   Widget _buildProductCard(ThemeData theme, Product product) {
-    final formattedPrice = product.price
-        .toStringAsFixed(0)
-        .replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
+    final formattedPrice = product.price.toStringAsFixed(0).replaceAllMapped(
+          RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"),
+          (Match m) => "${m[1]},",
+        );
     final isFav = _favoritedIds.contains(product.id);
 
     return Card(
@@ -545,16 +630,19 @@ class _ExplorePageState extends State<ExplorePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.name, 
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5), 
-                        maxLines: 1, 
+                        product.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11.5,
+                        ),
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 2),
                       Text(
                         '$formattedPrice تومان',
                         style: TextStyle(
-                          color: theme.colorScheme.primary, 
+                          color: theme.colorScheme.primary,
                           fontWeight: FontWeight.bold,
                           fontSize: 10.5,
                         ),
@@ -611,11 +699,21 @@ class _ExplorePageState extends State<ExplorePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.search_off_outlined, size: 64, color: theme.colorScheme.primary.withOpacity(0.5)),
+          Icon(
+            Icons.search_off_outlined,
+            size: 64,
+            color: theme.colorScheme.primary.withOpacity(0.5),
+          ),
           const SizedBox(height: 16),
-          const Text('کالایی یافت نشد!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+          const Text(
+            'کالایی یافت نشد!',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
           const SizedBox(height: 8),
-          const Text('شاید لیست علاقه‌مندی‌ها خالی باشد یا عبارتی جستجو نشده باشد.', style: TextStyle(color: Colors.grey, fontSize: 11)),
+          const Text(
+            'شاید لیست علاقه‌مندی‌ها خالی باشد یا عبارتی جستجو نشده باشد.',
+            style: TextStyle(color: Colors.grey, fontSize: 11),
+          ),
         ],
       ),
     );
@@ -624,16 +722,23 @@ class _ExplorePageState extends State<ExplorePage> {
   // Interactive Product Detail, Cart action, and Instant purchase modal!
   void _showProductDetailsDialog(Product product) {
     final theme = Theme.of(context);
-    final formattedPrice = product.price
-        .toStringAsFixed(0)
-        .replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
+    final formattedPrice = product.price.toStringAsFixed(0).replaceAllMapped(
+          RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"),
+          (Match m) => "${m[1]},",
+        );
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15), textAlign: TextAlign.right),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            product.name,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            textAlign: TextAlign.right,
+          ),
           content: Directionality(
             textDirection: TextDirection.rtl,
             child: Column(
@@ -647,17 +752,33 @@ class _ExplorePageState extends State<ExplorePage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text('توضیحات محصول:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                const Text(
+                  'توضیحات محصول:',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                ),
                 const SizedBox(height: 4),
-                Text(product.description, style: const TextStyle(fontSize: 11.5, color: Colors.black87)),
+                Text(
+                  product.description,
+                  style: const TextStyle(fontSize: 11.5, color: Colors.black87),
+                ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('قیمت واحد:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                    const Text(
+                      'قیمت واحد:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12.5,
+                      ),
+                    ),
                     Text(
                       '$formattedPrice تومان',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: theme.colorScheme.primary),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
                   ],
                 ),
@@ -673,7 +794,9 @@ class _ExplorePageState extends State<ExplorePage> {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('📥 محصول «${product.name}» به سبد خرید اضافه شد!'),
+                    content: Text(
+                      '📥 محصول «${product.name}» به سبد خرید اضافه شد!',
+                    ),
                     backgroundColor: Colors.blue.shade700,
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -702,39 +825,68 @@ class _ExplorePageState extends State<ExplorePage> {
   void _showInstantPurchaseCheckout(Product product) {
     final theme = Theme.of(context);
     final monetization = MonetizationManager();
-    final formattedPrice = product.price
-        .toStringAsFixed(0)
-        .replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
+    final formattedPrice = product.price.toStringAsFixed(0).replaceAllMapped(
+          RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"),
+          (Match m) => "${m[1]},",
+        );
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Text('تایید خرید فوری 💳', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.right),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'تایید خرید فوری 💳',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            textAlign: TextAlign.right,
+          ),
           content: Directionality(
             textDirection: TextDirection.rtl,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('آیا می‌خواهید خرید خودکار کالا «${product.name}» را نهایی کنید؟', style: const TextStyle(fontSize: 12.5)),
+                Text(
+                  'آیا می‌خواهید خرید خودکار کالا «${product.name}» را نهایی کنید؟',
+                  style: const TextStyle(fontSize: 12.5),
+                ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('قیمت نهایی:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-                    Text('$formattedPrice تومان', style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold)),
+                    const Text(
+                      'قیمت نهایی:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      '$formattedPrice تومان',
+                      style: TextStyle(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('موجودی کیف پول شما:', style: TextStyle(fontSize: 11.5, color: Colors.grey)),
+                    const Text(
+                      'موجودی کیف پول شما:',
+                      style: TextStyle(fontSize: 11.5, color: Colors.grey),
+                    ),
                     Text(
                       '${monetization.walletBalance.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")} تومان',
-                      style: const TextStyle(fontSize: 11.5, color: Colors.grey, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 11.5,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -761,7 +913,9 @@ class _ExplorePageState extends State<ExplorePage> {
                   });
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('🎉 خرید فوری «${product.name}» موفقیت‌آمیز بود! کیف پول کسر شد.'),
+                      content: Text(
+                        '🎉 خرید فوری «${product.name}» موفقیت‌آمیز بود! کیف پول کسر شد.',
+                      ),
                       backgroundColor: Colors.green,
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -769,14 +923,19 @@ class _ExplorePageState extends State<ExplorePage> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('❌ موجودی کیف پول کافی نیست! ابتدا موجودی خود را افزایش دهید.'),
+                      content: Text(
+                        '❌ موجودی کیف پول کافی نیست! ابتدا موجودی خود را افزایش دهید.',
+                      ),
                       backgroundColor: Colors.red,
                       behavior: SnackBarBehavior.floating,
                     ),
                   );
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary, foregroundColor: Colors.white),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+                foregroundColor: Colors.white,
+              ),
               child: const Text('پرداخت و خرید'),
             ),
           ],
@@ -803,12 +962,16 @@ class _ExplorePageState extends State<ExplorePage> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             final cartItems = _cart.entries.toList();
-            final formattedTotal = _cartTotalPrice
-                .toStringAsFixed(0)
-                .replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
-            final formattedWallet = monetization.walletBalance
-                .toStringAsFixed(0)
-                .replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
+            final formattedTotal =
+                _cartTotalPrice.toStringAsFixed(0).replaceAllMapped(
+                      RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"),
+                      (Match m) => "${m[1]},",
+                    );
+            final formattedWallet =
+                monetization.walletBalance.toStringAsFixed(0).replaceAllMapped(
+                      RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"),
+                      (Match m) => "${m[1]},",
+                    );
 
             return Container(
               padding: const EdgeInsets.all(24),
@@ -828,7 +991,10 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                       const Text(
                         'سبد خرید شما 🛒',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                     ],
                   ),
@@ -853,25 +1019,48 @@ class _ExplorePageState extends State<ExplorePage> {
                           final qty = item.value;
                           final formattedItemPrice = (product.price * qty)
                               .toStringAsFixed(0)
-                              .replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
+                              .replaceAllMapped(
+                                RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"),
+                                (Match m) => "${m[1]},",
+                              );
 
                           return ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: theme.colorScheme.primaryContainer.withOpacity(0.2),
+                              backgroundColor: theme
+                                  .colorScheme.primaryContainer
+                                  .withOpacity(0.2),
                               child: Text(_getProductEmoji(product.category)),
                             ),
-                            title: Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12), textAlign: TextAlign.right),
+                            title: Text(
+                              product.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                              textAlign: TextAlign.right,
+                            ),
                             subtitle: Row(
                               textDirection: TextDirection.rtl,
                               children: [
-                                Text('$formattedItemPrice تومان', style: TextStyle(color: theme.colorScheme.primary, fontSize: 11, fontWeight: FontWeight.bold)),
+                                Text(
+                                  '$formattedItemPrice تومان',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.primary,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ],
                             ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                  icon: const Icon(Icons.remove_circle_outline, size: 20, color: Colors.red),
+                                  icon: const Icon(
+                                    Icons.remove_circle_outline,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
                                   onPressed: () {
                                     setModalState(() {
                                       setState(() {
@@ -884,9 +1073,19 @@ class _ExplorePageState extends State<ExplorePage> {
                                     });
                                   },
                                 ),
-                                Text('$qty', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                Text(
+                                  '$qty',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
+                                ),
                                 IconButton(
-                                  icon: const Icon(Icons.add_circle_outline, size: 20, color: Colors.green),
+                                  icon: const Icon(
+                                    Icons.add_circle_outline,
+                                    size: 20,
+                                    color: Colors.green,
+                                  ),
                                   onPressed: () {
                                     setModalState(() {
                                       setState(() {
@@ -902,14 +1101,27 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                     ),
                     const Divider(height: 24),
-                    
+
                     // Total prices rows
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       textDirection: TextDirection.rtl,
                       children: [
-                        const Text('مجموع سبد خرید:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                        Text('$formattedTotal تومان', style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 14)),
+                        const Text(
+                          'مجموع سبد خرید:',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Text(
+                          '$formattedTotal تومان',
+                          style: TextStyle(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 6),
@@ -917,23 +1129,41 @@ class _ExplorePageState extends State<ExplorePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       textDirection: TextDirection.rtl,
                       children: [
-                        const Text('موجودی کیف پول دیجیتال:', style: TextStyle(fontSize: 11.5, color: Colors.grey)),
-                        Text('$formattedWallet تومان', style: const TextStyle(fontSize: 11.5, color: Colors.grey, fontWeight: FontWeight.bold)),
+                        const Text(
+                          'موجودی کیف پول دیجیتال:',
+                          style: TextStyle(fontSize: 11.5, color: Colors.grey),
+                        ),
+                        Text(
+                          '$formattedWallet تومان',
+                          style: const TextStyle(
+                            fontSize: 11.5,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Purchase Button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         icon: const Icon(Icons.credit_card),
-                        label: const Text('تایید و پرداخت نهایی سبد خرید 💳', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                        label: const Text(
+                          'تایید و پرداخت نهایی سبد خرید 💳',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.primary,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                         ),
                         onPressed: () {
                           if (monetization.walletBalance >= _cartTotalPrice) {
@@ -950,7 +1180,9 @@ class _ExplorePageState extends State<ExplorePage> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('🎉 سفارش شما با موفقیت ثبت شد و فاکتور تجاری آن صادر گردید!'),
+                                content: Text(
+                                  '🎉 سفارش شما با موفقیت ثبت شد و فاکتور تجاری آن صادر گردید!',
+                                ),
                                 backgroundColor: Colors.green,
                                 behavior: SnackBarBehavior.floating,
                               ),
@@ -958,7 +1190,9 @@ class _ExplorePageState extends State<ExplorePage> {
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('❌ موجودی کیف پول برای خرید کل سبد کافی نیست! لطفاً حساب خود را شارژ کنید.'),
+                                content: Text(
+                                  '❌ موجودی کیف پول برای خرید کل سبد کافی نیست! لطفاً حساب خود را شارژ کنید.',
+                                ),
                                 backgroundColor: Colors.red,
                                 behavior: SnackBarBehavior.floating,
                               ),

@@ -16,40 +16,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.registerUseCase,
     required this.logoutUseCase,
   }) : super(AuthInitial()) {
-    
-    on<AuthLoginRequested>(
-      (event, emit) async {
-        emit(AuthLoading());
-        final result = await loginUseCase.execute(event.email, event.password);
-        result.fold(
-          (failure) => emit(AuthFailure(failure.message)),
-          (user) => emit(AuthAuthenticated(user)),
-        );
-      }, 
-      transformer: restartable(),
-    );
+    on<AuthLoginRequested>((event, emit) async {
+      emit(AuthLoading());
+      final result = await loginUseCase.execute(event.email, event.password);
+      result.fold(
+        (failure) => emit(AuthFailure(failure.message)),
+        (user) => emit(AuthAuthenticated(user)),
+      );
+    }, transformer: restartable());
 
-    on<AuthRegisterRequested>(
-      (event, emit) async {
-        emit(AuthLoading());
-        final result = await registerUseCase.execute(event.email, event.password, event.fullName, event.phoneNumber, event.role);
-        result.fold(
-          (failure) => emit(AuthFailure(failure.message)),
-          (user) => emit(AuthAuthenticated(user)),
-        );
-      }, 
-      transformer: restartable(),
-    );
+    on<AuthRegisterRequested>((event, emit) async {
+      emit(AuthLoading());
+      final result = await registerUseCase.execute(
+        event.email,
+        event.password,
+        event.fullName,
+        event.phoneNumber,
+        event.role,
+      );
+      result.fold(
+        (failure) => emit(AuthFailure(failure.message)),
+        (user) => emit(AuthAuthenticated(user)),
+      );
+    }, transformer: restartable());
 
-    on<AuthLogoutRequested>(
-      (event, emit) async {
-        final result = await logoutUseCase.execute();
-        result.fold(
-          (failure) => emit(AuthFailure(failure.message)),
-          (_) => emit(AuthUnauthenticated()),
-        );
-      }, 
-      transformer: sequential(),
-    );
+    on<AuthLogoutRequested>((event, emit) async {
+      final result = await logoutUseCase.execute();
+      result.fold(
+        (failure) => emit(AuthFailure(failure.message)),
+        (_) => emit(AuthUnauthenticated()),
+      );
+    }, transformer: sequential());
   }
 }

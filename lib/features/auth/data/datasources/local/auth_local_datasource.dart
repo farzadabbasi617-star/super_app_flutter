@@ -15,16 +15,19 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   AuthLocalDataSourceImpl(this.storage);
 
   @override
-  Future<void> saveToken(String token) async => await storage.write(key: 'token', value: token);
+  Future<void> saveToken(String token) async =>
+      await storage.write(key: 'token', value: token);
   @override
   Future<String?> getToken() async => await storage.read(key: 'token');
   @override
-  Future<void> saveUser(UserModel user) async => await storage.write(key: 'user', value: jsonEncode(user.toJson()));
+  Future<void> saveUser(UserModel user) async =>
+      await storage.write(key: 'user', value: jsonEncode(user.toJson()));
   @override
   Future<UserModel?> getUser() async {
     final json = await storage.read(key: 'user');
     return json == null ? null : UserModel.fromJson(jsonDecode(json));
   }
+
   @override
   Future<void> clear() async => await storage.deleteAll();
 }

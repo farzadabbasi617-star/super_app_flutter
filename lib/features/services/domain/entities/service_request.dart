@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-enum ServiceStatus { 
-  pending,      / Created but not yet dispatched
-  searching,    / Dispatched to nearby professionals
-  offerReceived, / One or more professionals expressed interest
-  accepted,     / A professional has been officially assigned
-  onTheWay,     / Professional is moving towards the customer
-  completed,    / Service finished
-  cancelled     / Cancelled by either party
+enum ServiceStatus {
+  pending, // Created but not yet dispatched
+  searching, // Dispatched to nearby professionals
+  offerReceived, // One or more professionals expressed interest
+  accepted, // A professional has been officially assigned
+  onTheWay, // Professional is moving towards the customer
+  completed, // Service finished
+  cancelled, // Cancelled by either party
 }
 
 class ServiceRequest extends Equatable {
@@ -70,14 +70,18 @@ class ServiceRequest extends Equatable {
       status: status ?? this.status,
       createdAt: createdAt,
       estimatedArrivalTime: estimatedArrivalTime ?? this.estimatedArrivalTime,
-      assignedProfessionalName: assignedProfessionalName ?? this.assignedProfessionalName,
-      assignedProfessionalSpecialty: assignedProfessionalSpecialty ?? this.assignedProfessionalSpecialty,
-      assignedProfessionalRating: assignedProfessionalRating ?? this.assignedProfessionalRating,
+      assignedProfessionalName:
+          assignedProfessionalName ?? this.assignedProfessionalName,
+      assignedProfessionalSpecialty:
+          assignedProfessionalSpecialty ?? this.assignedProfessionalSpecialty,
+      assignedProfessionalRating:
+          assignedProfessionalRating ?? this.assignedProfessionalRating,
       confirmedPrice: confirmedPrice ?? this.confirmedPrice,
       problemDescription: problemDescription ?? this.problemDescription,
       productBrand: productBrand ?? this.productBrand,
       budgetRange: budgetRange ?? this.budgetRange,
-      preferredTechnicianLevel: preferredTechnicianLevel ?? this.preferredTechnicianLevel,
+      preferredTechnicianLevel:
+          preferredTechnicianLevel ?? this.preferredTechnicianLevel,
     );
   }
 

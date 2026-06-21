@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppTypography {
-  static const String fontFamily = 'Inter'; / Assuming Inter is added to pubspec or using system default
+  static const String fontFamily =
+      'Inter'; // Assuming Inter is added to pubspec or using system default
 
   static const TextStyle h1 = TextStyle(
     fontSize: 32,

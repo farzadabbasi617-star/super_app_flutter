@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../../domain/usecases/book_equipment_usecase.dart';
-import '../../../core/error/failures.dart';
 
 abstract class RentalEvent extends Equatable {
   @override
@@ -23,8 +22,11 @@ abstract class RentalState extends Equatable {
 }
 
 class RentalInitial extends RentalState {}
+
 class RentalBookingLoading extends RentalState {}
+
 class RentalBookingSuccess extends RentalState {}
+
 class RentalBookingFailure extends RentalState {
   final String error;
   RentalBookingFailure(this.error);

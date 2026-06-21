@@ -8,7 +8,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final GetProfileUseCase getProfile;
   final UpdateWalletUseCase updateWallet;
 
-  ProfileBloc({required this.getProfile, required this.updateWallet}) : super(ProfileInitial()) {
+  ProfileBloc({required this.getProfile, required this.updateWallet})
+      : super(ProfileInitial()) {
     on<LoadProfileRequested>((event, emit) async {
       emit(ProfileLoading());
       final result = await getProfile.execute();
@@ -24,7 +25,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         final result = await updateWallet.execute(event.amount);
         result.fold(
           (failure) => emit(ProfileFailure(failure.message)),
-          (newBalance) => emit(ProfileLoaded(currentState.profile.copyWith(walletBalance: newBalance))),
+          (newBalance) => emit(
+            ProfileLoaded(
+              currentState.profile.copyWith(walletBalance: newBalance),
+            ),
+          ),
         );
       }
     });

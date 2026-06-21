@@ -23,16 +23,18 @@ class NetworkClient {
 
     dio.interceptors.add(AuthInterceptor());
     dio.interceptors.add(ErrorInterceptor());
-    
+
     if (kDebugMode) {
-      dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-      ));
+      dio.interceptors.add(
+        LogInterceptor(requestBody: true, responseBody: true),
+      );
     }
   }
 
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) async {
+  Future<Response> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
     try {
       return await dio.get(path, queryParameters: queryParameters);
     } on DioException catch (e) {
@@ -73,8 +75,14 @@ class NetworkClient {
       case DioExceptionType.badResponse:
         final statusCode = e.response?.statusCode;
         if (statusCode == 401) return const UnauthorizedFailure();
-        if (statusCode == 400) return ValidationFailure(e.response?.data['message'] ?? 'Invalid request');
-        return ServerFailure(e.response?.data['message'] ?? 'Something went wrong', statusCode: statusCode);
+        if (statusCode == 400)
+          return ValidationFailure(
+            e.response?.data['message'] ?? 'Invalid request',
+          );
+        return ServerFailure(
+          e.response?.data['message'] ?? 'Something went wrong',
+          statusCode: statusCode,
+        );
       default:
         return ServerFailure('An unexpected error occurred');
     }
@@ -83,10 +91,13 @@ class NetworkClient {
 
 class AuthInterceptor extends Interceptor {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     final storage = sl<SecureStorageService>();
     final token = await storage.getToken();
-    
+
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
     }
@@ -96,9 +107,12 @@ class AuthInterceptor extends Interceptor {
 
 class ErrorInterceptor extends Interceptor {
   @override
-  void onError(DioException err, RequestInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-      AppLogger.log('Global Auth Error: Session Expired', level: LogLevel.warning);
+      AppLogger.log(
+        'Global Auth Error: Session Expired',
+        level: LogLevel.warning,
+      );
     }
     super.onError(err, handler);
   }

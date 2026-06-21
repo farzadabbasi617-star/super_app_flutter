@@ -37,7 +37,6 @@ dependencies:
 
   # Geospatial & Maps
   google_maps_flutter: ^2.5.0
-  google_maps_cluster_manager: ^3.0.0
   geolocator: ^10.1.0
 
 dev_dependencies:

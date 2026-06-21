@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/service_request.dart';
 import '../bloc/service_bloc.dart';
 import '../bloc/service_event.dart';
-import '../bloc/service_state.dart';
 
 class ExpertOffer {
   final String id;
@@ -67,8 +66,10 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
       completedJobs: 142,
       price: 350000,
       eta: '15 mins',
-      introMessage: 'Hello! I am a certified senior plumber with all the necessary tools. I can resolve any pipe leaks, blockages, or tap repairs immediately.',
-      avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150',
+      introMessage:
+          'Hello! I am a certified senior plumber with all the necessary tools. I can resolve any pipe leaks, blockages, or tap repairs immediately.',
+      avatarUrl:
+          'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150',
       chatHistory: [],
     ),
     ExpertOffer(
@@ -79,8 +80,10 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
       completedJobs: 98,
       price: 290000,
       eta: '22 mins',
-      introMessage: 'Hi there! I specialize in residential electrical systems. I can safely diagnose and repair any short circuits, sockets, or lighting issues.',
-      avatarUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150',
+      introMessage:
+          'Hi there! I specialize in residential electrical systems. I can safely diagnose and repair any short circuits, sockets, or lighting issues.',
+      avatarUrl:
+          'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150',
       chatHistory: [],
     ),
     ExpertOffer(
@@ -91,8 +94,10 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
       completedJobs: 215,
       price: 320000,
       eta: '18 mins',
-      introMessage: 'Hello! I have over 8 years of experience in AC installation, maintenance, and gas refills. I can get your system cooling perfectly today.',
-      avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
+      introMessage:
+          'Hello! I have over 8 years of experience in AC installation, maintenance, and gas refills. I can get your system cooling perfectly today.',
+      avatarUrl:
+          'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
       chatHistory: [],
     ),
   ];
@@ -115,12 +120,14 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
       if (mounted) {
         setState(() {
           final offer = _allAvailableOffers[0];
-          offer.chatHistory.add(ChatMessage(
-            id: 'msg_init_1',
-            senderId: 'expert',
-            text: offer.introMessage,
-            timestamp: DateTime.now(),
-          ));
+          offer.chatHistory.add(
+            ChatMessage(
+              id: 'msg_init_1',
+              senderId: 'expert',
+              text: offer.introMessage,
+              timestamp: DateTime.now(),
+            ),
+          );
           _receivedOffers.add(offer);
           _isSearching = false; // At least one offer received
         });
@@ -133,12 +140,14 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
       if (mounted) {
         setState(() {
           final offer = _allAvailableOffers[1];
-          offer.chatHistory.add(ChatMessage(
-            id: 'msg_init_2',
-            senderId: 'expert',
-            text: offer.introMessage,
-            timestamp: DateTime.now(),
-          ));
+          offer.chatHistory.add(
+            ChatMessage(
+              id: 'msg_init_2',
+              senderId: 'expert',
+              text: offer.introMessage,
+              timestamp: DateTime.now(),
+            ),
+          );
           _receivedOffers.add(offer);
         });
         _showNotificationSnackBar(_allAvailableOffers[1].expertName);
@@ -150,12 +159,14 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
       if (mounted) {
         setState(() {
           final offer = _allAvailableOffers[2];
-          offer.chatHistory.add(ChatMessage(
-            id: 'msg_init_3',
-            senderId: 'expert',
-            text: offer.introMessage,
-            timestamp: DateTime.now(),
-          ));
+          offer.chatHistory.add(
+            ChatMessage(
+              id: 'msg_init_3',
+              senderId: 'expert',
+              text: offer.introMessage,
+              timestamp: DateTime.now(),
+            ),
+          );
           _receivedOffers.add(offer);
         });
         _showNotificationSnackBar(_allAvailableOffers[2].expertName);
@@ -194,9 +205,7 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
 
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          color: theme.colorScheme.background,
-        ),
+        decoration: BoxDecoration(color: theme.colorScheme.background),
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,7 +258,9 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    _isSearching ? 'Searching for experts...' : 'Active Proposals',
+                    _isSearching
+                        ? 'Searching for experts...'
+                        : 'Active Proposals',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onBackground.withOpacity(0.6),
                     ),
@@ -278,7 +289,10 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
           children: [
             CircleAvatar(
               backgroundColor: theme.colorScheme.primaryContainer,
-              child: Icon(Icons.build, color: theme.colorScheme.onPrimaryContainer),
+              child: Icon(
+                Icons.build,
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -287,12 +301,16 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
                 children: [
                   Text(
                     widget.request.serviceType,
-                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Location: Tehran, Iran',
-                    style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    ),
                   ),
                 ],
               ),
@@ -305,7 +323,10 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
               ),
               child: Text(
                 'ID: ${widget.request.id.substring(0, min(8, widget.request.id.length))}',
-                style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onPrimaryContainer, fontWeight: FontWeight.bold),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -327,7 +348,9 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
               children: [
                 CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary.withOpacity(0.5)),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    theme.colorScheme.primary.withOpacity(0.5),
+                  ),
                 ),
                 Container(
                   width: 90,
@@ -336,7 +359,11 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
                     shape: BoxShape.circle,
                     color: theme.colorScheme.primary.withOpacity(0.1),
                   ),
-                  child: Icon(Icons.radar, size: 40, color: theme.colorScheme.primary),
+                  child: Icon(
+                    Icons.radar,
+                    size: 40,
+                    color: theme.colorScheme.primary,
+                  ),
                 ),
               ],
             ),
@@ -344,12 +371,16 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
           const SizedBox(height: 32),
           Text(
             'Broadcasting request to verified experts...',
-            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             'Experts usually respond in less than a minute',
-            style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onBackground.withOpacity(0.5)),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onBackground.withOpacity(0.5),
+            ),
           ),
         ],
       ),
@@ -382,7 +413,9 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
                 Expanded(
                   child: Text(
                     offer.expertName,
-                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Text(
@@ -400,13 +433,18 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
                 const SizedBox(height: 4),
                 Text(
                   offer.specialty,
-                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.amber.shade50,
                         borderRadius: BorderRadius.circular(6),
@@ -417,24 +455,39 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
                           const SizedBox(width: 4),
                           Text(
                             '${offer.rating}',
-                            style: theme.textTheme.labelSmall?.copyWith(color: Colors.amber.shade900, fontWeight: FontWeight.bold),
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: Colors.amber.shade900,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Icon(Icons.check_circle_outline, size: 14, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                    Icon(
+                      Icons.check_circle_outline,
+                      size: 14,
+                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       '${offer.completedJobs} jobs',
-                      style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      ),
                     ),
                     const SizedBox(width: 16),
-                    Icon(Icons.access_time, size: 14, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+                    Icon(
+                      Icons.access_time,
+                      size: 14,
+                      color: theme.colorScheme.onSurface.withOpacity(0.4),
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       offer.eta,
-                      style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.5)),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                      ),
                     ),
                   ],
                 ),
@@ -442,7 +495,10 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
             ),
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -450,7 +506,9 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
                     const SizedBox(height: 8),
                     Text(
                       'Proposal Summary:',
-                      style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 6),
                     Text(
@@ -466,11 +524,17 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
                         Expanded(
                           child: OutlinedButton.icon(
                             icon: const Icon(Icons.chat_bubble_outline),
-                            label: Text(offer.isConsulting ? 'Continue Chat' : 'Consult & Chat'),
+                            label: Text(
+                              offer.isConsulting
+                                  ? 'Continue Chat'
+                                  : 'Consult & Chat',
+                            ),
                             onPressed: () => _openConsultationChat(offer),
                             style: OutlinedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                             ),
                           ),
                         ),
@@ -480,7 +544,9 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
                             onPressed: () => _showConfirmationDialog(offer),
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                               backgroundColor: theme.colorScheme.primary,
                               foregroundColor: theme.colorScheme.onPrimary,
                             ),
@@ -526,7 +592,9 @@ class _CustomerOffersViewState extends State<CustomerOffersView> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Confirm Selection'),
-          content: Text('Do you want to accept ${offer.expertName}\'s proposal and confirm the price of ${offer.price.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} Tomans?'),
+          content: Text(
+            "Do you want to accept ${offer.expertName}'s proposal and confirm the price of ${offer.price.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} Tomans?",
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -608,12 +676,14 @@ class _ConsultationChatPageState extends State<ConsultationChatPage> {
     _messageController.clear();
 
     setState(() {
-      widget.offer.chatHistory.add(ChatMessage(
-        id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
-        senderId: 'customer',
-        text: text,
-        timestamp: DateTime.now(),
-      ));
+      widget.offer.chatHistory.add(
+        ChatMessage(
+          id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+          senderId: 'customer',
+          text: text,
+          timestamp: DateTime.now(),
+        ),
+      );
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
@@ -631,24 +701,38 @@ class _ConsultationChatPageState extends State<ConsultationChatPage> {
     String replyText = '';
     final textLower = customerMsg.toLowerCase();
 
-    if (textLower.contains('price') || textLower.contains('cost') || textLower.contains('تومان') || textLower.contains('هزینه') || textLower.contains('قیمت')) {
-      replyText = 'The proposal of ${widget.offer.price.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} Tomans covers the visit fee and direct labor. If we need to purchase replacement parts on-site, I will buy them with a receipt and share the invoice.';
-    } else if (textLower.contains('when') || textLower.contains('time') || textLower.contains('arrival') || textLower.contains('کی') || textLower.contains('ساعت') || textLower.contains('زمان')) {
-      replyText = 'I am fully prepared with all tools in my service vehicle. I can be at your address in Tehran within ${widget.offer.eta} once you accept the proposal!';
+    if (textLower.contains('price') ||
+        textLower.contains('cost') ||
+        textLower.contains('تومان') ||
+        textLower.contains('هزینه') ||
+        textLower.contains('قیمت')) {
+      replyText =
+          'The proposal of ${widget.offer.price.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} Tomans covers the visit fee and direct labor. If we need to purchase replacement parts on-site, I will buy them with a receipt and share the invoice.';
+    } else if (textLower.contains('when') ||
+        textLower.contains('time') ||
+        textLower.contains('arrival') ||
+        textLower.contains('کی') ||
+        textLower.contains('ساعت') ||
+        textLower.contains('زمان')) {
+      replyText =
+          'I am fully prepared with all tools in my service vehicle. I can be at your address in Tehran within ${widget.offer.eta} once you accept the proposal!';
     } else {
-      replyText = 'Excellent! I have successfully noted the details. If you have any other questions, please let me know, or you can click "Accept Proposal" at the bottom of our chat so I can start driving!';
+      replyText =
+          'Excellent! I have successfully noted the details. If you have any other questions, please let me know, or you can click "Accept Proposal" at the bottom of our chat so I can start driving!';
     }
 
     Timer(const Duration(milliseconds: 1500), () {
       if (mounted) {
         setState(() {
           _isExpertTyping = false;
-          widget.offer.chatHistory.add(ChatMessage(
-            id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
-            senderId: 'expert',
-            text: replyText,
-            timestamp: DateTime.now(),
-          ));
+          widget.offer.chatHistory.add(
+            ChatMessage(
+              id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+              senderId: 'expert',
+              text: replyText,
+              timestamp: DateTime.now(),
+            ),
+          );
         });
         WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       }
@@ -673,18 +757,24 @@ class _ConsultationChatPageState extends State<ConsultationChatPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.offer.expertName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Text(widget.offer.specialty, style: const TextStyle(fontSize: 12, color: Colors.white70)),
+                  Text(
+                    widget.offer.expertName,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    widget.offer.specialty,
+                    style: const TextStyle(fontSize: 12, color: Colors.white70),
+                  ),
                 ],
               ),
             ),
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.info_outline), onPressed: () {}),
         ],
       ),
       body: Column(
@@ -698,27 +788,39 @@ class _ConsultationChatPageState extends State<ConsultationChatPage> {
                 final message = widget.offer.chatHistory[index];
                 final isMe = message.senderId == 'customer';
                 return Align(
-                  alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment:
+                      isMe ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
-                      color: isMe ? theme.colorScheme.primary : theme.colorScheme.surfaceVariant,
+                      color: isMe
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.surfaceVariant,
                       borderRadius: BorderRadius.only(
                         topLeft: const Radius.circular(16),
                         topRight: const Radius.circular(16),
-                        bottomLeft: isMe ? const Radius.circular(16) : Radius.zero,
-                        bottomRight: isMe ? Radius.zero : const Radius.circular(16),
+                        bottomLeft:
+                            isMe ? const Radius.circular(16) : Radius.zero,
+                        bottomRight:
+                            isMe ? Radius.zero : const Radius.circular(16),
                       ),
                     ),
-                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.75,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           message.text,
                           style: TextStyle(
-                            color: isMe ? theme.colorScheme.onPrimary : theme.colorScheme.onSurfaceVariant,
+                            color: isMe
+                                ? theme.colorScheme.onPrimary
+                                : theme.colorScheme.onSurfaceVariant,
                             fontSize: 14,
                             height: 1.4,
                           ),
@@ -727,9 +829,12 @@ class _ConsultationChatPageState extends State<ConsultationChatPage> {
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Text(
-                            '${message.timestamp.hour.toString().padLeft(2, \'0\')}:${message.timestamp.minute.toString().padLeft(2, \'0\')}',
+                            "${message.timestamp.hour.toString().padLeft(2, '0')}:${message.timestamp.minute.toString().padLeft(2, '0')}",
                             style: TextStyle(
-                              color: (isMe ? theme.colorScheme.onPrimary : theme.colorScheme.onSurfaceVariant).withOpacity(0.6),
+                              color: (isMe
+                                      ? theme.colorScheme.onPrimary
+                                      : theme.colorScheme.onSurfaceVariant)
+                                  .withOpacity(0.6),
                               fontSize: 10,
                             ),
                           ),
@@ -748,7 +853,9 @@ class _ConsultationChatPageState extends State<ConsultationChatPage> {
                 children: [
                   Text(
                     '${widget.offer.expertName} is typing...',
-                    style: theme.textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   const SizedBox(
@@ -779,7 +886,9 @@ class _ConsultationChatPageState extends State<ConsultationChatPage> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+                          color: theme.colorScheme.surfaceVariant.withOpacity(
+                            0.5,
+                          ),
                           borderRadius: BorderRadius.circular(24),
                         ),
                         child: TextField(
@@ -787,7 +896,10 @@ class _ConsultationChatPageState extends State<ConsultationChatPage> {
                           decoration: const InputDecoration(
                             hintText: 'Ask expert about details, price, ETA...',
                             border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
                           ),
                         ),
                       ),
@@ -804,11 +916,15 @@ class _ConsultationChatPageState extends State<ConsultationChatPage> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.check_circle_outline),
-                    label: Text('Select Expert & Confirm Price (${widget.offer.price.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => \'${m[1]},\')} Tomans)'),
+                    label: Text(
+                      "Select Expert & Confirm Price (${widget.offer.price.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} Tomans)",
+                    ),
                     onPressed: widget.onAccept,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       backgroundColor: Colors.green.shade600,
                       foregroundColor: Colors.white,
                     ),

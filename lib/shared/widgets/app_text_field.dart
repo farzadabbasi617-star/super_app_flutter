@@ -29,14 +29,19 @@ class AppTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold)),
+        Text(
+          label,
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
           obscureText: isPassword,
           keyboardType: keyboardType,
           onChanged: onChanged,
-          onFieldSubmitted: onFieldSubmitted,
+          onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
             hintText: 'Enter $label...',
             prefixIcon: prefixIcon,

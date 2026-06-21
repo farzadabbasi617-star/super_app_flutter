@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../../../core/error/failures.dart';
+import 'package:super_app_flutter/core/error/failures.dart';
 
 class LogoutUseCase {
   final AuthRepository repository;

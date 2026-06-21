@@ -1,56 +1,52 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:super_app_flutter/core/error/failures.dart';
 import 'package:super_app_flutter/features/marketplace/domain/repositories/rental_repository.dart';
 import 'package:super_app_flutter/features/marketplace/domain/usecases/book_equipment_usecase.dart';
-import 'package:super_app_flutter/core/error/failures.dart';
 
-class MockRentalRepository extends Mock implements RentalRepository {}
+class FakeRentalRepository implements RentalRepository {
+  Either<Failure, bool>? result;
+
+  @override
+  Future<Either<Failure, bool>> bookEquipment({
+    required String productId,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    return result!;
+  }
+}
 
 void main() {
   late BookEquipmentUseCase usecase;
-  late MockRentalRepository mockRepository;
+  late FakeRentalRepository repository;
 
   setUp(() {
-    mockRepository = MockRentalRepository();
-    usecase = BookEquipmentUseCase(mockRepository);
+    repository = FakeRentalRepository();
+    usecase = BookEquipmentUseCase(repository);
   });
 
   test('should return success when equipment is available', () async {
-    // Arrange
-    when(mockRepository.bookEquipment(
-      productId: anyNamed('productId'),
-      startDate: anyNamed('startDate'),
-      endDate: anyNamed('endDate'),
-    )).thenAnswer((_) async => Right(true));
+    repository.result = const Right(true);
 
-    // Act
     final result = await usecase.execute(
       productId: 'p1',
       startDate: DateTime.now(),
       endDate: DateTime.now().add(const Duration(days: 2)),
     );
 
-    // Assert
-    expect(result, Right(true));
+    expect(result, const Right(true));
   });
 
   test('should return ValidationFailure when dates conflict', () async {
-    // Arrange
-    when(mockRepository.bookEquipment(
-      productId: anyNamed('productId'),
-      startDate: anyNamed('startDate'),
-      endDate: anyNamed('endDate'),
-    )).thenAnswer((_) async => Left(ValidationFailure('Equipment unavailable')));
+    repository.result = const Left(ValidationFailure('Equipment unavailable'));
 
-    // Act
     final result = await usecase.execute(
       productId: 'p1',
       startDate: DateTime.now(),
       endDate: DateTime.now().add(const Duration(days: 2)),
     );
 
-    // Assert
-    expect(result, Left(ValidationFailure('Equipment unavailable')));
+    expect(result, const Left(ValidationFailure('Equipment unavailable')));
   });
 }

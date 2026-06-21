@@ -2,33 +2,14 @@ import 'dart:math' show pi, sin, cos, sqrt, atan2, Random;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:geolocator/geolocator.dart';
 import '../bloc/map_bloc.dart';
 import '../bloc/map_event.dart';
 import '../bloc/map_state.dart';
 import '../../domain/entities/shop.dart';
 import 'shop_detail_page.dart';
-import '../../../../core/utils/monetization_manager.dart';
 import 'package:go_router/go_router.dart';
-import '../../../shared/widgets/app_button.dart';
-
-// 1. Unified Cluster Item Wrapper for Map Discovery
-class MapClusterItem with ClusterItem {
-  final dynamic item; // Can be a Shop or a MapExpert
-
-  MapClusterItem({required this.item});
-
-  @override
-  LatLng get location {
-    if (item is Shop) {
-      return (item as Shop).location;
-    } else if (item is MapExpert) {
-      return (item as MapExpert).location;
-    }
-    return const LatLng(0, 0);
-  }
-}
+import 'package:super_app_flutter/shared/widgets/app_button.dart';
 
 // 2. Expert Map Model Representation
 class MapExpert {
@@ -62,7 +43,6 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   late GoogleMapController mapController;
-  late ClusterManager<MapClusterItem> _clusterManager;
   final LatLng _initialPosition = const LatLng(35.6892, 51.3890);
 
   // Filter States
@@ -144,102 +124,88 @@ class _MapPageState extends State<MapPage> {
     ),
   ];
 
-  Set<Marker> _markers = {};
-
   @override
   void initState() {
     super.initState();
-    _initClusterManager();
     // Initial load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<MapBloc>().add(LoadNearbyShopsRequested(_initialPosition));
     });
   }
 
-  void _initClusterManager() {
-    _clusterManager = ClusterManager<MapClusterItem>(
-      [],
-      _updateMarkers,
-      markerBuilder: _getMarkerBuilder,
-    );
-  }
+  Set<Marker> _buildMarkers(List<Shop> shops, List<MapExpert> experts) {
+    final markers = <Marker>{};
 
-  void _updateMarkers(Set<Marker> markers) {
-    setState(() {
-      _markers = markers;
-    });
-  }
-
-  // Builder function for clusters/markers (Polymorphic: supports Shop and MapExpert)
-  Future<Marker> _getMarkerBuilder(Cluster<MapClusterItem> cluster) async {
-    final isMultiple = cluster.isMultiple;
-    final item = cluster.items.first.item;
-
-    double hue = BitmapDescriptor.hueRed;
-    if (!isMultiple) {
-      if (item is Shop) {
-        hue = _getMarkerHue(item.category);
-      } else if (item is MapExpert) {
-        hue = BitmapDescriptor.hueOrange; // Orange markers for experts
-      }
+    for (final shop in shops) {
+      markers.add(
+        Marker(
+          markerId: MarkerId('shop_${shop.id}'),
+          position: shop.location,
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              _getMarkerHue(shop.category)),
+          onTap: () {
+            setState(() {
+              _selectedItem = shop;
+              _showOnboarding = false;
+            });
+            mapController.animateCamera(
+              CameraUpdate.newLatLngZoom(shop.location, 14.5),
+            );
+          },
+        ),
+      );
     }
 
-    return Marker(
-      markerId: MarkerId(cluster.getId()),
-      position: cluster.location,
-      onTap: () {
-        if (isMultiple) {
-          mapController.animateCamera(
-            CameraUpdate.newLatLngZoom(cluster.location, cluster.zoom + 2),
-          );
-        } else {
-          setState(() {
-            _selectedItem = item;
-            _showOnboarding = false; // Hide onboarding if they interact
-          });
-          mapController.animateCamera(
-            CameraUpdate.newLatLngZoom(cluster.location, 14.5),
-          );
-        }
-      },
-      icon: isMultiple 
-          ? await _getClusterIcon(cluster.count)
-          : BitmapDescriptor.defaultMarkerWithHue(hue),
-    );
-  }
+    for (final expert in experts) {
+      markers.add(
+        Marker(
+          markerId: MarkerId('expert_${expert.id}'),
+          position: expert.location,
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+          onTap: () {
+            setState(() {
+              _selectedItem = expert;
+              _showOnboarding = false;
+            });
+            mapController.animateCamera(
+              CameraUpdate.newLatLngZoom(expert.location, 14.5),
+            );
+          },
+        ),
+      );
+    }
 
-  Future<BitmapDescriptor> _getClusterIcon(int count) async {
-    return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet);
+    return markers;
   }
 
   double _getMarkerHue(String category) {
-    if (MonetizationManager().activeSubscription == 'Gold') {
-      return BitmapDescriptor.hueYellow; // Gilded markers for the entire ecosystem when Gold subscription is active!
-    }
-    switch (category.toLowerCase()) {
-      case 'electronics':
+    switch (category) {
+      case 'Electronics':
         return BitmapDescriptor.hueGreen;
-      case 'plants':
-        return BitmapDescriptor.hueBlue;
-      case 'cafe':
-        return BitmapDescriptor.hueOrange;
-      case 'restaurant':
-        return BitmapDescriptor.hueMagenta;
-      case 'supermarket':
+      case 'Plants':
+        return BitmapDescriptor.hueAzure;
+      case 'Cafe':
+      case 'Restaurant':
+        return BitmapDescriptor.hueRose;
+      case 'Clinic':
         return BitmapDescriptor.hueCyan;
+      case 'Supermarket':
+        return BitmapDescriptor.hueBlue;
       default:
         return BitmapDescriptor.hueRed;
     }
   }
 
-  // Haversine formula to filter markers within radius
   double _calculateDistance(LatLng p1, LatLng p2) {
     const double earthRadius = 6371; // km
     final dLat = (p2.latitude - p1.latitude) * pi / 180;
     final dLon = (p2.longitude - p1.longitude) * pi / 180;
     final a = sin(dLat / 2) * sin(dLat / 2) +
-              cos(p1.latitude * pi / 180) * cos(p2.latitude * pi / 180) *
-              sin(dLon / 2) * sin(dLon / 2);
+        cos(p1.latitude * pi / 180) *
+            cos(p2.latitude * pi / 180) *
+            sin(dLon / 2) *
+            sin(dLon / 2);
     final c = 2 * atan2(sqrt(a), sqrt(1 - a));
     return earthRadius * c;
   }
@@ -257,7 +223,9 @@ class _MapPageState extends State<MapPage> {
   // Toggle Map Style normal <-> satellite
   void _toggleMapType() {
     setState(() {
-      _currentMapType = _currentMapType == MapType.normal ? MapType.satellite : MapType.normal;
+      _currentMapType = _currentMapType == MapType.normal
+          ? MapType.satellite
+          : MapType.normal;
     });
     _setMapStyle(Theme.of(context));
   }
@@ -287,7 +255,9 @@ class _MapPageState extends State<MapPage> {
 
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('دسترسی موقعیت‌یابی برای همیشه مسدود شده است.')),
+        const SnackBar(
+          content: Text('دسترسی موقعیت‌یابی برای همیشه مسدود شده است.'),
+        ),
       );
       return;
     }
@@ -306,24 +276,20 @@ class _MapPageState extends State<MapPage> {
         ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطا در دریافت لوکیشن: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('خطا در دریافت لوکیشن: $e')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: BlocConsumer<MapBloc, MapState>(
-        listener: (context, state) {
-          if (state is MapLoaded) {
-            _syncClusterItems(state.shops);
-          }
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           if (state is MapLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -331,48 +297,58 @@ class _MapPageState extends State<MapPage> {
             // Filter both Shops and Experts dynamically
             final allShopsCombined = [...state.shops, ..._customShops];
             final List<Shop> filteredShops = allShopsCombined.where((shop) {
-              final matchesCategory = _selectedCategories.contains(shop.category);
-              final matchesQuery = _searchQuery.isEmpty || 
+              final matchesCategory = _selectedCategories.contains(
+                shop.category,
+              );
+              final matchesQuery = _searchQuery.isEmpty ||
                   shop.name.toLowerCase().contains(_searchQuery.toLowerCase());
               final matchesOpen = !_showOnlyOpen || shop.isOpen;
               final matchesRating = shop.rating >= _minRating;
-              final matchesRadius = _calculateDistance(_initialPosition, shop.location) <= _searchRadius;
-              
-              return matchesCategory && matchesQuery && matchesOpen && matchesRating && matchesRadius;
+              final matchesRadius =
+                  _calculateDistance(_initialPosition, shop.location) <=
+                      _searchRadius;
+
+              return matchesCategory &&
+                  matchesQuery &&
+                  matchesOpen &&
+                  matchesRating &&
+                  matchesRadius;
             }).toList();
 
-            final List<MapExpert> filteredExperts = _selectedCategories.contains('Expert')
+            final List<MapExpert> filteredExperts = _selectedCategories
+                    .contains('Expert')
                 ? _allExperts.where((expert) {
-                    final matchesQuery = _searchQuery.isEmpty || 
-                        expert.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                        expert.specialty.toLowerCase().contains(_searchQuery.toLowerCase());
+                    final matchesQuery = _searchQuery.isEmpty ||
+                        expert.name.toLowerCase().contains(
+                              _searchQuery.toLowerCase(),
+                            ) ||
+                        expert.specialty.toLowerCase().contains(
+                              _searchQuery.toLowerCase(),
+                            );
                     final matchesRating = expert.rating >= _minRating;
-                    final matchesRadius = _calculateDistance(_initialPosition, expert.location) <= _searchRadius;
-                    
+                    final matchesRadius =
+                        _calculateDistance(_initialPosition, expert.location) <=
+                            _searchRadius;
+
                     return matchesQuery && matchesRating && matchesRadius;
                   }).toList()
                 : [];
 
-            // Combine both Shop and Expert items for the ClusterManager
-            final List<MapClusterItem> combinedItems = [];
-            combinedItems.addAll(filteredShops.map((s) => MapClusterItem(item: s)));
-            combinedItems.addAll(filteredExperts.map((e) => MapClusterItem(item: e)));
-            
-            _clusterManager.setItems(combinedItems);
+            final markers = _buildMarkers(filteredShops, filteredExperts);
 
             return Stack(
               children: [
                 // 1. Google Map View
                 GoogleMap(
-                  initialCameraPosition: CameraPosition(target: _initialPosition, zoom: 13),
+                  initialCameraPosition: CameraPosition(
+                    target: _initialPosition,
+                    zoom: 13,
+                  ),
                   mapType: _currentMapType,
                   onMapCreated: (controller) {
                     mapController = controller;
-                    _clusterManager.setMapId(controller.mapId);
                     _setMapStyle(theme);
                   },
-                  onCameraMove: _clusterManager.onCameraMove,
-                  onCameraIdle: _clusterManager.onCameraIdle,
                   myLocationEnabled: false,
                   zoomControlsEnabled: false,
                   mapToolbarEnabled: false,
@@ -383,7 +359,7 @@ class _MapPageState extends State<MapPage> {
                     });
                     FocusScope.of(context).unfocus();
                   },
-                  markers: _markers,
+                  markers: markers,
                 ),
 
                 // 2. Floating Search and Advanced Filters
@@ -397,9 +373,14 @@ class _MapPageState extends State<MapPage> {
                       Card(
                         elevation: 6,
                         shadowColor: Colors.black26,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 4,
+                          ),
                           child: Row(
                             children: [
                               const Icon(Icons.search, color: Colors.grey),
@@ -413,7 +394,8 @@ class _MapPageState extends State<MapPage> {
                                   },
                                   child: TextField(
                                     decoration: const InputDecoration(
-                                      hintText: 'جستجوی فروشگاه، خدمات، کافه‌ها...',
+                                      hintText:
+                                          'جستجوی فروشگاه، خدمات، کافه‌ها...',
                                       border: InputBorder.none,
                                     ),
                                     onChanged: (val) {
@@ -428,7 +410,10 @@ class _MapPageState extends State<MapPage> {
                               ),
                               if (_searchQuery.isNotEmpty)
                                 IconButton(
-                                  icon: const Icon(Icons.clear, color: Colors.grey),
+                                  icon: const Icon(
+                                    Icons.clear,
+                                    color: Colors.grey,
+                                  ),
                                   onPressed: () {
                                     setState(() {
                                       _searchQuery = '';
@@ -437,20 +422,28 @@ class _MapPageState extends State<MapPage> {
                                 ),
                               const VerticalDivider(width: 16, thickness: 1),
                               IconButton(
-                                icon: Icon(Icons.tune, color: (_showOnlyOpen || _minRating > 0 || _searchRadius < 15.0) ? Colors.orange : theme.colorScheme.primary),
-                                onPressed: () => _showFilterBottomSheet(context, theme),
+                                icon: Icon(
+                                  Icons.tune,
+                                  color: (_showOnlyOpen ||
+                                          _minRating > 0 ||
+                                          _searchRadius < 15.0)
+                                      ? Colors.orange
+                                      : theme.colorScheme.primary,
+                                ),
+                                onPressed: () =>
+                                    _showFilterBottomSheet(context, theme),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      
+
                       // Search Suggestions Overlay
                       if (_isSearchFocused && _searchQuery.isNotEmpty)
                         _buildSearchSuggestions(filteredShops, filteredExperts),
 
                       const SizedBox(height: 10),
-                      
+
                       // Category Filter Chips Row
                       SizedBox(
                         height: 44,
@@ -459,7 +452,8 @@ class _MapPageState extends State<MapPage> {
                           itemCount: _categories.length + 1,
                           itemBuilder: (context, index) {
                             if (index == 0) {
-                              final isSelected = _selectedCategories.length == _categories.length;
+                              final isSelected = _selectedCategories.length ==
+                                  _categories.length;
                               return Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: FilterChip(
@@ -467,19 +461,28 @@ class _MapPageState extends State<MapPage> {
                                   selected: isSelected,
                                   onSelected: (_) {
                                     setState(() {
-                                      _selectedCategories = _categories.map((c) => c['name']!).toSet();
+                                      _selectedCategories = _categories
+                                          .map((c) => c['name']!)
+                                          .toSet();
                                       _selectedItem = null;
                                     });
                                   },
-                                  avatar: const Icon(Icons.storefront, size: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                  avatar: const Icon(
+                                    Icons.storefront,
+                                    size: 16,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
                                 ),
                               );
                             }
                             final cat = _categories[index - 1];
                             final catName = cat['name']!;
                             final catFa = cat['fa']!;
-                            final isSelected = _selectedCategories.length == 1 && _selectedCategories.contains(catName);
+                            final isSelected =
+                                _selectedCategories.length == 1 &&
+                                    _selectedCategories.contains(catName);
 
                             return Padding(
                               padding: const EdgeInsets.only(right: 8.0),
@@ -493,8 +496,13 @@ class _MapPageState extends State<MapPage> {
                                     _showOnboarding = false;
                                   });
                                 },
-                                avatar: Text(cat['icon']!, style: const TextStyle(fontSize: 14)),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                avatar: Text(
+                                  cat['icon']!,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                               ),
                             );
                           },
@@ -511,15 +519,23 @@ class _MapPageState extends State<MapPage> {
                     left: 20,
                     right: 20,
                     child: Card(
-                      color: theme.colorScheme.primaryContainer.withOpacity(0.95),
+                      color: theme.colorScheme.primaryContainer.withOpacity(
+                        0.95,
+                      ),
                       elevation: 8,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.tips_and_updates, color: theme.colorScheme.primary, size: 28),
+                            Icon(
+                              Icons.tips_and_updates,
+                              color: theme.colorScheme.primary,
+                              size: 28,
+                            ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(
@@ -527,12 +543,18 @@ class _MapPageState extends State<MapPage> {
                                 children: [
                                   const Text(
                                     'راهنمای نقشه سوپراپلیکیشن 🌟',
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
                                     'در این صفحه می‌توانید مراکز خدماتی اطراف را بیابید، یا با لمس دکمه «درخواست متخصص»، فوراً سرویس‌کار لوله‌کشی، برق، یا AC به خانه خود دعوت کنید!',
-                                    style: TextStyle(fontSize: 12, color: theme.colorScheme.onSurfaceVariant),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -561,7 +583,11 @@ class _MapPageState extends State<MapPage> {
                     backgroundColor: theme.colorScheme.surface,
                     foregroundColor: theme.colorScheme.primary,
                     onPressed: _toggleMapType,
-                    child: Icon(_currentMapType == MapType.normal ? Icons.satellite_outlined : Icons.map_outlined),
+                    child: Icon(
+                      _currentMapType == MapType.normal
+                          ? Icons.satellite_outlined
+                          : Icons.map_outlined,
+                    ),
                   ),
                 ),
 
@@ -618,16 +644,70 @@ class _MapPageState extends State<MapPage> {
                     child: Card(
                       color: theme.colorScheme.surface.withOpacity(0.9),
                       elevation: 4,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8.0,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Row(children: [Text('📱', style: TextStyle(fontSize: 12)), SizedBox(width: 4), Text('الکترونیک', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))]),
-                            Row(children: [Text('🌱', style: TextStyle(fontSize: 12)), SizedBox(width: 4), Text('گیاهان', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))]),
-                            Row(children: [Text('☕', style: TextStyle(fontSize: 12)), SizedBox(width: 4), Text('کافه', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))]),
-                            Row(children: [Text('👷', style: TextStyle(fontSize: 12)), SizedBox(width: 4), Text('متخصصین', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.orange))]),
+                            Row(
+                              children: [
+                                Text('📱', style: TextStyle(fontSize: 12)),
+                                SizedBox(width: 4),
+                                Text(
+                                  'الکترونیک',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('🌱', style: TextStyle(fontSize: 12)),
+                                SizedBox(width: 4),
+                                Text(
+                                  'گیاهان',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('☕', style: TextStyle(fontSize: 12)),
+                                SizedBox(width: 4),
+                                Text(
+                                  'کافه',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('👷', style: TextStyle(fontSize: 12)),
+                                SizedBox(width: 4),
+                                Text(
+                                  'متخصصین',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.orange,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -648,14 +728,6 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  void _syncClusterItems(List<Shop> shops) {
-    final combined = <MapClusterItem>[];
-    combined.addAll(shops.map((s) => MapClusterItem(item: s)));
-    combined.addAll(_customShops.map((s) => MapClusterItem(item: s)));
-    combined.addAll(_allExperts.map((e) => MapClusterItem(item: e)));
-    _clusterManager.setItems(combined);
-  }
-
   // Combined suggestions builder
   Widget _buildSearchSuggestions(List<Shop> shops, List<MapExpert> experts) {
     final totalCount = shops.length + experts.length;
@@ -666,37 +738,59 @@ class _MapPageState extends State<MapPage> {
       child: Container(
         constraints: const BoxConstraints(maxHeight: 240),
         child: totalCount == 0
-            ? const ListTile(title: Text('موردی یافت نشد.', style: TextStyle(color: Colors.grey)))
+            ? const ListTile(
+                title: Text(
+                  'موردی یافت نشد.',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              )
             : ListView(
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
                 children: [
-                  ...experts.map((exp) => ListTile(
-                    leading: const Icon(Icons.construction_outlined, color: Colors.orange),
-                    title: Text(exp.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('${exp.specialty} • ⭐ ${exp.rating}'),
-                    onTap: () {
-                      setState(() {
-                        _selectedItem = exp;
-                        _isSearchFocused = false;
-                      });
-                      FocusScope.of(context).unfocus();
-                      mapController.animateCamera(CameraUpdate.newLatLngZoom(exp.location, 14.5));
-                    },
-                  )),
-                  ...shops.map((shop) => ListTile(
-                    leading: const Icon(Icons.storefront, color: Colors.grey),
-                    title: Text(shop.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('${shop.category} • ⭐ ${shop.rating}'),
-                    onTap: () {
-                      setState(() {
-                        _selectedItem = shop;
-                        _isSearchFocused = false;
-                      });
-                      FocusScope.of(context).unfocus();
-                      mapController.animateCamera(CameraUpdate.newLatLngZoom(shop.location, 14.5));
-                    },
-                  )),
+                  ...experts.map(
+                    (exp) => ListTile(
+                      leading: const Icon(
+                        Icons.construction_outlined,
+                        color: Colors.orange,
+                      ),
+                      title: Text(
+                        exp.name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text('${exp.specialty} • ⭐ ${exp.rating}'),
+                      onTap: () {
+                        setState(() {
+                          _selectedItem = exp;
+                          _isSearchFocused = false;
+                        });
+                        FocusScope.of(context).unfocus();
+                        mapController.animateCamera(
+                          CameraUpdate.newLatLngZoom(exp.location, 14.5),
+                        );
+                      },
+                    ),
+                  ),
+                  ...shops.map(
+                    (shop) => ListTile(
+                      leading: const Icon(Icons.storefront, color: Colors.grey),
+                      title: Text(
+                        shop.name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text('${shop.category} • ⭐ ${shop.rating}'),
+                      onTap: () {
+                        setState(() {
+                          _selectedItem = shop;
+                          _isSearchFocused = false;
+                        });
+                        FocusScope.of(context).unfocus();
+                        mapController.animateCamera(
+                          CameraUpdate.newLatLngZoom(shop.location, 14.5),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
       ),
@@ -728,7 +822,9 @@ class _MapPageState extends State<MapPage> {
                       children: [
                         Text(
                           'تنظیمات پیشرفته نقشه',
-                          style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.close),
@@ -740,8 +836,13 @@ class _MapPageState extends State<MapPage> {
 
                     // 1. Show Open Only Toggle Switch
                     SwitchListTile(
-                      title: const Text('فقط مغازه‌های باز', style: TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: const Text('پنهان کردن کسب‌وکارهای بسته در لحظه'),
+                      title: const Text(
+                        'فقط مغازه‌های باز',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: const Text(
+                        'پنهان کردن کسب‌وکارهای بسته در لحظه',
+                      ),
                       value: _showOnlyOpen,
                       activeColor: theme.colorScheme.primary,
                       onChanged: (val) {
@@ -752,7 +853,13 @@ class _MapPageState extends State<MapPage> {
                     const Divider(),
 
                     // 2. Active Categories Multi-Select Checkboxes
-                    const Text('صنف‌های فعال روی نقشه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    const Text(
+                      'صنف‌های فعال روی نقشه',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     ..._categories.map((cat) {
                       final catName = cat['name']!;
@@ -789,7 +896,10 @@ class _MapPageState extends State<MapPage> {
                     const SizedBox(height: 10),
                     Text(
                       'شعاع جستجو در نقشه: ${_searchRadius.toStringAsFixed(1)} کیلومتر',
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
                     ),
                     Slider(
                       value: _searchRadius,
@@ -807,14 +917,22 @@ class _MapPageState extends State<MapPage> {
                     const SizedBox(height: 10),
 
                     // 4. Minimum Rating Choice Row
-                    const Text('حداقل امتیاز ستاره‌ای', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    const Text(
+                      'حداقل امتیاز ستاره‌ای',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
                     const SizedBox(height: 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [0.0, 4.0, 4.5, 4.8].map((rating) {
                         final isSelected = _minRating == rating;
                         return ChoiceChip(
-                          label: Text(rating == 0.0 ? 'هر امتیازی' : '$rating+ ⭐'),
+                          label: Text(
+                            rating == 0.0 ? 'هر امتیازی' : '$rating+ ⭐',
+                          ),
                           selected: isSelected,
                           onSelected: (_) {
                             setModalState(() => _minRating = rating);
@@ -835,18 +953,22 @@ class _MapPageState extends State<MapPage> {
                                 _showOnlyOpen = false;
                                 _minRating = 0.0;
                                 _searchRadius = 5.0;
-                                _selectedCategories = _categories.map((c) => c['name']!).toSet();
+                                _selectedCategories =
+                                    _categories.map((c) => c['name']!).toSet();
                               });
                               setState(() {
                                 _showOnlyOpen = false;
                                 _minRating = 0.0;
                                 _searchRadius = 5.0;
-                                _selectedCategories = _categories.map((c) => c['name']!).toSet();
+                                _selectedCategories =
+                                    _categories.map((c) => c['name']!).toSet();
                               });
                             },
                             style: OutlinedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                             ),
                             child: const Text('حذف فیلترها'),
                           ),
@@ -857,7 +979,9 @@ class _MapPageState extends State<MapPage> {
                             onPressed: () => Navigator.of(context).pop(),
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                               backgroundColor: theme.colorScheme.primary,
                               foregroundColor: theme.colorScheme.onPrimary,
                             ),
@@ -898,7 +1022,13 @@ class _MapPageState extends State<MapPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSheetCloseHeader(theme, 'فروشگاه', shop.category == 'Electronics' ? 'الکترونیک' : (shop.category == 'Plants' ? 'گل و گیاه' : 'کافه')),
+            _buildSheetCloseHeader(
+              theme,
+              'فروشگاه',
+              shop.category == 'Electronics'
+                  ? 'الکترونیک'
+                  : (shop.category == 'Plants' ? 'گل و گیاه' : 'کافه'),
+            ),
             const SizedBox(height: 8),
             Row(
               children: [
@@ -908,18 +1038,35 @@ class _MapPageState extends State<MapPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(shop.name, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+                      Text(
+                        shop.name,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 4),
                       _buildRatingRow(shop.rating, '(${shop.reviewCount} نظر)'),
                       const SizedBox(height: 4),
-                      Text(shop.address, style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6), fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      Text(
+                        shop.address,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          fontSize: 13,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            _buildHoursRow('ساعت کاری:', shop.isOpen ? 'باز است' : 'بسته است', shop.isOpen),
+            _buildHoursRow(
+              'ساعت کاری:',
+              shop.isOpen ? 'باز است' : 'بسته است',
+              shop.isOpen,
+            ),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
@@ -955,32 +1102,54 @@ class _MapPageState extends State<MapPage> {
                 CircleAvatar(
                   radius: 35,
                   backgroundColor: theme.colorScheme.primaryContainer,
-                  child: Text(expert.avatar, style: const TextStyle(fontSize: 32)),
+                  child: Text(
+                    expert.avatar,
+                    style: const TextStyle(fontSize: 32),
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(expert.name, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+                      Text(
+                        expert.name,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 4),
                       _buildRatingRow(expert.rating, '(تایید شده رسمی)'),
                       const SizedBox(height: 4),
-                      Text(expert.specialty, style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6), fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      Text(
+                        expert.specialty,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          fontSize: 13,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            _buildHoursRow('اجرت ایاب و ذهاب:', '${expert.basePrice.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")} تومان', true),
+            _buildHoursRow(
+              'اجرت ایاب و ذهاب:',
+              '${expert.basePrice.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")} تومان',
+              true,
+            ),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: AppButton(
                 text: 'درخواست مستقیم و چت فوری با ${expert.name}',
                 onPressed: () {
-                  context.push('/request-service'); // Head over to services direct flow
+                  context.push(
+                    '/request-service',
+                  ); // Head over to services direct flow
                 },
                 type: AppButtonType.primary,
                 icon: Icons.chat_bubble_outline_outlined,
@@ -994,102 +1163,125 @@ class _MapPageState extends State<MapPage> {
 
   // Common sheet widget helpers
   BoxDecoration _sheetDecoration(ThemeData theme) => BoxDecoration(
-    color: theme.colorScheme.surface,
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(24),
-      topRight: Radius.circular(24),
-    ),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.15),
-        blurRadius: 15,
-        offset: const Offset(0, -3),
-      ),
-    ],
-  );
+        color: theme.colorScheme.surface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 15,
+            offset: const Offset(0, -3),
+          ),
+        ],
+      );
 
-  Widget _buildSheetCloseHeader(ThemeData theme, String badgeLabel, String subLabel) => Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
+  Widget _buildSheetCloseHeader(
+    ThemeData theme,
+    String badgeLabel,
+    String subLabel,
+  ) =>
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  badgeLabel,
+                  style: TextStyle(
+                    color: theme.colorScheme.onPrimaryContainer,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                subLabel,
+                style: const TextStyle(fontSize: 11, color: Colors.grey),
+              ),
+            ],
+          ),
+          IconButton(
+            icon: const Icon(Icons.cancel, color: Colors.grey),
+            onPressed: () => setState(() => _selectedItem = null),
+          ),
+        ],
+      );
+
+  Widget _buildSheetImage(String url, IconData fallback, ThemeData theme) =>
+      ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.network(
+          url,
+          width: 70,
+          height: 70,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => Container(
+            width: 70,
+            height: 70,
+            color: theme.colorScheme.primaryContainer.withOpacity(0.3),
+            child: Icon(fallback, color: theme.colorScheme.primary),
+          ),
+        ),
+      );
+
+  Widget _buildRatingRow(double rating, String subtext) => Row(
+        children: [
+          const Icon(Icons.star, color: Colors.amber, size: 18),
+          Text(' $rating', style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            ' $subtext',
+            style: const TextStyle(color: Colors.grey, fontSize: 12),
+          ),
+        ],
+      );
+
+  Widget _buildHoursRow(String leadText, String valueText, bool highlight) =>
       Row(
         children: [
+          Icon(Icons.access_time, size: 16, color: HighlightColor(highlight)),
+          const SizedBox(width: 6),
+          Text(
+            leadText,
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+          ),
+          const Spacer(),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(12),
+              color: highlight ? Colors.green.shade50 : Colors.red.shade50,
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              badgeLabel,
-              style: TextStyle(color: theme.colorScheme.onPrimaryContainer, fontSize: 11, fontWeight: FontWeight.bold),
+              valueText,
+              style: TextStyle(
+                color: highlight ? Colors.green.shade900 : Colors.red.shade900,
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          const SizedBox(width: 8),
-          Text(subLabel, style: const TextStyle(fontSize: 11, color: Colors.grey)),
         ],
-      ),
-      IconButton(
-        icon: const Icon(Icons.cancel, color: Colors.grey),
-        onPressed: () => setState(() => _selectedItem = null),
-      ),
-    ],
-  );
-
-  Widget _buildSheetImage(String url, IconData fallback, ThemeData theme) => ClipRRect(
-    borderRadius: BorderRadius.circular(12),
-    child: Image.network(
-      url,
-      width: 70,
-      height: 70,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) => Container(
-        width: 70,
-        height: 70,
-        color: theme.colorScheme.primaryContainer.withOpacity(0.3),
-        child: Icon(fallback, color: theme.colorScheme.primary),
-      ),
-    ),
-  );
-
-  Widget _buildRatingRow(double rating, String subtext) => Row(
-    children: [
-      const Icon(Icons.star, color: Colors.amber, size: 18),
-      Text(' $rating', style: const TextStyle(fontWeight: FontWeight.bold)),
-      Text(' $subtext', style: const TextStyle(color: Colors.grey, fontSize: 12)),
-    ],
-  );
-
-  Widget _buildHoursRow(String leadText, String valueText, bool highlight) => Row(
-    children: [
-      Icon(Icons.access_time, size: 16, color: HighlightColor(highlight)),
-      const SizedBox(width: 6),
-      Text(leadText, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
-      const Spacer(),
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: highlight ? Colors.green.shade50 : Colors.red.shade50,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          valueText,
-          style: TextStyle(color: highlight ? Colors.green.shade900 : Colors.red.shade900, fontSize: 11, fontWeight: FontWeight.bold),
-        ),
-      ),
-    ],
-  );
+      );
 
   Color HighlightColor(bool h) => h ? Colors.green : Colors.red;
 
   void _showCreateBoothDialog(BuildContext context) {
-    final theme = Theme.of(context);
-    
     final nameController = TextEditingController();
     final addressController = TextEditingController();
     final phoneController = TextEditingController();
     final hoursController = TextEditingController(text: '۰۹:۰۰ الی ۲۲:۰۰');
     final aboutController = TextEditingController();
-    
+
     String selectedCatName = 'Electronics'; // Default selected category name
     String selectedCatFa = 'الکترونیک و دیجیتال';
     String selectedIcon = '📱';
@@ -1116,7 +1308,9 @@ class _MapPageState extends State<MapPage> {
           builder: (context, setModalState) {
             return AlertDialog(
               scrollable: true,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1145,21 +1339,38 @@ class _MapPageState extends State<MapPage> {
                       const SizedBox(height: 16),
 
                       // 1. Name
-                      const Text('نام غرفه / کسب‌وکار', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const Text(
+                        'نام غرفه / کسب‌وکار',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.5,
+                        ),
+                      ),
                       const SizedBox(height: 6),
                       TextField(
                         controller: nameController,
                         decoration: InputDecoration(
                           hintText: 'مثال: گالری پوشاک شیک‌پوش',
                           prefixIcon: const Icon(Icons.storefront, size: 20),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 12,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 14),
 
                       // 2. Category Dropdown
-                      const Text('صنف و دسته‌بندی اصلی غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const Text(
+                        'صنف و دسته‌بندی اصلی غرفه',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.5,
+                        ),
+                      ),
                       const SizedBox(height: 6),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -1179,7 +1390,9 @@ class _MapPageState extends State<MapPage> {
                             }).toList(),
                             onChanged: (val) {
                               if (val != null) {
-                                final matched = categoriesList.firstWhere((element) => element['name'] == val);
+                                final matched = categoriesList.firstWhere(
+                                  (element) => element['name'] == val,
+                                );
                                 setModalState(() {
                                   selectedCatName = val;
                                   selectedCatFa = matched['fa']!;
@@ -1193,58 +1406,109 @@ class _MapPageState extends State<MapPage> {
                       const SizedBox(height: 14),
 
                       // 3. Address
-                      const Text('آدرس دقیق فیزیکی', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const Text(
+                        'آدرس دقیق فیزیکی',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.5,
+                        ),
+                      ),
                       const SizedBox(height: 6),
                       TextField(
                         controller: addressController,
                         decoration: InputDecoration(
                           hintText: 'مثال: تهران، میدان ونک، پلاک ۱۵',
-                          prefixIcon: const Icon(Icons.location_on_outlined, size: 20),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          prefixIcon: const Icon(
+                            Icons.location_on_outlined,
+                            size: 20,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 12,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 14),
 
                       // 4. Phone
-                      const Text('شماره تماس غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const Text(
+                        'شماره تماس غرفه',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.5,
+                        ),
+                      ),
                       const SizedBox(height: 6),
                       TextField(
                         controller: phoneController,
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           hintText: 'مثال: ۰۲۱۸۸۷۷۶۶۵۵',
-                          prefixIcon: const Icon(Icons.phone_outlined, size: 20),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          prefixIcon: const Icon(
+                            Icons.phone_outlined,
+                            size: 20,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 12,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 14),
 
                       // 5. Operating Hours
-                      const Text('ساعت کاری غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const Text(
+                        'ساعت کاری غرفه',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.5,
+                        ),
+                      ),
                       const SizedBox(height: 6),
                       TextField(
                         controller: hoursController,
                         decoration: InputDecoration(
                           hintText: 'مثال: ۰۹:۰۰ الی ۲۲:۰۰',
                           prefixIcon: const Icon(Icons.access_time, size: 20),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 12,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 14),
 
                       // 6. About Description
-                      const Text('توضیحات و درباره غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                      const Text(
+                        'توضیحات و درباره غرفه',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.5,
+                        ),
+                      ),
                       const SizedBox(height: 6),
                       TextField(
                         controller: aboutController,
                         maxLines: 2,
                         decoration: InputDecoration(
-                          hintText: 'درباره خدمات غرفه، کیفیت محصولات و شعار غرفه بنویسید...',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          hintText:
+                              'درباره خدمات غرفه، کیفیت محصولات و شعار غرفه بنویسید...',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 12,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -1268,7 +1532,9 @@ class _MapPageState extends State<MapPage> {
                     if (name.isEmpty || address.isEmpty || phone.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('لطفاً فیلدهای نام، آدرس و تلفن را پر کنید!'),
+                          content: Text(
+                            'لطفاً فیلدهای نام، آدرس و تلفن را پر کنید!',
+                          ),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -1279,68 +1545,197 @@ class _MapPageState extends State<MapPage> {
                     List<BoothProduct> customProducts = [];
                     if (selectedCatName == 'Electronics') {
                       customProducts = const [
-                        BoothProduct(name: 'کابل شارژر Fast تایپ سی', price: '۱۵۰,۰۰۰ تومان', icon: '🔌', description: 'کابل فست شارژ بادوام و کنفی'),
-                        BoothProduct(name: 'پاوربانک مسافرتی ۲۰هزار', price: '۲,۵۰۰,۰۰۰ تومان', icon: '🔋', description: 'شارژ همزمان سه دستگاه با ظرفیت واقعی'),
+                        BoothProduct(
+                          name: 'کابل شارژر Fast تایپ سی',
+                          price: '۱۵۰,۰۰۰ تومان',
+                          icon: '🔌',
+                          description: 'کابل فست شارژ بادوام و کنفی',
+                        ),
+                        BoothProduct(
+                          name: 'پاوربانک مسافرتی ۲۰هزار',
+                          price: '۲,۵۰۰,۰۰۰ تومان',
+                          icon: '🔋',
+                          description: 'شارژ همزمان سه دستگاه با ظرفیت واقعی',
+                        ),
                       ];
                     } else if (selectedCatName == 'Plants') {
                       customProducts = const [
-                        BoothProduct(name: 'گلدان پوتوس رونده سبز', price: '۱۸۰,۰۰۰ تومان', icon: '🍀', description: 'پوتوس شاداب با نگهداری آسان آپارتمانی'),
-                        BoothProduct(name: 'کود غنی مایع نیتروژن', price: '۹۰,۰۰۰ تومان', icon: '🧪', description: 'محلول رشد سریع و شادابی و قطره پاشی'),
+                        BoothProduct(
+                          name: 'گلدان پوتوس رونده سبز',
+                          price: '۱۸۰,۰۰۰ تومان',
+                          icon: '🍀',
+                          description: 'پوتوس شاداب با نگهداری آسان آپارتمانی',
+                        ),
+                        BoothProduct(
+                          name: 'کود غنی مایع نیتروژن',
+                          price: '۹۰,۰۰۰ تومان',
+                          icon: '🧪',
+                          description: 'محلول رشد سریع و شادابی و قطره پاشی',
+                        ),
                       ];
                     } else if (selectedCatName == 'Cafe') {
                       customProducts = const [
-                        BoothProduct(name: 'اسپرسو دوبل اسپشیالتی', price: '۸۰,۰۰۰ تومان', icon: '☕', description: 'دانه‌های ممتاز اسپشیالتی عربیکا'),
-                        BoothProduct(name: 'کرواسان داغ پخت روز', price: '۱۲۰,۰۰۰ تومان', icon: '🥐', description: 'کرواسان فرانسوی ترد با فیلینگ شکلات فندقی'),
+                        BoothProduct(
+                          name: 'اسپرسو دوبل اسپشیالتی',
+                          price: '۸۰,۰۰۰ تومان',
+                          icon: '☕',
+                          description: 'دانه‌های ممتاز اسپشیالتی عربیکا',
+                        ),
+                        BoothProduct(
+                          name: 'کرواسان داغ پخت روز',
+                          price: '۱۲۰,۰۰۰ تومان',
+                          icon: '🥐',
+                          description:
+                              'کرواسان فرانسوی ترد با فیلینگ شکلات فندقی',
+                        ),
                       ];
                     } else if (selectedCatName == 'Clinic') {
                       customProducts = const [
-                        BoothProduct(name: 'ویزیت پزشک عمومی حضوری', price: '۱۵۰,۰۰۰ تومان', icon: '🩺', description: 'ویزیت حضوری و معاینه بالینی کامل'),
-                        BoothProduct(name: 'خدمت سرم‌تراپی و تزریقات', price: '۱۲۰,۰۰۰ تومان', icon: '💉', description: 'تزریق سرم و آمپول توسط کادر مجرب پرستاری'),
+                        BoothProduct(
+                          name: 'ویزیت پزشک عمومی حضوری',
+                          price: '۱۵۰,۰۰۰ تومان',
+                          icon: '🩺',
+                          description: 'ویزیت حضوری و معاینه بالینی کامل',
+                        ),
+                        BoothProduct(
+                          name: 'خدمت سرم‌تراپی و تزریقات',
+                          price: '۱۲۰,۰۰۰ تومان',
+                          icon: '💉',
+                          description:
+                              'تزریق سرم و آمپول توسط کادر مجرب پرستاری',
+                        ),
                       ];
                     } else if (selectedCatName == 'Restaurant') {
                       customProducts = const [
-                        BoothProduct(name: 'چلوکباب کوبیده نگین‌دار', price: '۲۸۰,۰۰۰ تومان', icon: '🍢', description: 'دو سیخ کباب گوسفندی زعفرانی با برنج ممتاز'),
-                        BoothProduct(name: 'جوجه کباب زعفرانی مخصوص', price: '۲۱۰,۰۰۰ تومان', icon: '🍗', description: 'جوجه کباب سینه بدون استخوان نرم و لذیذ'),
+                        BoothProduct(
+                          name: 'چلوکباب کوبیده نگین‌دار',
+                          price: '۲۸۰,۰۰۰ تومان',
+                          icon: '🍢',
+                          description:
+                              'دو سیخ کباب گوسفندی زعفرانی با برنج ممتاز',
+                        ),
+                        BoothProduct(
+                          name: 'جوجه کباب زعفرانی مخصوص',
+                          price: '۲۱۰,۰۰۰ تومان',
+                          icon: '🍗',
+                          description: 'جوجه کباب سینه بدون استخوان نرم و لذیذ',
+                        ),
                       ];
                     } else if (selectedCatName == 'Supermarket') {
                       customProducts = const [
-                        BoothProduct(name: 'پک تنقلات عصرانه خانواده', price: '۱۳۵,۰۰۰ تومان', icon: '🍿', description: 'شامل چیپس، پفک، پاپ‌کورن و نوشابه قوطی'),
-                        BoothProduct(name: 'روغن پخت و پز آفتابگردان', price: '۱۹۰,۰۰۰ تومان', icon: '🧴', description: 'بطری ۱.۵ لیتری روغن خالص تصفیه شده'),
+                        BoothProduct(
+                          name: 'پک تنقلات عصرانه خانواده',
+                          price: '۱۳۵,۰۰۰ تومان',
+                          icon: '🍿',
+                          description: 'شامل چیپس، پفک، پاپ‌کورن و نوشابه قوطی',
+                        ),
+                        BoothProduct(
+                          name: 'روغن پخت و پز آفتابگردان',
+                          price: '۱۹۰,۰۰۰ تومان',
+                          icon: '🧴',
+                          description: 'بطری ۱.۵ لیتری روغن خالص تصفیه شده',
+                        ),
                       ];
                     } else if (selectedCatName == 'Fashion') {
                       customProducts = const [
-                        BoothProduct(name: 'تی‌شرت نخی آستین کوتاه', price: '۳۵۰,۰۰۰ تومان', icon: '👕', description: 'تی‌شرت نخی ۱۰۰٪ خالص ضد حساسیت'),
-                        BoothProduct(name: 'شلوار جین تیره کلاسیک', price: '۶۸۰,۰۰۰ تومان', icon: '👖', description: 'جین اصل ترک با پاخور شکیل و عالی'),
+                        BoothProduct(
+                          name: 'تی‌شرت نخی آستین کوتاه',
+                          price: '۳۵۰,۰۰۰ تومان',
+                          icon: '👕',
+                          description: 'تی‌شرت نخی ۱۰۰٪ خالص ضد حساسیت',
+                        ),
+                        BoothProduct(
+                          name: 'شلوار جین تیره کلاسیک',
+                          price: '۶۸۰,۰۰۰ تومان',
+                          icon: '👖',
+                          description: 'جین اصل ترک با پاخور شکیل و عالی',
+                        ),
                       ];
                     } else if (selectedCatName == 'Automotive') {
                       customProducts = const [
-                        BoothProduct(name: 'تعویض روغن موتور و فیلترها', price: '۸۵۰,۰۰۰ تومان', icon: '🔧', description: 'روغن ۱۰W40 مرغوب با تعویض فیلتر روغن و هوا'),
-                        BoothProduct(name: 'تنظیم باد تخصصی و آپارات', price: '۹۰,۰۰۰ تومان', icon: '🚗', description: 'بررسی باد و بالانس چهار چرخ خودرو'),
+                        BoothProduct(
+                          name: 'تعویض روغن موتور و فیلترها',
+                          price: '۸۵۰,۰۰۰ تومان',
+                          icon: '🔧',
+                          description:
+                              'روغن ۱۰W40 مرغوب با تعویض فیلتر روغن و هوا',
+                        ),
+                        BoothProduct(
+                          name: 'تنظیم باد تخصصی و آپارات',
+                          price: '۹۰,۰۰۰ تومان',
+                          icon: '🚗',
+                          description: 'بررسی باد و بالانس چهار چرخ خودرو',
+                        ),
                       ];
                     } else if (selectedCatName == 'Home') {
                       customProducts = const [
-                        BoothProduct(name: 'ساعت دیواری طرح مدرن فانتزی', price: '۴۸۰,۰۰۰ تومان', icon: '🕰️', description: 'ساعت دیواری موتور تایوانی بی‌صدا'),
-                        BoothProduct(name: 'آباژور رومیزی پایه چوبی دنج', price: '۶۲۰,۰۰۰ تومان', icon: '💡', description: 'نورپردازی گرم و رویایی مخصوص اتاق‌خواب'),
+                        BoothProduct(
+                          name: 'ساعت دیواری طرح مدرن فانتزی',
+                          price: '۴۸۰,۰۰۰ تومان',
+                          icon: '🕰️',
+                          description: 'ساعت دیواری موتور تایوانی بی‌صدا',
+                        ),
+                        BoothProduct(
+                          name: 'آباژور رومیزی پایه چوبی دنج',
+                          price: '۶۲۰,۰۰۰ تومان',
+                          icon: '💡',
+                          description: 'نورپردازی گرم و رویایی مخصوص اتاق‌خواب',
+                        ),
                       ];
                     } else if (selectedCatName == 'Beauty') {
                       customProducts = const [
-                        BoothProduct(name: 'فیشیال و پاکسازی عمیق پوست', price: '۳۸۰,۰۰۰ تومان', icon: '🧼', description: 'لایه‌برداری، آبرسانی و ماسک جوانسازی شاداب‌کننده'),
-                        BoothProduct(name: 'کاشت ناخن پایه و طراحی زیبا', price: '۴۵۰,۰۰۰ تومان', icon: '💅', description: 'کاشت ناخن پودری با طراحی دلخواه شما'),
+                        BoothProduct(
+                          name: 'فیشیال و پاکسازی عمیق پوست',
+                          price: '۳۸۰,۰۰۰ تومان',
+                          icon: '🧼',
+                          description:
+                              'لایه‌برداری، آبرسانی و ماسک جوانسازی شاداب‌کننده',
+                        ),
+                        BoothProduct(
+                          name: 'کاشت ناخن پایه و طراحی زیبا',
+                          price: '۴۵۰,۰۰۰ تومان',
+                          icon: '💅',
+                          description: 'کاشت ناخن پودری با طراحی دلخواه شما',
+                        ),
                       ];
                     } else if (selectedCatName == 'Tools') {
                       customProducts = const [
-                        BoothProduct(name: 'پیچ‌گوشتی برقی و شارژی رونیکس', price: '۱,۹۰۰,۰۰۰ تومان', icon: '🛠️', description: 'رونیکس موتور قوی با دو باتری لیتیومی'),
-                        BoothProduct(name: 'جعبه ابزار فلزی چند طبقه بزرگ', price: '۴۸۰,۰۰۰ تومان', icon: '🧰', description: 'جعبه ابزار تمام فلزی ضد زنگ بادوام'),
+                        BoothProduct(
+                          name: 'پیچ‌گوشتی برقی و شارژی رونیکس',
+                          price: '۱,۹۰۰,۰۰۰ تومان',
+                          icon: '🛠️',
+                          description: 'رونیکس موتور قوی با دو باتری لیتیومی',
+                        ),
+                        BoothProduct(
+                          name: 'جعبه ابزار فلزی چند طبقه بزرگ',
+                          price: '۴۸۰,۰۰۰ تومان',
+                          icon: '🧰',
+                          description: 'جعبه ابزار تمام فلزی ضد زنگ بادوام',
+                        ),
                       ];
-                    } else { // Books
+                    } else {
+                      // Books
                       customProducts = const [
-                        BoothProduct(name: 'دفترچه یادداشت طرح چرم نفیس', price: '۹۵,۰۰۰ تومان', icon: '📔', description: 'کاغذ کرم گرم بالا بدون خط خوردگی مناسب هدیه'),
-                        BoothProduct(name: 'روان‌نویس ژلی لاکچری مشکی', price: '۸۵,۰۰۰ تومان', icon: '✒️', description: 'نوک ساچمه‌ای استیل فوق روان روان‌نویس ژل'),
+                        BoothProduct(
+                          name: 'دفترچه یادداشت طرح چرم نفیس',
+                          price: '۹۵,۰۰۰ تومان',
+                          icon: '📔',
+                          description:
+                              'کاغذ کرم گرم بالا بدون خط خوردگی مناسب هدیه',
+                        ),
+                        BoothProduct(
+                          name: 'روان‌نویس ژلی لاکچری مشکی',
+                          price: '۸۵,۰۰۰ تومان',
+                          icon: '✒️',
+                          description:
+                              'نوک ساچمه‌ای استیل فوق روان روان‌نویس ژل',
+                        ),
                       ];
                     }
 
                     // Create unique ID for the custom booth
-                    final customId = 'custom_${DateTime.now().millisecondsSinceEpoch}';
+                    final customId =
+                        'custom_${DateTime.now().millisecondsSinceEpoch}';
 
                     // Save details in ShopDetailPage's static cache so it opens beautifully!
                     ShopDetailPage.customCreatedShops.add({
@@ -1353,7 +1748,9 @@ class _MapPageState extends State<MapPage> {
                       'address': address,
                       'phone': phone,
                       'hours': hours,
-                      'about': about.isEmpty ? 'یک غرفه بومی و معتبر ثبت شده در موقعیت یابی سوپراپلیکیشن.' : about,
+                      'about': about.isEmpty
+                          ? 'یک غرفه بومی و معتبر ثبت شده در موقعیت یابی سوپراپلیکیشن.'
+                          : about,
                       'avatar': selectedIcon,
                       'products': customProducts,
                       'defaultReviews': <UserReview>[],
@@ -1363,12 +1760,16 @@ class _MapPageState extends State<MapPage> {
                     final newShop = Shop(
                       id: customId,
                       name: name,
-                      description: about.isEmpty ? 'غرفه تازه تاسیس در تهران' : about,
+                      description:
+                          about.isEmpty ? 'غرفه تازه تاسیس در تهران' : about,
                       location: LatLng(
-                        _initialPosition.latitude + (Random().nextDouble() - 0.5) * 0.015,
-                        _initialPosition.longitude + (Random().nextDouble() - 0.5) * 0.015,
+                        _initialPosition.latitude +
+                            (Random().nextDouble() - 0.5) * 0.015,
+                        _initialPosition.longitude +
+                            (Random().nextDouble() - 0.5) * 0.015,
                       ), // Random offset near map center
-                      imageUrl: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=150', // placeholder
+                      imageUrl:
+                          'https://images.unsplash.com/photo-1542838132-92c53300491e?w=150', // placeholder
                       category: selectedCatName,
                       rating: 5.0,
                       reviewCount: 0,
@@ -1383,16 +1784,13 @@ class _MapPageState extends State<MapPage> {
                       _customShops.add(newShop);
                     });
 
-                    // Refresh clusters immediately!
-                    _syncClusterItems(context.read<MapBloc>().state is MapLoaded 
-                        ? (context.read<MapBloc>().state as MapLoaded).shops
-                        : []);
-
                     Navigator.pop(context);
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('🎉 تبریک! غرفه «$name» با دسته‌بندی «$selectedCatFa» و آیکون $selectedIcon روی نقشه ایجاد شد!'),
+                        content: Text(
+                          '🎉 تبریک! غرفه «$name» با دسته‌بندی «$selectedCatFa» و آیکون $selectedIcon روی نقشه ایجاد شد!',
+                        ),
                         backgroundColor: Colors.green,
                         behavior: SnackBarBehavior.floating,
                       ),
@@ -1402,7 +1800,10 @@ class _MapPageState extends State<MapPage> {
                     backgroundColor: Colors.orange,
                     foregroundColor: Colors.white,
                   ),
-                  child: const Text('ایجاد غرفه غرفه‌دار 🚀', style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    'ایجاد غرفه غرفه‌دار 🚀',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             );
@@ -1411,8 +1812,6 @@ class _MapPageState extends State<MapPage> {
       },
     );
   }
-
-  Color HighlightColor(bool h) => h ? Colors.green : Colors.red;
 
   static const String _darkMapStyle = '''
 [

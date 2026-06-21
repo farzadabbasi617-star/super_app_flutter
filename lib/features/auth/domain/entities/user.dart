@@ -10,11 +10,11 @@ class User extends Equatable {
   final UserRole role;
 
   const User({
-    required this.id, 
-    required this.email, 
-    required this.fullName, 
-    required this.phoneNumber, 
-    required this.role
+    required this.id,
+    required this.email,
+    required this.fullName,
+    required this.phoneNumber,
+    required this.role,
   });
 
   @override

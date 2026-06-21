@@ -8,7 +8,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   final GetNearbyShopsUseCase getNearbyShops;
   final GetShopDetailsUseCase getShopDetails;
 
-  MapBloc({required this.getNearbyShops, required this.getShopDetails}) : super(MapInitial()) {
+  MapBloc({required this.getNearbyShops, required this.getShopDetails})
+      : super(MapInitial()) {
     on<LoadNearbyShopsRequested>((event, emit) async {
       emit(MapLoading());
       final result = await getNearbyShops.execute(event.userLocation);
@@ -17,9 +18,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         (shops) => emit(MapLoaded(shops)),
       );
     });
-    
+
     on<ShopSelected>((event, emit) async {
-      / Logic for handling shop selection via getShopDetails
+      // Logic for handling shop selection via getShopDetails
     });
   }
 }

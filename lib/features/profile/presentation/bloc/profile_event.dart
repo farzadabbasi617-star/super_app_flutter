@@ -6,6 +6,7 @@ abstract class ProfileEvent extends Equatable {
 }
 
 class LoadProfileRequested extends ProfileEvent {}
+
 class UpdateBalanceRequested extends ProfileEvent {
   final double amount;
   UpdateBalanceRequested(this.amount);

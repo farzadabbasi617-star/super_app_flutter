@@ -1681,6 +1681,214 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
+
+
+    /* ========================================= */
+    /* ARENA PATCH: Auth preview + Dev update    */
+    /* ========================================= */
+    .auth-preview-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 5000;
+      background: linear-gradient(160deg, #00934b 0%, #064e3b 55%, #0f172a 100%);
+      color: #fff;
+      padding: 48px 24px 24px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      direction: rtl;
+    }
+    .auth-preview-overlay.open { display: flex; }
+    .auth-hero-card {
+      text-align: right;
+      animation: authFloatIn 0.45s ease both;
+    }
+    @keyframes authFloatIn {
+      from { transform: translateY(18px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .auth-logo-bubble {
+      width: 76px;
+      height: 76px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.24), 0 18px 35px rgba(0,0,0,0.2);
+      margin-bottom: 22px;
+    }
+    .auth-title {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .auth-subtitle {
+      font-size: 12.5px;
+      line-height: 1.9;
+      color: rgba(255,255,255,0.82);
+      max-width: 280px;
+    }
+    .auth-mini-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 18px;
+      padding: 8px 10px;
+      background: rgba(16,185,129,0.22);
+      border: 1px solid rgba(167,243,208,0.4);
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: bold;
+    }
+    .auth-form-card {
+      background: rgba(255,255,255,0.96);
+      color: #111827;
+      border-radius: 28px;
+      padding: 18px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+    }
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #eef2f7;
+      border-radius: 16px;
+      padding: 4px;
+      margin-bottom: 14px;
+      gap: 4px;
+    }
+    .auth-tab {
+      border: none;
+      border-radius: 12px;
+      padding: 9px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      background: transparent;
+      color: #64748b;
+    }
+    .auth-tab.active {
+      background: #fff;
+      color: var(--primary-color);
+      box-shadow: 0 6px 16px rgba(15,23,42,0.08);
+    }
+    .auth-field {
+      height: 42px;
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 0 12px;
+      margin-bottom: 10px;
+      outline: none;
+      font-size: 12px;
+      background: #f9fafb;
+    }
+    .auth-field:focus { border-color: var(--primary-color); background: #fff; }
+    .auth-main-btn {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 13px;
+      background: var(--primary-color);
+      color: #fff;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 4px;
+      box-shadow: 0 10px 22px rgba(0,147,75,0.25);
+    }
+    .auth-secondary-btn {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .dev-update-fab {
+      position: absolute;
+      z-index: 1600;
+      top: 52px;
+      left: 14px;
+      min-width: 92px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(16,185,129,0.35);
+      background: rgba(236,253,245,0.94);
+      color: #047857;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 900;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+      cursor: pointer;
+    }
+    .dev-modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15,23,42,0.58);
+      z-index: 5200;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 14px;
+      direction: rtl;
+    }
+    .dev-modal-overlay.open { display: flex; }
+    .dev-modal-card {
+      width: 100%;
+      max-height: 82%;
+      overflow: auto;
+      background: var(--surface-color);
+      color: var(--on-surface);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.28);
+    }
+    .dev-modal-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-weight: 900;
+      font-size: 15px;
+    }
+    .dev-close {
+      border: none;
+      background: #f1f5f9;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .dev-check-row, .roadmap-row {
+      display: flex;
+      gap: 9px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(148,163,184,0.22);
+      font-size: 11.5px;
+      line-height: 1.7;
+    }
+    .dev-check-row b, .roadmap-row b { color: var(--primary-color); }
+    .roadmap-tag {
+      background: #fef3c7;
+      color: #92400e;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 9.5px;
+      font-weight: bold;
+      white-space: nowrap;
+      height: fit-content;
+    }
+
   </style>
 </head>
 <body>
@@ -1693,14 +1901,14 @@
     <p>بخش‌های جدید و بهبودیافته سوپراپلیکیشن خود را به صورت زنده و کاملاً تعاملی در تلفن همراه شبیه‌سازی‌شده زیر لمس و بررسی کنید! این شبیه‌ساز مستقیماً از روی سورس‌کد اصلاح‌شده فلاتر شما آماده شده است.</p>
     
     <ul class="features-list">
-      <li><span>۱</span> <strong>سیستم یادآور هوشمند نوبت کلینیک:</strong> اضافه شدن دکمه تنظیم آلارم در رسید نوبت دیجیتال!</li>
-      <li><span>۲</span> <strong>شبیه‌سازی زنده نوتیفیکیشن آلارم:</strong> با فشردن دکمه آلارم، یک تایمر معکوس برای دریافت نوتیفیکیشن فعال می‌شود!</li>
-      <li><span>۳</span> <strong>نوتیفیکیشن فشاری سیستم (Push Notification):</strong> پس از ۶ ثانیه، نوتیفیکیشن لایو با افکت و جزئیات نوبت از بالای گوشی ظاهر می‌شود!</li>
-      <li><span>۴</span> <strong>بال دوم خدمات (نوبت‌دهی آنلاین):</strong> رزرو نوبت حضوری برای مراکز درمانی، زیبایی و آزمایشگاه‌ها.</li>
-      <li><span>۵</span> <strong>پین‌های پزشکی روی نقشه:</strong> آیکون‌های جدید `🩺` و `🧪` برای مراکز درمانی با لوکیشن ثابت.</li>
+      <li><span>۱</span> <strong>جریان ورود/ثبت‌نام:</strong> شبیه‌ساز حالا مثل اپ Flutter با صفحه Auth شروع می‌شود.</li>
+      <li><span>۲</span> <strong>وضعیت اصلاحات:</strong> دکمه سبز «وضعیت اصلاحات» داخل گوشی، گزارش fixها و پیشنهادهای بعدی را نشان می‌دهد.</li>
+      <li><span>۳</span> <strong>نقشه و سرویس‌ها:</strong> پین‌های فروشگاه، متخصص، کلینیک، رستوران و سوپرمارکت همچنان تعاملی هستند.</li>
+      <li><span>۴</span> <strong>مارکت‌پلیس و اجاره:</strong> خرید، علاقه‌مندی، سبد خرید و رزرو ابزار/ماشین‌آلات قابل تست است.</li>
+      <li><span>۵</span> <strong>کیف پول و نوبت‌دهی:</strong> پروفایل، تراکنش‌ها، رزرو کلینیک و یادآور هوشمند در شبیه‌ساز باقی مانده‌اند.</li>
     </ul>
 
-    <p style="font-size: 13px; font-style: italic; color: #888;">💡 وارد مینی‌سایت <strong>کلینیک درمانی آریا (🩺)</strong> شوید. خدمتی را رزرو کنید؛ در کارت نوبت دیجیتال نهایی، دکمه <strong>«🔔 تنظیم یادآور هوشمند نوبت»</strong> را لمس کنید و ۶ ثانیه شکیبا باشید تا غافلگیری نوتیفیکیشن لایو سیستم را ببینید!</p>
+    <p style="font-size: 13px; font-style: italic; color: #888;">💡 اول داخل گوشی روی ورود یا مشاهده مستقیم بزنید. بعد دکمه <strong>«✅ وضعیت اصلاحات»</strong> را لمس کنید تا ببینید چه چیزهایی در سورس Flutter درست شده و چه قابلیت‌هایی برای نسخه بعدی پیشنهاد می‌شود.</p>
   </div>
 
   <!-- RIGHT: Mobile Emulator Wrapper -->
@@ -1711,6 +1919,54 @@
     </div>
     
     <div class="screen" id="phone-screen">
+
+
+      <!-- ARENA PATCH: Login/Register preview synced with Flutter auth flow -->
+      <div class="auth-preview-overlay open" id="auth-preview-overlay">
+        <div class="auth-hero-card">
+          <div class="auth-logo-bubble">🚀</div>
+          <div class="auth-title">Super App<br>نسخه شبیه‌ساز اصلاح‌شده</div>
+          <div class="auth-subtitle">
+            این صفحه برای دیدن جریان واقعی شروع اپ اضافه شد: Splash → Welcome → Login/Register → Home. نسخه Flutter هم analyze و test شده است.
+          </div>
+          <div class="auth-mini-status">✅ analyze/test/web build آماده • ⚠️ کلید Google Maps لازم است</div>
+        </div>
+
+        <div>
+          <div class="auth-form-card">
+            <div class="auth-tabs">
+              <button class="auth-tab active" id="auth-tab-login" onclick="showLoginSim()">ورود</button>
+              <button class="auth-tab" id="auth-tab-register" onclick="showRegisterSim()">ثبت‌نام</button>
+            </div>
+            <input class="auth-field" id="auth-name-field" style="display:none;" value="فرزاد عباسی" placeholder="نام کامل">
+            <input class="auth-field" value="farzad@example.com" placeholder="ایمیل">
+            <input class="auth-field" value="09123456789" placeholder="شماره موبایل">
+            <input class="auth-field" value="password123" type="password" placeholder="رمز عبور">
+            <button class="auth-main-btn" onclick="enterSimulator()" id="auth-main-action">ورود به اپ</button>
+          </div>
+          <button class="auth-secondary-btn" onclick="enterSimulator()">مشاهده مستقیم شبیه‌ساز بدون ورود</button>
+        </div>
+      </div>
+
+      <button class="dev-update-fab" onclick="openDevUpdate()">✅ وضعیت اصلاحات</button>
+
+      <div class="dev-modal-overlay" id="dev-update-modal">
+        <div class="dev-modal-card">
+          <div class="dev-modal-title">
+            <span>گزارش تغییرات قابل مشاهده</span>
+            <button class="dev-close" onclick="closeDevUpdate()">×</button>
+          </div>
+          <div class="dev-check-row">✅ <div><b>پروژه Flutter الان استانداردتر است:</b> پوشه‌های android / ios / web ساخته شد؛ importهای خراب، DI، Dio، Socket و نقشه اصلاح شدند.</div></div>
+          <div class="dev-check-row">✅ <div><b>تست‌ها پایدار شدند:</b> تست‌های Auth، Bloc، LoginPage، Map و Rental با fake repository قابل اجرا شدند.</div></div>
+          <div class="dev-check-row">✅ <div><b>در شبیه‌ساز اضافه شد:</b> جریان Login/Register، دکمه وضعیت اصلاحات، لیست پیشنهادهای توسعه و گزارش آماده‌سازی build وب.</div></div>
+          <div style="font-weight:900; margin:14px 0 6px; font-size:13px;">پیشنهادهای بعدی برای اپ</div>
+          <div class="roadmap-row"><span class="roadmap-tag">اولویت بالا</span><div><b>تنظیم کلیدهای نقشه:</b> جایگزینی YOUR_GOOGLE_MAPS_API_KEY در Android، iOS و Web با کلیدهای محدودشده واقعی.</div></div>
+          <div class="roadmap-row"><span class="roadmap-tag">اولویت بالا</span><div><b>اتصال auth واقعی:</b> token refresh، current user، logout و محافظت routeها.</div></div>
+          <div class="roadmap-row"><span class="roadmap-tag">محصولی</span><div><b>رزرو و پرداخت واقعی:</b> کیف پول، پرداخت امن، رسید دیجیتال و تاریخچه تراکنش.</div></div>
+          <div class="roadmap-row"><span class="roadmap-tag">UX</span><div><b>نقشه بهتر:</b> permission لوکیشن، حالت offline، فیلتر فاصله و search autocomplete.</div></div>
+          <div class="roadmap-row"><span class="roadmap-tag">کسب‌وکار</span><div><b>پنل متخصص/غرفه‌دار:</b> مدیریت قیمت، سفارش‌ها، زمان‌بندی، امتیاز و پاسخ سریع.</div></div>
+        </div>
+      </div>
 
       <!-- SYSTEM PUSH NOTIFICATION ALARM BANNER (جدید!) -->
       <div class="system-push-banner" id="system-alarm-banner" onclick="clickSystemAlarmBanner()">
@@ -4507,6 +4763,37 @@
     setTimeout(() => {
       banner.style.display = 'none';
     }, 3000);
+  }
+
+
+  // =========================================
+  // ARENA PATCH: AUTH PREVIEW + DEV STATUS
+  // =========================================
+  function showLoginSim() {
+    document.getElementById('auth-tab-login').classList.add('active');
+    document.getElementById('auth-tab-register').classList.remove('active');
+    document.getElementById('auth-name-field').style.display = 'none';
+    document.getElementById('auth-main-action').innerText = 'ورود به اپ';
+  }
+
+  function showRegisterSim() {
+    document.getElementById('auth-tab-register').classList.add('active');
+    document.getElementById('auth-tab-login').classList.remove('active');
+    document.getElementById('auth-name-field').style.display = 'block';
+    document.getElementById('auth-main-action').innerText = 'ثبت‌نام و ورود';
+  }
+
+  function enterSimulator() {
+    document.getElementById('auth-preview-overlay').classList.remove('open');
+    showNotification('نسخه اصلاح‌شده اپ آماده تست است ✅');
+  }
+
+  function openDevUpdate() {
+    document.getElementById('dev-update-modal').classList.add('open');
+  }
+
+  function closeDevUpdate() {
+    document.getElementById('dev-update-modal').classList.remove('open');
   }
 
 </script>

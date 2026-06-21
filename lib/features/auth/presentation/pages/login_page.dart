@@ -4,9 +4,9 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import 'package:go_router/go_router.dart';
-import '../../../shared/widgets/app_button.dart';
-import '../../../shared/widgets/app_text_field.dart';
-import '../../../core/utils/validators.dart';
+import 'package:super_app_flutter/shared/widgets/app_button.dart';
+import 'package:super_app_flutter/shared/widgets/app_text_field.dart';
+import 'package:super_app_flutter/core/utils/validators.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -54,7 +54,12 @@ class _LoginPageState extends State<LoginPage> {
           if (state is AuthAuthenticated) {
             context.go('/home');
           } else if (state is AuthFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error), backgroundColor: theme.colorScheme.error));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error),
+                backgroundColor: theme.colorScheme.error,
+              ),
+            );
           }
         },
         child: SingleChildScrollView(
@@ -65,16 +70,27 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                Text('Welcome Back', style: theme.textTheme.displayLarge?.copyWith(fontWeight: FontWeight.bold, fontSize: 32)),
+                Text(
+                  'Welcome Back',
+                  style: theme.textTheme.displayLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                  ),
+                ),
                 const SizedBox(height: 8),
-                Text('Sign in to your account to continue', style: theme.textTheme.bodyLarge),
+                Text(
+                  'Sign in to your account to continue',
+                  style: theme.textTheme.bodyLarge,
+                ),
                 const SizedBox(height: 40),
                 AppTextField(
                   label: 'Email Address',
                   controller: _emailController,
                   errorText: _emailError,
                   prefixIcon: const Icon(Icons.email_outlined),
-                  onChanged: (val) => setState(() => _emailError = Validators.validateEmail(val)),
+                  onChanged: (val) => setState(
+                    () => _emailError = Validators.validateEmail(val),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 AppTextField(
@@ -83,14 +99,19 @@ class _LoginPageState extends State<LoginPage> {
                   isPassword: true,
                   errorText: _passwordError,
                   prefixIcon: const Icon(Icons.lock_outline),
-                  onChanged: (val) => setState(() => _passwordError = Validators.validatePassword(val)),
+                  onChanged: (val) => setState(
+                    () => _passwordError = Validators.validatePassword(val),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {},
-                    child: Text('Forgot Password?', style: TextStyle(color: theme.colorScheme.primary)),
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: theme.colorScheme.primary),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -108,7 +129,13 @@ class _LoginPageState extends State<LoginPage> {
                 Center(
                   child: TextButton(
                     onPressed: () => context.push('/register'),
-                    child: Text('Don\'t have an account? Register Now', style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      "Don't have an account? Register Now",
+                      style: TextStyle(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ],

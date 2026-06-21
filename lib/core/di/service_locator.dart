@@ -59,41 +59,44 @@ void _initCore() {
 }
 
 void _initAuth() {
-  sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(sl()));
-  sl.registerLazySingleton<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(sl()));
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
-    remoteDataSource: sl(),
-    localDataSource: sl(),
-  ));
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+    () => AuthRemoteDataSourceImpl(sl()),
+  );
+  sl.registerLazySingleton<AuthLocalDataSource>(
+    () => AuthLocalDataSourceImpl(sl()),
+  );
+  sl.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
+  );
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => RegisterUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
-  sl.registerFactory(() => AuthBloc(
-    loginUseCase: sl(),
-    registerUseCase: sl(),
-    logoutUseCase: sl(),
-  ));
+  sl.registerFactory(
+    () => AuthBloc(
+      loginUseCase: sl(),
+      registerUseCase: sl(),
+      logoutUseCase: sl(),
+    ),
+  );
 }
 
 void _initMap() {
   sl.registerLazySingleton<ShopRepository>(() => ShopRepositoryImpl());
   sl.registerLazySingleton(() => GetNearbyShopsUseCase(sl()));
   sl.registerLazySingleton(() => GetShopDetailsUseCase(sl()));
-  sl.registerFactory(() => MapBloc(
-    getNearbyShops: sl(),
-    getShopDetails: sl(),
-  ));
+  sl.registerFactory(() => MapBloc(getNearbyShops: sl(), getShopDetails: sl()));
 }
 
 void _initServices() {
-  sl.registerLazySingleton<ServiceRepository>(() => ServiceRepositoryImpl(sl()));
+  sl.registerLazySingleton<ServiceRepository>(
+    () => ServiceRepositoryImpl(sl()),
+  );
   sl.registerLazySingleton(() => CreateServiceRequestUseCase(sl()));
   // Register AcceptServiceRequestUseCase
   sl.registerLazySingleton(() => AcceptServiceRequestUseCase(sl()));
-  sl.registerFactory(() => ServiceBloc(
-    createRequest: sl(),
-    acceptRequest: sl(),
-  ));
+  sl.registerFactory(
+    () => ServiceBloc(createRequest: sl(), acceptRequest: sl()),
+  );
 }
 
 void _initMarketplace() {
@@ -107,12 +110,13 @@ void _initMarketplace() {
 }
 
 void _initProfileAndPayment() {
-  sl.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(sl()));
+  sl.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(sl()),
+  );
   sl.registerLazySingleton(() => GetProfileUseCase(sl()));
   sl.registerLazySingleton(() => UpdateWalletUseCase(sl()));
-  sl.registerFactory(() => ProfileBloc(
-    getProfile: sl(),
-    updateWallet: sl(),
-  ));
-  sl.registerLazySingleton<PaymentRepository>(() => PaymentRepositoryImpl(sl()));
+  sl.registerFactory(() => ProfileBloc(getProfile: sl(), updateWallet: sl()));
+  sl.registerLazySingleton<PaymentRepository>(
+    () => PaymentRepositoryImpl(sl()),
+  );
 }

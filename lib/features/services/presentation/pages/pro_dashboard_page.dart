@@ -5,8 +5,6 @@ class ProDashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(title: const Text('Professional Hub')),
       body: ListView.builder(
@@ -21,7 +19,10 @@ class ProDashboardPage extends StatelessWidget {
               trailing: ElevatedButton(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Request Accepted!'), backgroundColor: Colors.green),
+                    const SnackBar(
+                      content: Text('Request Accepted!'),
+                      backgroundColor: Colors.green,
+                    ),
                   );
                 },
                 child: const Text('Accept'),

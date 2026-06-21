@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../domain/entities/shop.dart';
-import '../../domain/repositories/shop_/repository.dart';
-import '../../../core/error/failures.dart';
+import '../../domain/repositories/shop_repository.dart';
+import 'package:super_app_flutter/core/error/failures.dart';
 
 class GetShopDetailsUseCase {
   final ShopRepository repository;

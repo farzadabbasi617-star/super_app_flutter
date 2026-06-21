@@ -21,29 +21,29 @@ class MonetizationManager {
       'amount': 500000.0,
       'isIncome': true,
       'date': 'امروز',
-      'icon': '💳'
+      'icon': '💳',
     },
     {
       'title': 'دریافت کارمزد تراکنش خدمت لوله‌کشی (علی رضایی)',
       'amount': 35000.0,
       'isIncome': true,
       'date': 'دیروز',
-      'icon': '🛠️'
+      'icon': '🛠️',
     },
     {
       'title': 'دریافت کارمزد فروش گجت در غرفه تک‌هاب',
       'amount': 15000.0,
       'isIncome': true,
       'date': '۲ روز پیش',
-      'icon': '🛍️'
+      'icon': '🛍️',
     },
     {
       'title': 'خرید بسته ۲۵تایی سکه پیشنهاد متخصص',
       'amount': -50000.0,
       'isIncome': false,
       'date': '۳ روز پیش',
-      'icon': '🪙'
-    }
+      'icon': '🪙',
+    },
   ];
 
   // Stream controller to notify UI of changes
@@ -58,7 +58,12 @@ class MonetizationManager {
     if (walletBalance >= price) {
       walletBalance -= price;
       activeSubscription = tier;
-      addTransaction('خرید و ارتقای اشتراک به لایه $tier غرفه‌داری', -price, false, '👑');
+      addTransaction(
+        'خرید و ارتقای اشتراک به لایه $tier غرفه‌داری',
+        -price,
+        false,
+        '👑',
+      );
       return true;
     }
     return false;
@@ -68,7 +73,12 @@ class MonetizationManager {
     if (walletBalance >= price) {
       walletBalance -= price;
       biddingCoins += count;
-      addTransaction('خرید بسته $count عددی سکه پیشنهاد متخصص', -price, false, '🪙');
+      addTransaction(
+        'خرید بسته $count عددی سکه پیشنهاد متخصص',
+        -price,
+        false,
+        '🪙',
+      );
       return true;
     }
     return false;
@@ -85,7 +95,7 @@ class MonetizationManager {
       'amount': amount.abs(),
       'isIncome': isIncome,
       'date': 'هم‌اکنون',
-      'icon': icon
+      'icon': icon,
     });
     notify();
   }

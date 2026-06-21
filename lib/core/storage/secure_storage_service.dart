@@ -6,7 +6,7 @@ class SecureStorageService {
 
   SecureStorageService(this._storage);
 
-  / Keys constants to avoid typos
+  // Keys constants to avoid typos
   static const String _keyToken = 'auth_token';
   static const String _keyUser = 'user_data';
 

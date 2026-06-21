@@ -20,7 +20,13 @@ class AuthRegisterRequested extends AuthEvent {
   final String fullName;
   final String phoneNumber;
   final UserRole role;
-  AuthRegisterRequested(this.email, this.password, this.fullName, this.phoneNumber, this.role);
+  AuthRegisterRequested(
+    this.email,
+    this.password,
+    this.fullName,
+    this.phoneNumber,
+    this.role,
+  );
   @override
   List<Object?> get props => [email, password, fullName, phoneNumber, role];
 }

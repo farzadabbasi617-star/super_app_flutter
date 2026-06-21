@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 enum TransactionStatus { pending, completed, failed, refunded }
+
 enum TransactionType { credit, debit }
 
 class Transaction extends Equatable {

@@ -5,7 +5,7 @@ import '../bloc/service_bloc.dart';
 import '../bloc/service_event.dart';
 import '../bloc/service_state.dart';
 import '../../domain/entities/service_request.dart';
-import '../../../shared/widgets/app_button.dart';
+import 'package:super_app_flutter/shared/widgets/app_button.dart';
 import 'customer_offers_view.dart';
 
 class RequestServicePage extends StatefulWidget {
@@ -28,7 +28,7 @@ class _RequestServicePageState extends State<RequestServicePage> {
     'ال‌جی (LG)',
     'اسنوا (Snowa)',
     'اج‌جنرال (O’General)',
-    'سایر برندها / متفرقه'
+    'سایر برندها / متفرقه',
   ];
 
   @override
@@ -40,7 +40,11 @@ class _RequestServicePageState extends State<RequestServicePage> {
   // Check if a category requires brand selection (appliances/devices)
   bool _requiresBrand(String category) {
     final catLower = category.toLowerCase();
-    return catLower == 'ac repair' || catLower == 'electricity' || catLower == 'cooling' || catLower == 'برق‌کاری' || catLower == 'سرویس کولر';
+    return catLower == 'ac repair' ||
+        catLower == 'electricity' ||
+        catLower == 'cooling' ||
+        catLower == 'برق‌کاری' ||
+        catLower == 'سرویس کولر';
   }
 
   @override
@@ -70,7 +74,9 @@ class _RequestServicePageState extends State<RequestServicePage> {
           if (state is ServiceProfessionalAssigned) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('متخصص ${state.request.assignedProfessionalName} با موفقیت تخصیص داده شد!'), 
+                content: Text(
+                  'متخصص ${state.request.assignedProfessionalName} با موفقیت تخصیص داده شد!',
+                ),
                 backgroundColor: Colors.green,
                 behavior: SnackBarBehavior.floating,
               ),
@@ -80,7 +86,8 @@ class _RequestServicePageState extends State<RequestServicePage> {
         builder: (context, state) {
           if (state is ServiceSearching) {
             return CustomerOffersView(request: state.request);
-          } else if (state is ServiceProfessionalAssigned || state is ServiceOnTheWay) {
+          } else if (state is ServiceProfessionalAssigned ||
+              state is ServiceOnTheWay) {
             return _buildTrackingUI(context, theme, state);
           }
 
@@ -102,16 +109,16 @@ class _RequestServicePageState extends State<RequestServicePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'به چه متخصصی نیاز دارید؟', 
+            'به چه متخصصی نیاز دارید؟',
             style: theme.textTheme.displayLarge?.copyWith(
-              fontWeight: FontWeight.bold, 
+              fontWeight: FontWeight.bold,
               fontSize: 26,
               color: theme.colorScheme.onBackground,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'دسته‌بندی مورد نیاز خود را جهت تکمیل جزئیات عیب‌یابی انتخاب کنید.', 
+            'دسته‌بندی مورد نیاز خود را جهت تکمیل جزئیات عیب‌یابی انتخاب کنید.',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onBackground.withOpacity(0.6),
             ),
@@ -120,18 +127,37 @@ class _RequestServicePageState extends State<RequestServicePage> {
           Wrap(
             spacing: 12,
             runSpacing: 12,
-            children: ['Plumbing', 'Electricity', 'Painting', 'AC Repair', 'Cleaning'].map((service) {
+            children: [
+              'Plumbing',
+              'Electricity',
+              'Painting',
+              'AC Repair',
+              'Cleaning',
+            ].map((service) {
               final faName = _getServiceFaName(service);
               return ActionChip(
                 elevation: 2,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                label: Text(
-                  faName, 
-                  style: TextStyle(fontWeight: FontWeight.w600, color: theme.colorScheme.onPrimaryContainer),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
                 ),
-                backgroundColor: theme.colorScheme.primaryContainer.withOpacity(0.4),
-                avatar: Icon(_getServiceIcon(service), size: 18, color: theme.colorScheme.primary),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                label: Text(
+                  faName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onPrimaryContainer,
+                  ),
+                ),
+                backgroundColor:
+                    theme.colorScheme.primaryContainer.withOpacity(0.4),
+                avatar: Icon(
+                  _getServiceIcon(service),
+                  size: 18,
+                  color: theme.colorScheme.primary,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 onPressed: () {
                   setState(() {
                     _clickedCategory = service;
@@ -143,8 +169,8 @@ class _RequestServicePageState extends State<RequestServicePage> {
           const Spacer(),
           Center(
             child: Icon(
-              Icons.home_repair_service_outlined, 
-              size: 100, 
+              Icons.home_repair_service_outlined,
+              size: 100,
               color: theme.colorScheme.primary.withOpacity(0.1),
             ),
           ),
@@ -165,11 +191,17 @@ class _RequestServicePageState extends State<RequestServicePage> {
         children: [
           Row(
             children: [
-              Icon(Icons.assignment_outlined, color: theme.colorScheme.primary, size: 28),
+              Icon(
+                Icons.assignment_outlined,
+                color: theme.colorScheme.primary,
+                size: 28,
+              ),
               const SizedBox(width: 8),
               Text(
                 'جزئیات درخواست ${_getServiceFaName(_clickedCategory!)}',
-                style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -181,14 +213,19 @@ class _RequestServicePageState extends State<RequestServicePage> {
           const SizedBox(height: 24),
 
           // Problem Description Input
-          const Text('توضیح خلاصه مشکل ساختمان / دستگاه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+          const Text(
+            'توضیح خلاصه مشکل ساختمان / دستگاه',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
           const SizedBox(height: 8),
           TextField(
             controller: _problemController,
             maxLines: 3,
             decoration: const InputDecoration(
               hintText: 'مثلاً: کولر لرزش شدید دارد و باد آن خنک نیست...',
-              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
               contentPadding: EdgeInsets.all(12),
             ),
           ),
@@ -196,7 +233,10 @@ class _RequestServicePageState extends State<RequestServicePage> {
 
           // Brand Selection (Conditional: only visible if related to devices/appliances)
           if (showBrandDropdown) ...[
-            const Text('برند دستگاه شما', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+            const Text(
+              'برند دستگاه شما',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            ),
             const SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -208,7 +248,9 @@ class _RequestServicePageState extends State<RequestServicePage> {
                 child: DropdownButton<String>(
                   value: _selectedBrand,
                   isExpanded: true,
-                  items: _brands.map((b) => DropdownMenuItem(value: b, child: Text(b))).toList(),
+                  items: _brands
+                      .map((b) => DropdownMenuItem(value: b, child: Text(b)))
+                      .toList(),
                   onChanged: (val) {
                     if (val != null) {
                       setState(() {
@@ -244,7 +286,10 @@ class _RequestServicePageState extends State<RequestServicePage> {
           const SizedBox(height: 20),
 
           // Technician Level Choice Chips
-          const Text('سطح مهارت استادکار درخواستی', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+          const Text(
+            'سطح مهارت استادکار درخواستی',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -285,26 +330,32 @@ class _RequestServicePageState extends State<RequestServicePage> {
                 final text = _problemController.text.trim();
                 if (text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('لطفاً توضیح خلاصه مشکل را بنویسید.')),
+                    const SnackBar(
+                      content: Text('لطفاً توضیح خلاصه مشکل را بنویسید.'),
+                    ),
                   );
                   return;
                 }
 
                 // Dispatch Request to Bloc!
-                context.read<ServiceBloc>().add(RequestServiceStarted(
-                  ServiceRequest(
-                    id: 'req_${DateTime.now().millisecondsSinceEpoch}',
-                    customerId: 'user123',
-                    serviceType: _clickedCategory!,
-                    location: const LatLng(35.6892, 51.3890),
-                    status: ServiceStatus.pending,
-                    createdAt: DateTime.now(),
-                    problemDescription: text,
-                    productBrand: showBrandDropdown ? _selectedBrand : 'N/A',
-                    budgetRange: '${_estimatedBudget.toStringAsFixed(0)} تومان',
-                    preferredTechnicianLevel: _techLevel,
-                  ),
-                ));
+                context.read<ServiceBloc>().add(
+                      RequestServiceStarted(
+                        ServiceRequest(
+                          id: 'req_${DateTime.now().millisecondsSinceEpoch}',
+                          customerId: 'user123',
+                          serviceType: _clickedCategory!,
+                          location: const LatLng(35.6892, 51.3890),
+                          status: ServiceStatus.pending,
+                          createdAt: DateTime.now(),
+                          problemDescription: text,
+                          productBrand:
+                              showBrandDropdown ? _selectedBrand : 'N/A',
+                          budgetRange:
+                              '${_estimatedBudget.toStringAsFixed(0)} تومان',
+                          preferredTechnicianLevel: _techLevel,
+                        ),
+                      ),
+                    );
               },
               type: AppButtonType.primary,
               icon: Icons.rocket_launch_outlined,
@@ -349,11 +400,18 @@ class _RequestServicePageState extends State<RequestServicePage> {
     }
   }
 
-  Widget _buildTrackingUI(BuildContext context, ThemeData theme, ServiceState state) {
-    final request = (state is ServiceProfessionalAssigned) ? state.request : (state as ServiceOnTheWay).request;
-    
+  Widget _buildTrackingUI(
+    BuildContext context,
+    ThemeData theme,
+    ServiceState state,
+  ) {
+    final request = (state is ServiceProfessionalAssigned)
+        ? state.request
+        : (state as ServiceOnTheWay).request;
+
     final expertName = request.assignedProfessionalName ?? 'علی رضایی';
-    final expertSpecialty = request.assignedProfessionalSpecialty ?? 'متخصص ارشد تاسیسات و لوله‌کشی';
+    final expertSpecialty = request.assignedProfessionalSpecialty ??
+        'متخصص ارشد تاسیسات و لوله‌کشی';
     final expertRating = request.assignedProfessionalRating ?? 4.9;
     final confirmedPrice = request.confirmedPrice ?? 350000;
 
@@ -372,22 +430,29 @@ class _RequestServicePageState extends State<RequestServicePage> {
           ),
           const SizedBox(height: 24),
           Text(
-            'متخصص تایید شده و در راه است!', 
-            style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold, fontSize: 22),
+            'متخصص تایید شده و در راه است!',
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
             'درخواست لوله‌کشی شما با موفقیت ثبت شد. متخصص در حال حرکت به لوکیشن شماست.',
-            style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onBackground.withOpacity(0.6)),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onBackground.withOpacity(0.6),
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
-          
+
           // Expert Details Card
           Card(
             elevation: 4,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -399,8 +464,12 @@ class _RequestServicePageState extends State<RequestServicePage> {
                         radius: 30,
                         backgroundColor: theme.colorScheme.primaryContainer,
                         child: Text(
-                          expertName[0], 
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: theme.colorScheme.onPrimaryContainer),
+                          expertName[0],
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onPrimaryContainer,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -409,13 +478,21 @@ class _RequestServicePageState extends State<RequestServicePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              expertName, 
-                              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, fontSize: 18),
+                              expertName,
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               expertSpecialty,
-                              style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6), fontSize: 13),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onSurface.withOpacity(
+                                  0.6,
+                                ),
+                                fontSize: 13,
+                              ),
                             ),
                           ],
                         ),
@@ -433,20 +510,34 @@ class _RequestServicePageState extends State<RequestServicePage> {
                           const Icon(Icons.star, color: Colors.amber, size: 20),
                           const SizedBox(width: 6),
                           Text(
-                            '$expertRating', 
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                            '$expertRating',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
                           ),
                           const SizedBox(width: 4),
-                          const Text('(متخصص برتر)', style: TextStyle(color: Colors.grey, fontSize: 11)),
+                          const Text(
+                            '(متخصص برتر)',
+                            style: TextStyle(color: Colors.grey, fontSize: 11),
+                          ),
                         ],
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.access_time, color: Colors.blue, size: 20),
+                          const Icon(
+                            Icons.access_time,
+                            color: Colors.blue,
+                            size: 20,
+                          ),
                           const SizedBox(width: 6),
                           Text(
-                            'ETA: ${request.estimatedArrivalTime} دقیقه', 
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.blue),
+                            'ETA: ${request.estimatedArrivalTime} دقیقه',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Colors.blue,
+                            ),
                           ),
                         ],
                       ),
@@ -457,12 +548,19 @@ class _RequestServicePageState extends State<RequestServicePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'قیمت نهایی توافق شده:', 
-                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                        'قیمت نهایی توافق شده:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
                       ),
                       Text(
-                        '${confirmedPrice.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")} تومان', 
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: theme.colorScheme.primary),
+                        '${confirmedPrice.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")} تومان',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: theme.colorScheme.primary,
+                        ),
                       ),
                     ],
                   ),
@@ -470,7 +568,7 @@ class _RequestServicePageState extends State<RequestServicePage> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 40),
           SizedBox(
             width: double.infinity,
@@ -478,7 +576,11 @@ class _RequestServicePageState extends State<RequestServicePage> {
               text: 'ارسال پیام به $expertName',
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('در حال باز کردن چت مستقیم با $expertName...')),
+                  SnackBar(
+                    content: Text(
+                      'در حال باز کردن چت مستقیم با $expertName...',
+                    ),
+                  ),
                 );
               },
               type: AppButtonType.primary,
@@ -498,18 +600,23 @@ class _RequestServicePageState extends State<RequestServicePage> {
           const SizedBox(height: 24),
           TextButton(
             onPressed: () {
-              context.read<ServiceBloc>().add(ServiceStatusUpdated(
-                ServiceRequest(
-                  id: 'req_${DateTime.now().millisecondsSinceEpoch}',
-                  customerId: 'user123',
-                  serviceType: request.serviceType,
-                  location: const LatLng(35.6892, 51.3890),
-                  status: ServiceStatus.pending,
-                  createdAt: DateTime.now(),
-                )
-              ));
+              context.read<ServiceBloc>().add(
+                    ServiceStatusUpdated(
+                      ServiceRequest(
+                        id: 'req_${DateTime.now().millisecondsSinceEpoch}',
+                        customerId: 'user123',
+                        serviceType: request.serviceType,
+                        location: const LatLng(35.6892, 51.3890),
+                        status: ServiceStatus.pending,
+                        createdAt: DateTime.now(),
+                      ),
+                    ),
+                  );
             },
-            child: const Text('لغو درخواست سرویس', style: TextStyle(color: Colors.red)),
+            child: const Text(
+              'لغو درخواست سرویس',
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),

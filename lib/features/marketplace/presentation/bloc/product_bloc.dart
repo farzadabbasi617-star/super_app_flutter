@@ -9,27 +9,29 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final GetProductsUseCase getProducts;
   final GetCategoriesUseCase getCategories;
 
-  ProductBloc({
-    required this.getProducts,
-    required this.getCategories,
-  }) : super(ProductInitial()) {
-    
+  ProductBloc({required this.getProducts, required this.getCategories})
+      : super(ProductInitial()) {
     on<LoadProductsRequested>((event, emit) async {
       emit(ProductLoading());
-      
+
       final categoriesResult = await getCategories.execute();
-      final productsResult = await getProducts.execute(category: event.category, query: event.query);
-      
+      final productsResult = await getProducts.execute(
+        category: event.category,
+        query: event.query,
+      );
+
       categoriesResult.fold(
         (failure) => emit(ProductFailure(failure.message)),
         (categories) {
           productsResult.fold(
             (failure) => emit(ProductFailure(failure.message)),
-            (products) => emit(ProductLoaded(
-              products: products, 
-              categories: categories, 
-              selectedCategory: event.category,
-            )),
+            (products) => emit(
+              ProductLoaded(
+                products: products,
+                categories: categories,
+                selectedCategory: event.category,
+              ),
+            ),
           );
         },
       );
@@ -49,11 +51,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final result = await getProducts.execute(category: event.category);
       result.fold(
         (failure) => emit(ProductFailure(failure.message)),
-        (products) => emit(ProductLoaded(
-          products: products, 
-          categories: currentCategories, 
-          selectedCategory: event.category,
-        )),
+        (products) => emit(
+          ProductLoaded(
+            products: products,
+            categories: currentCategories,
+            selectedCategory: event.category,
+          ),
+        ),
       );
     });
   }

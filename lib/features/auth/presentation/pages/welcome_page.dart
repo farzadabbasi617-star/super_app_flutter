@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../shared/widgets/app_button.dart';
-import '../../../core/theme/app_colors.dart';
+import 'package:super_app_flutter/shared/widgets/app_button.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -9,7 +8,7 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       body: Stack(
         children: [
@@ -32,7 +31,7 @@ class WelcomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Spacer(),
-                  / Hero Icon with Shadow
+                  // Hero Icon with Shadow
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -45,9 +44,9 @@ class WelcomePage extends StatelessWidget {
                       ],
                     ),
                     child: Icon(
-                      Icons.rocket_launch_rounded, 
-                      size: 120, 
-                      color: theme.colorScheme.primary
+                      Icons.rocket_launch_rounded,
+                      size: 120,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: 40),
@@ -68,8 +67,8 @@ class WelcomePage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const Spacer(),
-                  
-                  / Professional Atomic Button
+
+                  // Professional Atomic Button
                   AppButton(
                     text: 'Get Started',
                     onPressed: () => context.push('/login'),
@@ -81,7 +80,10 @@ class WelcomePage extends StatelessWidget {
                     onPressed: () => context.push('/login'),
                     child: Text(
                       'Already have an account? Sign In',
-                      style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],

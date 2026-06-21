@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../entities/category.dart';
 import '../repositories/product_repository.dart';
-import '../../../../core/error/failures.dart';
+import 'package:super_app_flutter/core/error/failures.dart';
 
 class GetCategoriesUseCase {
   final ProductRepository repository;

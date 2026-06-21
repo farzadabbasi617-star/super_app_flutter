@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../core/utils/monetization_manager.dart';
-import '../../../shared/widgets/app_button.dart';
-import '../../map/presentation/pages/shop_detail_page.dart';
+import 'package:super_app_flutter/core/utils/monetization_manager.dart';
+import 'package:super_app_flutter/features/map/presentation/pages/shop_detail_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -21,15 +20,15 @@ class _ProfilePageState extends State<ProfilePage> {
       'product': 'گوشی آیفون ۱۵ پرو تیتانیوم',
       'price': '۶۰,۰۰۰,۰۰۰ تومان',
       'status': 'در انتظار ارسال 🚚',
-      'date': 'امروز - ۱۰:۴۵'
+      'date': 'امروز - ۱۰:۴۵',
     },
     {
       'customer': 'سارا مهدوی',
       'product': 'کابل شارژر Fast تایپ سی',
       'price': '۱۵۰,۰۰۰ تومان',
       'status': 'تحویل داده شده ✅',
-      'date': 'دیروز - ۱۸:۳۰'
-    }
+      'date': 'دیروز - ۱۸:۳۰',
+    },
   ];
 
   @override
@@ -38,7 +37,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('پروفایل کاربری و مدیریت مالی', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        title: const Text(
+          'پروفایل کاربری و مدیریت مالی',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
         centerTitle: true,
       ),
       body: StreamBuilder<void>(
@@ -61,7 +63,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(height: 12),
                       const Text(
                         'فرزاد عباسی (غرفه‌دار و کارفرمای ارشد)',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       const Text(
@@ -114,9 +119,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildWalletCard(ThemeData theme) {
-    final formattedBalance = _monetization.walletBalance
-        .toStringAsFixed(0)
-        .replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
+    final formattedBalance =
+        _monetization.walletBalance.toStringAsFixed(0).replaceAllMapped(
+              RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"),
+              (Match m) => "${m[1]},",
+            );
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24),
@@ -144,9 +151,17 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Text(
                 'موجودی کیف پول دیجیتال 💳',
-                style: TextStyle(color: Colors.white90, fontSize: 14, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-              Icon(Icons.account_balance_wallet_outlined, color: Colors.white, size: 24),
+              Icon(
+                Icons.account_balance_wallet_outlined,
+                color: Colors.white,
+                size: 24,
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -155,7 +170,12 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Text(
                 '$formattedBalance ',
-                style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold, fontFamily: 'monospace'),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'monospace',
+                ),
               ),
               const Text(
                 'تومان',
@@ -169,11 +189,16 @@ class _ProfilePageState extends State<ProfilePage> {
               Expanded(
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.add, size: 18),
-                  label: const Text('شارژ کیف پول', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  label: const Text(
+                    'شارژ کیف پول',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: theme.colorScheme.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                   onPressed: () => _showDepositDialog(),
@@ -214,7 +239,9 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               IconButton(
                 icon: Icon(
-                  _isSellerPortalExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  _isSellerPortalExpanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
                   color: Colors.orange.shade800,
                 ),
                 onPressed: () {
@@ -227,7 +254,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Text(
                     'پنل مدیریت غرفه و فروشندگان 🏪',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Colors.orange),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13.5,
+                      color: Colors.orange,
+                    ),
                   ),
                 ],
               ),
@@ -239,12 +270,15 @@ class _ProfilePageState extends State<ProfilePage> {
             style: const TextStyle(fontSize: 10.5, color: Colors.grey),
             textAlign: TextAlign.right,
           ),
-          
+
           if (_isSellerPortalExpanded) ...[
             const Divider(height: 24),
-            
+
             // A. Earnings Analytics Bar Chart (Simulated)
-            const Text('📈 گزارش عملکرد و تحلیل درآمد غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+            const Text(
+              '📈 گزارش عملکرد و تحلیل درآمد غرفه',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5),
+            ),
             const SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.all(12),
@@ -256,15 +290,28 @@ class _ProfilePageState extends State<ProfilePage> {
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('مجموع فروش غرفه شما:', style: TextStyle(fontSize: 11.5, color: Colors.grey)),
-                  Text('۶۰,۱۵۰,۰۰۰ تومان', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.5, color: Colors.green)),
+                  Text(
+                    'مجموع فروش غرفه شما:',
+                    style: TextStyle(fontSize: 11.5, color: Colors.grey),
+                  ),
+                  Text(
+                    '۶۰,۱۵۰,۰۰۰ تومان',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13.5,
+                      color: Colors.green,
+                    ),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 16),
 
             // B. Received Orders List
-            const Text('📦 سفارشات دریافتی اخیر مشتریان', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+            const Text(
+              '📦 سفارشات دریافتی اخیر مشتریان',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5),
+            ),
             const SizedBox(height: 8),
             ListView.builder(
               shrinkWrap: true,
@@ -286,31 +333,63 @@ class _ProfilePageState extends State<ProfilePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('خریدار: ${order['customer']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
-                          Text(order['date'], style: const TextStyle(fontSize: 9.5, color: Colors.grey)),
+                          Text(
+                            'خریدار: ${order['customer']}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 11,
+                            ),
+                          ),
+                          Text(
+                            order['date'],
+                            style: const TextStyle(
+                              fontSize: 9.5,
+                              color: Colors.grey,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 4),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('کالا: ${order['product']}', style: const TextStyle(fontSize: 10.5, color: Colors.black87)),
-                          Text(order['price'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Colors.orange)),
+                          Text(
+                            'کالا: ${order['product']}',
+                            style: const TextStyle(
+                              fontSize: 10.5,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          Text(
+                            order['price'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 11,
+                              color: Colors.orange,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 6),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
-                          color: order['status'].contains('انتظار') ? Colors.blue.shade50 : Colors.green.shade50,
+                          color: order['status'].contains('انتظار')
+                              ? Colors.blue.shade50
+                              : Colors.green.shade50,
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           order['status'],
                           style: TextStyle(
-                            fontSize: 9, 
-                            fontWeight: FontWeight.bold, 
-                            color: order['status'].contains('انتظار') ? Colors.blue.shade900 : Colors.green.shade900,
+                            fontSize: 9,
+                            fontWeight: FontWeight.bold,
+                            color: order['status'].contains('انتظار')
+                                ? Colors.blue.shade900
+                                : Colors.green.shade900,
                           ),
                         ),
                       ),
@@ -322,7 +401,10 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16),
 
             // C. Prices and Products Manager
-            const Text('🏷️ ویرایش سریع قیمت محصولات غرفه‌های شما', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+            const Text(
+              '🏷️ ویرایش سریع قیمت محصولات غرفه‌های شما',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5),
+            ),
             const SizedBox(height: 8),
             if (ShopDetailPage.customCreatedShops.isEmpty)
               const Center(
@@ -339,16 +421,38 @@ class _ProfilePageState extends State<ProfilePage> {
               ...ShopDetailPage.customCreatedShops.map((booth) {
                 final List<dynamic> products = booth['products'] ?? [];
                 return ExpansionTile(
-                  title: Text(booth['name'], style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold)),
+                  title: Text(
+                    booth['name'],
+                    style: const TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   children: products.map((product) {
                     return ListTile(
                       dense: true,
-                      leading: Text(product.icon, style: const TextStyle(fontSize: 18)),
-                      title: Text(product.name, style: const TextStyle(fontSize: 11)),
-                      subtitle: Text(product.price, style: const TextStyle(color: Colors.green, fontSize: 10.5)),
+                      leading: Text(
+                        product.icon,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      title: Text(
+                        product.name,
+                        style: const TextStyle(fontSize: 11),
+                      ),
+                      subtitle: Text(
+                        product.price,
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontSize: 10.5,
+                        ),
+                      ),
                       trailing: TextButton(
-                        child: const Text('ویرایش قیمت', style: TextStyle(fontSize: 10)),
-                        onPressed: () => _showEditPriceDialog(booth['id'], product),
+                        child: const Text(
+                          'ویرایش قیمت',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        onPressed: () =>
+                            _showEditPriceDialog(booth['id'], product),
                       ),
                     );
                   }).toList(),
@@ -369,21 +473,35 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Text('ویرایش قیمت محصول غرفه', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.right),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'ویرایش قیمت محصول غرفه',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            textAlign: TextAlign.right,
+          ),
           content: Directionality(
             textDirection: TextDirection.rtl,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('محصول: ${product.name}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5)),
+                Text(
+                  'محصول: ${product.name}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.5,
+                  ),
+                ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: priceController,
                   decoration: InputDecoration(
                     labelText: 'قیمت جدید کالا (همراه با تومان)',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
               ],
@@ -395,16 +513,23 @@ class _ProfilePageState extends State<ProfilePage> {
               child: const Text('انصراف'),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary, foregroundColor: Colors.white),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
                 final newPrice = priceController.text.trim();
                 if (newPrice.isEmpty) return;
-                
+
                 setState(() {
                   // Actually mutate the static custom Booths product price!
-                  final booth = ShopDetailPage.customCreatedShops.firstWhere((element) => element['id'] == boothId);
+                  final booth = ShopDetailPage.customCreatedShops.firstWhere(
+                    (element) => element['id'] == boothId,
+                  );
                   final List<dynamic> productsList = booth['products'];
-                  final prodIndex = productsList.indexWhere((element) => element.name == product.name);
+                  final prodIndex = productsList.indexWhere(
+                    (element) => element.name == product.name,
+                  );
                   if (prodIndex > -1) {
                     // Update price
                     productsList[prodIndex] = BoothProduct(
@@ -415,10 +540,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     );
                   }
                 });
-                
+
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('🎉 قیمت کالا با موفقیت ویرایش شد و در ویترین غرفه فعال گردید!'), backgroundColor: Colors.green),
+                  const SnackBar(
+                    content: Text(
+                      '🎉 قیمت کالا با موفقیت ویرایش شد و در ویترین غرفه فعال گردید!',
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
                 );
               },
               child: const Text('ذخیره قیمت'),
@@ -447,23 +577,32 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
-                  color: activeSub == 'Gold' 
-                      ? Colors.amber.shade100 
-                      : (activeSub == 'Silver' ? Colors.blue.shade50 : Colors.grey.shade100),
+                  color: activeSub == 'Gold'
+                      ? Colors.amber.shade100
+                      : (activeSub == 'Silver'
+                          ? Colors.blue.shade50
+                          : Colors.grey.shade100),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  activeSub == 'Gold' 
-                      ? '👑 اشتراک طلایی فعال' 
-                      : (activeSub == 'Silver' ? '🥈 اشتراک نقره‌ای فعال' : '🥉 اشتراک برنزی (رایگان)'),
+                  activeSub == 'Gold'
+                      ? '👑 اشتراک طلایی فعال'
+                      : (activeSub == 'Silver'
+                          ? '🥈 اشتراک نقره‌ای فعال'
+                          : '🥉 اشتراک برنزی (رایگان)'),
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
-                    color: activeSub == 'Gold' 
-                        ? Colors.amber.shade900 
-                        : (activeSub == 'Silver' ? Colors.blue.shade900 : Colors.grey.shade700),
+                    color: activeSub == 'Gold'
+                        ? Colors.amber.shade900
+                        : (activeSub == 'Silver'
+                            ? Colors.blue.shade900
+                            : Colors.grey.shade700),
                   ),
                 ),
               ),
@@ -485,26 +624,41 @@ class _ProfilePageState extends State<ProfilePage> {
               if (activeSub != 'Gold')
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () => _confirmSubscriptionUpgrade('Gold', 600000),
+                    onPressed: () =>
+                        _confirmSubscriptionUpgrade('Gold', 600000),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber.shade600,
                       foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 10),
                     ),
-                    child: const Text('خرید اشتراک طلایی (۶۰۰هزار ت)', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                    child: const Text(
+                      'خرید اشتراک طلایی (۶۰۰هزار ت)',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               if (activeSub != 'Gold' && activeSub != 'Silver') ...[
                 const SizedBox(width: 8),
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () => _confirmSubscriptionUpgrade('Silver', 300000),
+                    onPressed: () =>
+                        _confirmSubscriptionUpgrade('Silver', 300000),
                     style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 10),
                     ),
-                    child: const Text('خرید اشتراک نقره‌ای (۳۰۰هزار ت)', style: TextStyle(fontSize: 11)),
+                    child: const Text(
+                      'خرید اشتراک نقره‌ای (۳۰۰هزار ت)',
+                      style: TextStyle(fontSize: 11),
+                    ),
                   ),
                 ),
               ],
@@ -513,7 +667,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Center(
                     child: Text(
                       '✨ شما دارای بالاترین سطح اشتراک غرفه‌داری هستید ✨',
-                      style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 12),
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ),
@@ -541,10 +699,17 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Row(
                 children: [
-                  const Text(' سکه فعال', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  const Text(
+                    ' سکه فعال',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
                   Text(
                     ' ${_monetization.biddingCoins} ',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: theme.colorScheme.primary),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: theme.colorScheme.primary,
+                    ),
                   ),
                   const Text('🪙', style: TextStyle(fontSize: 16)),
                 ],
@@ -566,9 +731,14 @@ class _ProfilePageState extends State<ProfilePage> {
             width: double.infinity,
             child: OutlinedButton.icon(
               icon: const Icon(Icons.stars_outlined, size: 16),
-              label: const Text('خرید بسته ۵۰ تایی سکه (۱۰۰,۰۰۰ تومان)', style: TextStyle(fontSize: 11.5)),
+              label: const Text(
+                'خرید بسته ۵۰ تایی سکه (۱۰۰,۰۰۰ تومان)',
+                style: TextStyle(fontSize: 11.5),
+              ),
               style: OutlinedButton.styleFrom(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 padding: const EdgeInsets.symmetric(vertical: 10),
               ),
               onPressed: () => _confirmBuyCoins(50, 100000),
@@ -592,16 +762,23 @@ class _ProfilePageState extends State<ProfilePage> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: list.length,
-        separatorBuilder: (context, index) => Divider(height: 1, color: theme.colorScheme.outline.withOpacity(0.1)),
+        separatorBuilder: (context, index) => Divider(
+          height: 1,
+          color: theme.colorScheme.outline.withOpacity(0.1),
+        ),
         itemBuilder: (context, index) {
           final tx = list[index];
-          final formattedAmount = tx['amount']
-              .toStringAsFixed(0)
-              .replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
+          final formattedAmount =
+              tx['amount'].toStringAsFixed(0).replaceAllMapped(
+                    RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"),
+                    (Match m) => "${m[1]},",
+                  );
 
           return ListTile(
             leading: CircleAvatar(
-              backgroundColor: theme.colorScheme.primaryContainer.withOpacity(0.2),
+              backgroundColor: theme.colorScheme.primaryContainer.withOpacity(
+                0.2,
+              ),
               child: Text(tx['icon'], style: const TextStyle(fontSize: 18)),
             ),
             title: Text(
@@ -629,7 +806,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Text(
                   'تومان',
-                  style: TextStyle(color: tx['isIncome'] ? Colors.green : Colors.red, fontSize: 10),
+                  style: TextStyle(
+                    color: tx['isIncome'] ? Colors.green : Colors.red,
+                    fontSize: 10,
+                  ),
                 ),
               ],
             ),
@@ -647,22 +827,33 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Text('افزایش اعتبار کیف پول', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15), textAlign: TextAlign.right),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'افزایش اعتبار کیف پول',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            textAlign: TextAlign.right,
+          ),
           content: Directionality(
             textDirection: TextDirection.rtl,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('مبلغ مورد نیاز شارژ را به تومان وارد کنید:', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                const Text(
+                  'مبلغ مورد نیاز شارژ را به تومان وارد کنید:',
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: amountController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     suffixText: 'تومان',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
               ],
@@ -682,14 +873,21 @@ class _ProfilePageState extends State<ProfilePage> {
                 final amount = double.tryParse(amountController.text) ?? 0.0;
                 if (amount <= 0) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('لطفا مبلغ معتبری وارد کنید!')),
+                    const SnackBar(
+                      content: Text('لطفا مبلغ معتبری وارد کنید!'),
+                    ),
                   );
                   return;
                 }
                 _monetization.depositWallet(amount);
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('🎉 پرداخت شبیه‌سازی شد و کیف پول با موفقیت شارژ گردید!'), backgroundColor: Colors.green),
+                  const SnackBar(
+                    content: Text(
+                      '🎉 پرداخت شبیه‌سازی شد و کیف پول با موفقیت شارژ گردید!',
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
                 );
               },
               child: const Text('تایید و پرداخت آنلاین'),
@@ -706,8 +904,14 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text('تایید ارتقای اشتراک $tier', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.right),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            'تایید ارتقای اشتراک $tier',
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            textAlign: TextAlign.right,
+          ),
           content: Text(
             'آیا مایل هستید اشتراک غرفه‌داری خود را با پرداخت ${price.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")} تومان از محل موجودی کیف پول به سطح $tier ارتقا دهید؟',
             style: const TextStyle(fontSize: 12.5),
@@ -719,17 +923,30 @@ class _ProfilePageState extends State<ProfilePage> {
               child: const Text('انصراف'),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary, foregroundColor: Colors.white),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
                 Navigator.pop(context);
                 final success = _monetization.buySubscription(tier, price);
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('👑 اشتراک غرفه‌داری شما به سطح فوق‌پیشرفته $tier ارتقا یافت!'), backgroundColor: Colors.green),
+                    SnackBar(
+                      content: Text(
+                        '👑 اشتراک غرفه‌داری شما به سطح فوق‌پیشرفته $tier ارتقا یافت!',
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('❌ موجودی کیف پول شما برای این خرید کافی نیست. ابتدا موجودی خود را افزایش دهید!'), backgroundColor: Colors.red),
+                    const SnackBar(
+                      content: Text(
+                        '❌ موجودی کیف پول شما برای این خرید کافی نیست. ابتدا موجودی خود را افزایش دهید!',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
                   );
                 }
               },
@@ -747,8 +964,14 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Text('تایید خرید سکه پیشنهاد قیمت', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), textAlign: TextAlign.right),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'تایید خرید سکه پیشنهاد قیمت',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            textAlign: TextAlign.right,
+          ),
           content: Text(
             'آیا مایل هستید بسته $count عددی سکه ارسال پیشنهاد متخصص را با پرداخت ${price.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")} تومان از موجودی کیف پول تهیه کنید؟',
             style: const TextStyle(fontSize: 12.5),
@@ -760,17 +983,30 @@ class _ProfilePageState extends State<ProfilePage> {
               child: const Text('انصراف'),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary, foregroundColor: Colors.white),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
                 Navigator.pop(context);
                 final success = _monetization.buyCoins(count, price);
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('🪙 بسته $count تایی سکه پیشنهاد به کیف پول متخصص شما اضافه شد!'), backgroundColor: Colors.green),
+                    SnackBar(
+                      content: Text(
+                        '🪙 بسته $count تایی سکه پیشنهاد به کیف پول متخصص شما اضافه شد!',
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('❌ موجودی کافی نیست. لطفاً ابتدا کیف پول خود را شارژ کنید!'), backgroundColor: Colors.red),
+                    const SnackBar(
+                      content: Text(
+                        '❌ موجودی کافی نیست. لطفاً ابتدا کیف پول خود را شارژ کنید!',
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
                   );
                 }
               },

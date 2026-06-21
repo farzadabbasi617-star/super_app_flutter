@@ -17,11 +17,14 @@ class ServerFailure extends Failure {
 }
 
 class ConnectionFailure extends Failure {
-  const ConnectionFailure([String message = 'No internet connection']) : super(message);
+  const ConnectionFailure([String message = 'No internet connection'])
+      : super(message);
 }
 
 class UnauthorizedFailure extends Failure {
-  const UnauthorizedFailure([String message = 'Session expired. Please login again']) : super(message);
+  const UnauthorizedFailure([
+    String message = 'Session expired. Please login again',
+  ]) : super(message);
 }
 
 class ValidationFailure extends Failure {

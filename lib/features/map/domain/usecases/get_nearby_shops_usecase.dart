@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../domain/entities/shop.dart';
 import '../../domain/repositories/shop_repository.dart';
-import '../../../core/error/failures.dart';
+import 'package:super_app_flutter/core/error/failures.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GetNearbyShopsUseCase {

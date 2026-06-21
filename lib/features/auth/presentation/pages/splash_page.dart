@@ -19,9 +19,9 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _checkAuth() async {
-    / Simulate checking token in secure storage
+    // Simulate checking token in secure storage
     await Future.delayed(const Duration(seconds: 2));
-    
+
     if (mounted) {
       final authState = context.read<AuthBloc>().state;
       if (authState is AuthAuthenticated) {
