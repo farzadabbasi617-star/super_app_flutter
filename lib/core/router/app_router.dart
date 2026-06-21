@@ -1,5 +1,5 @@
-import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/welcome_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
@@ -8,7 +8,6 @@ import '../../features/map/presentation/pages/main_navigation_screen.dart';
 import '../../features/map/presentation/pages/shop_detail_page.dart';
 import '../../features/services/presentation/pages/request_service_page.dart';
 import '../../features/services/presentation/pages/pro_dashboard_page.dart';
-import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/services/presentation/bloc/service_bloc.dart';
 import '../di/service_locator.dart';
 
@@ -18,19 +17,10 @@ class AppRouter {
     routes: [
       GoRoute(path: '/splash', builder: (context, state) => const SplashPage()),
       GoRoute(path: '/', builder: (context, state) => const WelcomePage()),
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => BlocProvider(
-          create: (context) => sl<AuthBloc>(),
-          child: const LoginPage(),
-        ),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
       GoRoute(
         path: '/register',
-        builder: (context, state) => BlocProvider(
-          create: (context) => sl<AuthBloc>(),
-          child: const RegisterPage(),
-        ),
+        builder: (context, state) => const RegisterPage(),
       ),
       GoRoute(
         path: '/home',

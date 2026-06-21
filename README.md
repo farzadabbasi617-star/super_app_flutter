@@ -1,54 +1,61 @@
-# 🌟 Super App - Industrial Grade Implementation
+# Super App Flutter
 
-A professional-grade Super App built with Flutter, following Clean Architecture and Enterprise standards.
+A Flutter super-app prototype with clean architecture, BLoC state management, marketplace, rental, map discovery, profile/wallet and service dispatch flows.
 
-## 📊 Project Status: 100% (Reset for Professional Implementation)
-We have reset the progress to rebuild every feature from the ground up with production-grade quality. No mocks, no placeholders.
+## Current status
 
-## 🛠 Technical Stack
-- **Framework:** Flutter (Stable)
-- **Architecture:** Clean Architecture (Data, Domain, Presentation)
-- **State Management:** BLoC (with Advanced Concurrency)
-- **Navigation:** GoRouter (Role-based Access Control)
-- **Dependency Injection:** GetIt
-- **Network:** Dio (with Interceptors & Retry Logic)
-- **Real-time:** Socket.io (with Heartbeat & ACK)
-- **Local Storage:** Flutter Secure Storage & Hive
+- ✅ Flutter project structure is available for `android`, `ios` and `web`.
+- ✅ `flutter analyze` passes.
+- ✅ Unit/widget tests pass.
+- ✅ Web release build is supported.
+- ✅ Demo authentication fallback is enabled while the real backend is not connected.
+- ⚠️ Google Maps API keys must be configured before using the real map on Android/iOS/Web.
 
-## 🗺️ Professional Engineering Roadmap
+## Quick start
 
-### 🟢 Phase 1: Infrastructure & Hardened Core
-- [x] Advanced Network Layer (Interceptors, Retry Logic, Failure Mapping)
-- [x] Secure Data Storage (Encryption & Secure Storage)
-- [x] Professional Design System (Atomic Design, Accessibility)
-- [x] Advanced State Management Setup (Concurrency Strategies)
-- [x] Dependency Injection Configuration (Lifecycles)
+```bash
+flutter pub get
+flutter analyze
+flutter test
+flutter run -d chrome
+```
 
-### 🔵 Phase 2: Identity & Access Management (IAM)
-- [x] Full Auth Flow (Validation, OTP, Password Recovery)
-- [x] Role-Based Access Control (RBAC) for Customers/Professionals
-- [x] Professional Onboarding Experience
+## Build
 
-### 🟡 Phase 3: Geospatial Hub (Map & Shops)
-- [x] Map Optimization (Marker Clustering, Zoom-level Logic)
-- [x] Dynamic Shop Profiles (CMS-driven UI)
-- [x] Geo-query & Proximity Filtering
+```bash
+flutter build web --release --no-wasm-dry-run
+flutter build apk
+```
 
-### 🟠 Phase 4: Real-time Dispatch Engine
-- [x] Industrial Socket.io Implementation (Heartbeat, Backoff, ACK)
-- [x] Atomic Request State Machine
-- [x] Live Tracking with Smooth Interpolation
+> Android builds should use Java 17+.
 
-### 🔴 Phase 5: Industrial Marketplace & Rental
-- [x] Advanced Filtering & Search Engine
-- [x] Rental Booking Logic (Conflict Resolution, Calendar)
-- [x] Payment Gateway Integration & Webhooks
+## Google Maps setup
 
-### 🟣 Phase 6: Quality Assurance & Polish
-- [x] Unit & Integration Testing
-- [x] Performance Profiling & Memory Optimization
-- [x] Crash Reporting & Monitoring (Sentry/Crashlytics)
+Replace `YOUR_GOOGLE_MAPS_API_KEY` in:
 
----
-*Lead Engineer: Arena Agent*
-*Project Owner: Farzad*
+- `android/app/src/main/AndroidManifest.xml`
+- `ios/Runner/AppDelegate.swift`
+- `web/index.html`
+
+Use restricted keys per platform.
+
+## Useful docs
+
+See [`docs/SETUP.md`](docs/SETUP.md) for setup details.
+
+## Main stack
+
+- Flutter stable
+- BLoC / flutter_bloc
+- GoRouter
+- GetIt
+- Dio
+- Flutter Secure Storage
+- Google Maps Flutter
+- Geolocator
+- Socket.io client
+- dartz / Equatable
+
+## Notes
+
+The root `index.html` file is an interactive HTML simulator for product preview. The Flutter web entry point is `web/index.html`.
