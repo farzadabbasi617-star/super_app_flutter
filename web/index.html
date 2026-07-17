@@ -32,12 +32,20 @@
   <title>Super App</title>
   <link rel="manifest" href="manifest.json">
 
-  <!--
-    Google Maps Web setup:
-    Replace YOUR_GOOGLE_MAPS_API_KEY with a restricted Web Maps JavaScript API key
-    before running the map page on web.
-  -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+  <!-- Safe Google Maps Loader to prevent white screen on placeholder API key -->
+  <script>
+    function initMap() {}
+    window.addEventListener('load', function() {
+      const script = document.createElement('script');
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap';
+      script.async = true;
+      script.defer = true;
+      script.onerror = function() {
+        console.warn('Google Maps API key is placeholder. Running in safe fallback map mode.');
+      };
+      document.head.appendChild(script);
+    });
+  </script>
 </head>
 <body>
   <!--
