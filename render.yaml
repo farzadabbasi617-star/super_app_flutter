@@ -14,7 +14,6 @@ services:
   - type: web
     name: super-app-frontend
     env: static
-    region: frankfurt
     plan: free
     buildCommand: flutter pub get && flutter build web --release --no-wasm-dry-run
     staticPublishPath: build/web
