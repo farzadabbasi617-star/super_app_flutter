@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../bloc/product_bloc.dart';
 import '../bloc/product_event.dart';
 import '../bloc/product_state.dart';
@@ -602,7 +603,8 @@ class _ExplorePageState extends State<ExplorePage> {
     final isFav = _favoritedIds.contains(product.id);
 
     return Card(
-      elevation: 2,
+      elevation: 4,
+      shadowColor: theme.colorScheme.primary.withOpacity(0.15),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       clipBehavior: Clip.antiAlias,
       child: Stack(
@@ -691,10 +693,8 @@ class _ExplorePageState extends State<ExplorePage> {
           ),
         ],
       ),
-    );
+    ).animate().fadeIn(duration: 350.ms).slideY(begin: 0.1, end: 0);
   }
-
-  Widget _buildEmptyState(ThemeData theme) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
