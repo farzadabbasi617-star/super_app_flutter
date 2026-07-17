@@ -86,12 +86,11 @@ class ShopRepositoryImpl implements ShopRepository {
       isOpen: true,
       operatingHours: '۰۸:۰۰ الی ۲۰:۰۰',
     ),
-    // 3 Fixed Centers (Clinics s6, s7, s8)
     const Shop(
       id: 's6',
       name: 'کلینیک درمانی آریا',
       description: 'In-Clinic treatment, GP, dressings and family health.',
-      location: LatLng(35.6810, 51.3910), // adjusted to be on map canvas
+      location: LatLng(35.6810, 51.3910),
       imageUrl:
           'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150',
       category: 'Clinic',
@@ -135,7 +134,6 @@ class ShopRepositoryImpl implements ShopRepository {
       isOpen: true,
       operatingHours: '۱۰:۰۰ الی ۲۰:۰۰',
     ),
-    // 2 Quick Commerce (Restaurant s9 and Supermarket s10)
     const Shop(
       id: 's9',
       name: 'کباب‌سرای زعفران',
@@ -172,9 +170,7 @@ class ShopRepositoryImpl implements ShopRepository {
 
   @override
   Future<List<Shop>> getNearbyShops(LatLng userLocation) async {
-    await Future.delayed(const Duration(seconds: 1));
-
-    // Proximity Filtering (within 15km to match our custom slider range!)
+    // Immediate return without any delay
     return _allShops.where((shop) {
       final distance = _calculateDistance(userLocation, shop.location);
       return distance <= 15.0;
