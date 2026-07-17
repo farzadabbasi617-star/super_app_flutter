@@ -12,8 +12,9 @@ services:
       - key: DATABASE_URL
         sync: false
 
-  # 2. Interactive Super App Frontend Static Site (Zero build time, instant deployment)
+  # 2. Real Flutter Web App Docker Service
   - type: web
     name: super-app-web
-    env: static
-    staticPublishPath: .
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
