@@ -24,7 +24,8 @@ WORKDIR /app
 COPY . .
 
 RUN flutter pub get
-RUN flutter build web --release --verbose
+# Disable source maps to reduce memory usage and prevent OOM on 512MB RAM servers (Render Free Tier)
+RUN flutter build web --release --no-source-maps
 
 FROM nginx:alpine
 COPY --from=build /app/build/web /usr/share/nginx/html
