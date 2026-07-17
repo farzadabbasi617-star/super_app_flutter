@@ -9,6 +9,12 @@ RUN apt-get update && apt-get install -y \
     libglu1-mesa \
     && rm -rf /var/lib/apt/lists/*
 
+# Fix tar ownership issue in restricted container environments (Render)
+RUN mv /usr/bin/tar /usr/bin/tar.real && \
+    echo '#!/bin/sh' > /usr/bin/tar && \
+    echo '/usr/bin/tar.real --no-same-owner "$@"' >> /usr/bin/tar && \
+    chmod +x /usr/bin/tar
+
 RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
 ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/bin:${PATH}"
 
