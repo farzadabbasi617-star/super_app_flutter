@@ -10,10 +10,10 @@ services:
     startCommand: npm start
     envVars:
       - key: DATABASE_URL
-        sync: false # Set this in Render Dashboard from your Neon PostgreSQL connection string
+        sync: false
 
   # 2. Flutter Web Static Frontend Service
-  - type: static
+  - type: web
     name: super-app-frontend
     env: static
     region: frankfurt
