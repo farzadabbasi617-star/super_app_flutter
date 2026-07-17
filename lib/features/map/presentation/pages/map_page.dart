@@ -1,5 +1,6 @@
 import 'dart:math' show pi, sin, cos, sqrt, atan2, Random;
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -338,8 +339,105 @@ class _MapPageState extends State<MapPage> {
 
             return Stack(
               children: [
-                // 1. Google Map View
-                GoogleMap(
+                // 1. Google Map View or Web Interactive Fallback
+                kIsWeb
+                    ? Container(
+                        color: theme.brightness == Brightness.dark
+                            ? const Color(0xFF1E293B)
+                            : const Color(0xFFE2E8F0),
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: CustomPaint(
+                                painter: MapGridPainter(
+                                  isDark: theme.brightness == Brightness.dark,
+                                ),
+                              ),
+                            ),
+                            ...filteredShops.map((shop) {
+                              final dx = (shop.location.longitude - _initialPosition.longitude) * 15000 + MediaQuery.of(context).size.width / 2;
+                              final dy = (_initialPosition.latitude - shop.location.latitude) * 15000 + MediaQuery.of(context).size.height / 2;
+                              return Positioned(
+                                left: dx.clamp(20.0, MediaQuery.of(context).size.width - 120.0),
+                                top: dy.clamp(140.0, MediaQuery.of(context).size.height - 220.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedItem = shop;
+                                      _showOnboarding = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: _selectedItem == shop ? Colors.orange : theme.colorScheme.surface,
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: const Offset(0, 4)),
+                                      ],
+                                      border: Border.all(color: theme.colorScheme.primary, width: 2),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(_categories.firstWhere((c) => c['name'] == shop.category, orElse: () => {'icon': '🏪'})['icon']!),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          shop.name,
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.bold,
+                                            color: _selectedItem == shop ? Colors.white : theme.colorScheme.onSurface,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                            ...filteredExperts.map((expert) {
+                              final dx = (expert.location.longitude - _initialPosition.longitude) * 15000 + MediaQuery.of(context).size.width / 2;
+                              final dy = (_initialPosition.latitude - expert.location.latitude) * 15000 + MediaQuery.of(context).size.height / 2;
+                              return Positioned(
+                                left: dx.clamp(20.0, MediaQuery.of(context).size.width - 120.0),
+                                top: dy.clamp(140.0, MediaQuery.of(context).size.height - 220.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedItem = expert;
+                                      _showOnboarding = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.orange.shade700,
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8, offset: const Offset(0, 4)),
+                                      ],
+                                      border: Border.all(color: Colors.white, width: 2),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text('👷'),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          expert.name,
+                                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ],
+                        ),
+                      )
+                    : GoogleMap(
                   initialCameraPosition: CameraPosition(
                     target: _initialPosition,
                     zoom: 13,
@@ -1876,4 +1974,27 @@ class _MapPageState extends State<MapPage> {
   }
 ]
 ''';
+}
+
+class MapGridPainter extends CustomPainter {
+  final bool isDark;
+  MapGridPainter({required this.isDark});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.06)
+      ..strokeWidth = 1;
+
+    const gridSize = 40.0;
+    for (double x = 0; x < size.width; x += gridSize) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    for (double y = 0; y < size.height; y += gridSize) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
