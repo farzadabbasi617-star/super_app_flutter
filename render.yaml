@@ -14,7 +14,7 @@ services:
 
   # 2. Flutter Web Docker Frontend Service
   - type: web
-    name: super-app-frontend
+    name: super-app-web
     env: docker
     plan: free
     dockerfilePath: Dockerfile
